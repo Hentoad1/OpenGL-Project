@@ -46,10 +46,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>bin\$(Platform)\$(Configuration)\</IntDir>
     <LibraryPath>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\include;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IntDir>bin\$(Platform)\$(Configuration)\</IntDir>
     <LibraryPath>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\include;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

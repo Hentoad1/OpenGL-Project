@@ -21,6 +21,12 @@
 #include <filesystem>
 #include <functional>
 
+#include <assimp/config.h>
+
+#include <assimp/Importer.hpp>      // C++ importer interface
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing flags
+
 
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
@@ -33,5 +39,4 @@
 #include <glm/ext/matrix_clip_space.hpp> // glm::perspective
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 #include <glm/gtx/string_cast.hpp> // glm::to_string
-
 #include <glm/glm.hpp>
