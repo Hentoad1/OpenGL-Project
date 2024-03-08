@@ -19,13 +19,19 @@
     <Filter Include="Libraries">
       <UniqueIdentifier>{29f42762-5f65-47cf-83bd-2707e9b0ef1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Mesh">
+      <UniqueIdentifier>{3b8ac898-9d68-4abd-9582-a22fb95d7310}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\OneDrive\Documents\Programming\Libraries\glad\src\glad.c">
+    <ClCompile Include="..\..\..\..\..\Libraries\glad\src\glad.c">
       <Filter>Libraries</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicMesh.cpp">
+      <Filter>Source Files\Mesh</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +49,12 @@
     </ClInclude>
     <ClInclude Include="Screen.h">
       <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Source Files\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicMesh.h">
+      <Filter>Source Files\Mesh</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
