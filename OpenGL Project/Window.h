@@ -2,8 +2,7 @@
 
 #include "pch.h"
 
-#include "Model.h"
-#include "ModelLoader.h"
+#include "BasicMesh.h"
 
 #include "Screen.h"
 
@@ -14,7 +13,7 @@ namespace Window {
 		/* --- Variables --- */
 		GLFWwindow* window;
 
-		std::list<WorldContent*> content = std::list<WorldContent*>();
+		std::list<Mesh*> content = std::list<Mesh*>();
 
 
 		/* --- Callback Functions --- */
@@ -36,8 +35,6 @@ namespace Window {
 
 	//Creates a new OpenGL Window.
 	inline GLFWwindow* Create() {
-		ModelLoader::Create();
-
 		//Initalize GLFW
 		glfwInit();
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -104,7 +101,7 @@ namespace Window {
 
 
 		//Render World
-		for (WorldContent* const i : content) {
+		for (Mesh* const i : content) {
 			i->Render();
 		}
 
@@ -116,19 +113,17 @@ namespace Window {
 	}
 
 	inline void ClearContent(std::string name) {
-		for (Model* const i : content) {
+		for (Mesh* const i : content) {
 			delete i;
 		}
 
 		content.clear();
 	}
 
-	inline void LoadLevel(std::string name) {
-		Model* data = ModelLoader::Load(name);
+	inline void Load(std::string name) {
+		Mesh* newContent = new Mesh(name);
 
-		if (data != nullptr) {
-			WorldContent* newContent = new WorldContent(data);
-
+		if (newContent != nullptr) {
 			content.push_back(newContent);
 		}
 		else {
