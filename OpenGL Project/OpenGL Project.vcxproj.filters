@@ -22,6 +22,12 @@
     <Filter Include="Source Files\Mesh">
       <UniqueIdentifier>{3b8ac898-9d68-4abd-9582-a22fb95d7310}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders">
+      <UniqueIdentifier>{2f867880-801d-43ea-96c1-06aaae185651}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Shaders\Basic">
+      <UniqueIdentifier>{52b25b25-4bc3-446f-8dce-5cdb3f56a7be}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -56,5 +62,28 @@
     <ClInclude Include="BasicMesh.h">
       <Filter>Source Files\Mesh</Filter>
     </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Source Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicShader.h">
+      <Filter>Source Files\Shaders\Basic</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraNew.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CreateHeader.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BasicShaderV.glsl">
+      <Filter>Source Files\Shaders\Basic</Filter>
+    </None>
+    <None Include="BasicShaderF.glsl">
+      <Filter>Source Files\Shaders\Basic</Filter>
+    </None>
   </ItemGroup>
 </Project>

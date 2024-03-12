@@ -1,0 +1,12 @@
+//JS script for making comment
+
+h = (str) => {
+	const len = 87;
+
+	let paddingLen = (len - str.length) / 2;
+
+	let padding1 = "".padStart(Math.floor(paddingLen), '-');
+	let padding2 = "".padStart(Math.ceil(paddingLen), '-');
+
+	console.log("/* " + padding1 +  str + padding2 + " */");
+}

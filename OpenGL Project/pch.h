@@ -20,6 +20,7 @@
 #include <unordered_set>
 #include <filesystem>
 #include <functional>
+#include <array>
 
 #include <assimp/config.h>
 

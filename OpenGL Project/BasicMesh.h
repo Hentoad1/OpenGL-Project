@@ -1,6 +1,7 @@
 #pragma once
 
-#include "pch.h"
+#include "BasicShader.h"
+
 
 #define POSITION_LOCATION 0
 #define TEXTURE_LOCATION 1
@@ -9,19 +10,24 @@
 class Mesh {
 	
 public:
-	Mesh(std::string path);
+	Mesh(const std::string path);
 
 	~Mesh();
 
 	void Render();
 
 private:
-	const aiScene* Load(std::string path);
+	void Load(const std::string path);
 
-	void GenBuffers(const aiScene* scene);
+	ShaderProgram* shader;
 
-
-	std::vector<unsigned int> mesh_widths;
+	std::vector<std::pair<unsigned int, unsigned int>> mesh_indices;
 
 	GLuint VAO;
+
+	std::vector<float> positions;
+	std::vector<float> textures;
+	std::vector<float> normals;
+
+	std::vector<unsigned int> indices;
 };
