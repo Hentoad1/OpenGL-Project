@@ -25,10 +25,4 @@ private:
 	GLuint VAO;
 
 	Camera* mCamera;
-
-	std::vector<float> positions;
-	std::vector<float> textures;
-	std::vector<float> normals;
-
-	std::vector<unsigned int> indices;
 };

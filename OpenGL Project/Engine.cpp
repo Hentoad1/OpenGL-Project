@@ -2,6 +2,15 @@
 #include "pch.h"
 #include "Engine.h"
 
+/* -------------------------------- CALLBACK DECLARATIONS -------------------------------- */
+
+static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset);
+static void onResize(GLFWwindow* window, int width, int height);
+static void onCursorMovement(GLFWwindow* window, double xpos, double ypos);
+
+/* ----------------------------------- CLASS FUNCTIONS ----------------------------------- */
+
 Engine::Engine() {
 	eCamera = new Camera();
 	eWorld = new World(eCamera);
@@ -40,8 +49,14 @@ Engine::Engine() {
 	//Set Viewport
 	glad_glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
+	//Set User Pointer to Engine
+	glfwSetWindowUserPointer(eWindow, reinterpret_cast<void*>(this));
+
 	//Set Callbacks
-	//-----TODO-------
+	glfwSetKeyCallback(eWindow, onInput);
+	glfwSetScrollCallback(eWindow, onMouseWheel);
+	glfwSetFramebufferSizeCallback(eWindow, onResize);
+	glfwSetCursorPosCallback(eWindow, onCursorMovement);
 
 	//Set Mouse Cursor Style
 	glfwSetInputMode(eWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -89,4 +104,55 @@ void Engine::Update() {
 
 bool Engine::ShouldClose() const {
 	return glfwWindowShouldClose(eWindow);
+}
+
+Camera* Engine::GetCamera() const {
+	return eCamera;
+}
+
+/* --------------------------------- CALLBACK FUNCTIONS ---------------------------------- */
+
+static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
+
+	float amount = 0.2f;
+
+	if (action == GLFW_REPEAT) {
+		amount = 0.1f;
+	}
+	else if (action == GLFW_RELEASE) {
+		return;
+	}
+
+	switch (key)
+	{
+	case(GLFW_KEY_RIGHT):
+		e->GetCamera()->Rotate(true, amount);
+		break;
+	case(GLFW_KEY_LEFT):
+		e->GetCamera()->Rotate(true, -amount);
+		break;
+	case(GLFW_KEY_UP):
+		e->GetCamera()->Rotate(false, amount);
+		break;
+	case(GLFW_KEY_DOWN):
+		e->GetCamera()->Rotate(false, -amount);
+		break;
+	default:
+		break;
+	}
+}
+
+static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset) {
+	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
+
+	e->GetCamera()->Zoom(yoffset);
+}
+
+static void onResize(GLFWwindow* window, int width, int height){
+	glViewport(0, 0, width, height);
+}
+
+static void onCursorMovement(GLFWwindow * window, double xpos, double ypos) {
+
 }

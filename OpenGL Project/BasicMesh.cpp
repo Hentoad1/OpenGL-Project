@@ -49,11 +49,11 @@ void Mesh::Load(const std::string path) {
 
 	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
 
-	/*std::vector<float> positions;
+	std::vector<float> positions;
 	std::vector<float> textures;
 	std::vector<float> normals;
 
-	std::vector<unsigned int> indices;*/
+	std::vector<unsigned int> indices;
 	
 	const aiVector3D ZeroVector(0.0f, 0.0f, 0.0f);
 

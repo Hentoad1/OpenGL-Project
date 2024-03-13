@@ -18,8 +18,9 @@ public:
 
 	void Draw();
 
-
 	bool ShouldClose() const;
+
+	Camera* GetCamera() const;
 
 private:
 	Camera* eCamera;
