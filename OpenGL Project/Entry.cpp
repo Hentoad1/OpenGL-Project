@@ -5,7 +5,7 @@
 
 int main() {
 
-	Engine::Create();
+	/*Engine::Create();
 
 	Window::Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\model.fbx");
 
@@ -16,7 +16,7 @@ int main() {
 		Engine::Tick();
 	}
 
-	glfwTerminate();
+	glfwTerminate();*/
 
 	return 0;
 }

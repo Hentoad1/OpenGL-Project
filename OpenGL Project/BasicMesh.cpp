@@ -1,7 +1,6 @@
 
 #include "pch.h"
 #include "BasicMesh.h"
-#include "Debug.h"
 
 
 	/* ---------------------------------- COPY CONSTRUCTOR ----------------------------------- */
@@ -12,7 +11,9 @@
 
 	/* -------------------------------- DEFAULT CONSTRUCTORS --------------------------------- */
 
-Mesh::Mesh(const std::string path) {
+Mesh::Mesh(const std::string path, Camera* mCam) {
+	mCamera = mCam;
+	
 	Load(path);
 }
 
@@ -44,7 +45,7 @@ void Mesh::Load(const std::string path) {
 
 	/* ----------------------------- INITIALIZE CLASS VARIABLES ------------------------------ */
 
-	shader = (ShaderProgram*)new BasicShader(scene->mRootNode->mTransformation);
+	shader = (ShaderProgram*)new BasicShader(mCamera, scene->mRootNode->mTransformation);
 
 	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
 
