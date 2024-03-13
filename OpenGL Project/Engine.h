@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Camera.h"
-#include "Window.h"
+#include "World.h"
 
 class Engine {
 
@@ -10,11 +10,20 @@ public:
 
 	~Engine();
 
-	void Tick();
+	void Terminate();
+
+	void Load(std::string);
+
+	void Update();
+
+	void Draw();
+
 
 	bool ShouldClose() const;
 
 private:
-	Camera* cam;
-	Window* win;
+	Camera* eCamera;
+	World* eWorld;
+
+	GLFWwindow* eWindow;
 };

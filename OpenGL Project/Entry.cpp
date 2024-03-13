@@ -5,18 +5,17 @@
 
 int main() {
 
-	/*Engine::Create();
+	Engine Engine;
 
-	Window::Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\model.fbx");
+	Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\model.fbx");
 
-	glDisable(GL_TEXTURE_2D);
-
-	while (!glfwWindowShouldClose(Engine::GetWindow()))
+	while (!Engine.ShouldClose())
 	{
-		Engine::Tick();
+		Engine.Update();
+		Engine.Draw();
 	}
 
-	glfwTerminate();*/
+	Engine.Terminate();
 
 	return 0;
 }

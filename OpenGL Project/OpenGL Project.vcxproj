@@ -105,6 +105,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Window.cpp" />
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicMesh.h" />
@@ -119,6 +120,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Window.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CreateHeader.txt" />
