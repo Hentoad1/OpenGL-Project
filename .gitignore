@@ -397,8 +397,12 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
+#ASSIMP
+*/*assimp*.dll
+
 #Linking
 Linking/
 
 #Assets
 Assets/
+
