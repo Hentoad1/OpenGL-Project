@@ -18,11 +18,34 @@ public:
 private:
 	void Load(const std::string);
 
-	ShaderProgram* shader;
+	struct MeshMeta {
+		MeshMeta(unsigned int, unsigned int, glm::vec3, glm::vec3);
 
-	std::vector<std::pair<unsigned int, unsigned int>> mesh_indices;
+		unsigned int baseIndex;
+		unsigned int indexCount;
 
+		glm::vec3 min;
+		glm::vec3 max;
+
+		glm::vec3 center;
+
+	};
+	
+	//Bounding Box
+	glm::vec3 min;
+	glm::vec3 max;
+	glm::vec3 center;
+
+	//Vertex Array Object
 	GLuint VAO;
 
+	//Camera
 	Camera* mCamera;
+
+	//Shader
+	ShaderProgram* shader;
+
+	//Submesh Metadata
+	std::vector<MeshMeta> mesh_data;
+	
 };

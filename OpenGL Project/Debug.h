@@ -5,7 +5,7 @@
 #define GL_STACK_OVERFLOW 0x0503
 #define GL_STACK_UNDERFLOW 0x0504
 
-void checkGLErrors() {
+inline void checkGLErrors() {
 
     bool shouldThrow = false;
 

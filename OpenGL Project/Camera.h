@@ -30,7 +30,7 @@ private:
 
 	static constexpr float CAMERA_HEIGHT = 0.5f;
 
-	static constexpr float CAMERA_MIN_DISTANCE = 5.0f;
+	static constexpr float CAMERA_MIN_DISTANCE = 1.0f;
 
 	static constexpr float CAMERA_VERTICAL_MAX = glm::radians(89.9f);
 

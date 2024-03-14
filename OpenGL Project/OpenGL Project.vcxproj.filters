@@ -48,6 +48,9 @@
     <ClCompile Include="World.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
+    <ClCompile Include="BasicShader.cpp">
+      <Filter>Source Files\Shaders\Basic</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

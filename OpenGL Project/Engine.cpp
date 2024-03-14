@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "Engine.h"
 
+#include "Screen.h"
+
 /* -------------------------------- CALLBACK DECLARATIONS -------------------------------- */
 
 static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods);
