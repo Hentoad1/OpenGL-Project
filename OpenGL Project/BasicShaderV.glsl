@@ -4,6 +4,7 @@ layout(location = 1) in vec2 aTex;
 layout(location = 2) in vec3 aNormal;
 
 out vec3 Color;
+out vec2 Tex;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -12,6 +13,8 @@ uniform mat4 projection;
 void main()
 {
 	gl_Position = projection * view * model * vec4(aPos, 1.0f);
-	//Color = aColor;
+	
+	
+	Tex = aTex;
 	Color = vec3(0.5f,0.5f,0.5f);
 }

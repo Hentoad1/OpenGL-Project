@@ -2,6 +2,7 @@
 #include "pch.h"
 #include "BasicMesh.h"
 
+#include "Texture.h"
 
 	/* ---------------------------------- COPY CONSTRUCTOR ----------------------------------- */
 
@@ -21,6 +22,7 @@ Mesh::Mesh(const std::string path, Camera* mCam) {
 
 Mesh::~Mesh() {
 	delete shader;
+	delete[] MaterialBuffer;
 }
 
 
@@ -91,9 +93,6 @@ void Mesh::Load(const std::string path) {
 		glm::vec3 max = glm::vec3(-FLT_MAX);
 		glm::vec3 min = glm::vec3(FLT_MAX);
 
-		std::cout << meshIndex << std::endl;
-		std::cout << scene->mNumMeshes << std::endl;
-
 		//create buffers
 		for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
 			const aiVector3D& pos = mesh->mVertices[i];
@@ -125,17 +124,60 @@ void Mesh::Load(const std::string path) {
 
 			indices.insert(indices.end(), { face.mIndices[0], face.mIndices[1], face.mIndices[2] });
 		}
-		
+
 		const unsigned int mNumIndices = mesh->mNumFaces * 3;
 
-		mesh_data.emplace_back(MeshMeta(currentIndex, mNumIndices, min, max));
+		mesh_data.emplace_back(MeshMeta(currentIndex, mNumIndices, mesh->mMaterialIndex, min, max));
 
 		currentIndex += mNumIndices;
 	}
 
 	/* ----------------------------------- IMPORT TEXTURES ----------------------------------- */
 	
-	//Texture* textures = new Texture[scene->mNumTextures];
+
+	MaterialBuffer = new MatBuffer[scene->mNumMaterials];
+
+	for (unsigned int i = 0; i < scene->mNumMaterials; i++) {
+		aiMaterial* mat = scene->mMaterials[i];
+
+		unsigned int TexCount = mat->GetTextureCount(aiTextureType_DIFFUSE);
+
+		for (unsigned int i = 0; i < TexCount; i++) {
+			aiString path;
+			
+			mat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
+
+			const aiTexture* texture = scene->GetEmbeddedTexture(path.C_Str());
+
+			if (texture == nullptr) {
+				//regular texture, in external file
+
+				std::cout << "normal" << std::endl;
+				std::cout << path.C_Str() << std::endl;
+			}
+			else {
+				//embedded texture
+
+				GLuint glTexture = LoadTexture(texture);
+
+				if (!MaterialBuffer[i].Has(TextureType_DIFFUSE)) {
+					std::cout << "setting texture: " << glTexture << std::endl;
+					MaterialBuffer[i].Set(TextureType_DIFFUSE, glTexture);
+				}
+
+				std::cout << "embedded" << std::endl;
+				std::cout << path.C_Str() << std::endl;
+			}
+		}
+
+		//aiTexture* tex = scene->mTextures[0];
+
+		
+
+		
+		
+
+	}
 	
 	/* ----------------------------- INITIALIZE CLASS VARIABLES ------------------------------ */
 
@@ -163,8 +205,8 @@ void Mesh::Load(const std::string path) {
 
 	GLuint mBuffers[4];
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	glGenVertexArrays(1, &VertexBuffer);
+	glBindVertexArray(VertexBuffer);
 
 	glGenBuffers(4, mBuffers);
 
@@ -205,11 +247,18 @@ void Mesh::Render() {
 	
 	/* ----------------------------------- RENDER BUFFERS ------------------------------------ */
 	
-	glBindVertexArray(VAO);
+	glBindVertexArray(VertexBuffer);
 
 	for (const MeshMeta& meta : mesh_data) {
+
+		GLuint tex = MaterialBuffer[meta.materialIndex].Get(TextureType_DIFFUSE);
+
+		std::cout << "got: " << tex << std::endl;
+
+		glBindTexture(GL_TEXTURE_2D, tex);
+
 		glDrawElementsBaseVertex(
-			GL_LINES,
+			GL_TRIANGLES,
 			meta.indexCount,
 			GL_UNSIGNED_INT,
 			0,
@@ -221,11 +270,13 @@ void Mesh::Render() {
 	glBindVertexArray(0);
 }
 
-Mesh::MeshMeta::MeshMeta(unsigned int base, unsigned int count, glm::vec3 _min, glm::vec3 _max) {
+Mesh::MeshMeta::MeshMeta(unsigned int base, unsigned int count, unsigned int matIndex, glm::vec3 _min, glm::vec3 _max) {
 	
 	baseIndex = base;
 	indexCount = count;
 	
+	materialIndex = matIndex;
+
 	min = _min;
 	max = _max;
 

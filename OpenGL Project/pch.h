@@ -41,3 +41,7 @@
 #include <glm/gtc/type_ptr.hpp> // glm::value_ptr
 #include <glm/gtx/string_cast.hpp> // glm::to_string
 #include <glm/glm.hpp>
+
+#ifdef _DEBUG
+#include "Debug.h";
+#endif

@@ -28,6 +28,9 @@
     <Filter Include="Source Files\Shaders\Basic">
       <UniqueIdentifier>{52b25b25-4bc3-446f-8dce-5cdb3f56a7be}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Texture">
+      <UniqueIdentifier>{57426e12-b18f-41a1-a5e8-7c1406dc5862}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -50,6 +53,9 @@
     </ClCompile>
     <ClCompile Include="BasicShader.cpp">
       <Filter>Source Files\Shaders\Basic</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Source Files\Shaders\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +89,9 @@
     <ClInclude Include="World.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Source Files\Shaders\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CreateHeader.txt" />
@@ -94,5 +103,6 @@
     <None Include="BasicShaderF.glsl">
       <Filter>Source Files\Shaders\Basic</Filter>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
