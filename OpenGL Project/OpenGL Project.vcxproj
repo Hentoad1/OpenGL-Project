@@ -106,6 +106,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -119,6 +120,7 @@
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="Vertex.h" />
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>

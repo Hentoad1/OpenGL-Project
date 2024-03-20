@@ -24,7 +24,7 @@ private:
 
 	static constexpr float FOV = glm::radians(70.0f);
 
-	static constexpr float CLIPPING_MIN = 1.0f;
+	static constexpr float CLIPPING_MIN = 0.1f;
 	static constexpr float CLIPPING_MAX = 1000.0f;
 
 

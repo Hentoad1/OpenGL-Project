@@ -3,6 +3,10 @@
 #include "BasicMesh.h"
 
 #include "Texture.h"
+#include "Vertex.h"
+
+#define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_POINTS|aiPrimitiveType_LINES
+
 
 	/* ---------------------------------- COPY CONSTRUCTOR ----------------------------------- */
 
@@ -36,33 +40,40 @@ void Mesh::Load(const std::string path) {
 	const aiScene* scene = importer.ReadFile(path,
 		
 		//required: only want triangles
-		aiProcess_Triangulate |
+		aiProcess_Triangulate | \
 
 		//required: want to re-use indices
-		aiProcess_JoinIdenticalVertices |
+		aiProcess_JoinIdenticalVertices | \
 
-		//reuqired: creates sub-meshes
-		aiProcess_SortByPType |
+		//required: creates sub-meshes
+		aiProcess_SortByPType | \
 
 		//can be useful later for lighting
-		aiProcess_CalcTangentSpace |
+		//aiProcess_CalcTangentSpace | \
 
-		//takes a lot of import time, but improves optimizations; useful though when memory mapping.
-		//aiProcess_ImproveCacheLocality |
+		//find degenerates
+		//aiProcess_FindDegenerates | \
+
+		//takes a lot of import time, but improves optimizations; useful when memory mapping.
+		//aiProcess_ImproveCacheLocality | \
+
+		//removes unnecessary texures
+		//aiProcess_RemoveRedundantMaterials | \
 
 		//more optimizations
-		aiProcess_OptimizeMeshes |
-		aiProcess_OptimizeGraph |
+		//aiProcess_OptimizeMeshes | \
+		//aiProcess_OptimizeGraph | \
 
 		//infacing normals will be flipped.
-		aiProcess_FixInfacingNormals |
+		//aiProcess_FixInfacingNormals | \
 
 		//useful for fixing errors, removing bad normals and such
-		aiProcess_FindInvalidData | 
+		//aiProcess_FindInvalidData | \
 
 		//Smooth normal will be generated on top of any bad normals
-		aiProcess_GenSmoothNormals
+		//aiProcess_GenSmoothNormals | \
 		
+		0
 	);
 
 	if (nullptr == scene) {
@@ -72,20 +83,17 @@ void Mesh::Load(const std::string path) {
 
 	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
 
-	std::vector<float> positions;
-	std::vector<float> textures;
-	std::vector<float> normals;
+	//std::vector<Vertex> vertices;
 
-	std::vector<unsigned int> indices;
+	//std::vector<unsigned int> indices;
 	
 	const aiVector3D ZeroVector(0.0f, 0.0f, 0.0f);
 
 
-	mesh_data = std::vector<MeshMeta>();
+	mesh_data = std::vector<SubMesh>();
 
-	unsigned int currentIndex = 0;
-
-	
+	unsigned int BaseVertex = 0;
+	unsigned int BaseIndex = 0;
 
 	for (unsigned int meshIndex = 0; meshIndex < scene->mNumMeshes; ++meshIndex) {
 		const aiMesh* mesh = scene->mMeshes[meshIndex];
@@ -99,11 +107,13 @@ void Mesh::Load(const std::string path) {
 			const aiVector3D& normal = mesh->mNormals[i];
 			const aiVector3D& tex = mesh->HasTextureCoords(0) ? mesh->mTextureCoords[0][i] : ZeroVector;
 
-			positions.insert(positions.end(), { pos.x, pos.y, pos.z });
+			Vertex v;
 
-			textures.insert(textures.end(), { tex.x, tex.y });
+			v.SetPosition(pos);
+			v.SetTexture(tex);
+			v.SetNormal(normal);
 
-			normals.insert(normals.end(), { normal.x, normal.y, normal.z });
+			vertices.push_back(v);
 
 			min.x = std::min(min.x, pos.x);
 			min.y = std::min(min.y, pos.y);
@@ -114,6 +124,9 @@ void Mesh::Load(const std::string path) {
 			max.z = std::max(max.z, pos.z);
 		}
 
+
+		unsigned int maxIndex = 0;
+
 		//create index buffer
 		for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
 			const aiFace& face = mesh->mFaces[i];
@@ -122,14 +135,19 @@ void Mesh::Load(const std::string path) {
 				throw;
 			}
 
-			indices.insert(indices.end(), { face.mIndices[0], face.mIndices[1], face.mIndices[2] });
+			maxIndex = std::max(maxIndex, face.mIndices[0]);
+			maxIndex = std::max(maxIndex, face.mIndices[1]);
+			maxIndex = std::max(maxIndex, face.mIndices[2]);
+
+			indices.insert(indices.end(), { face.mIndices[0] , face.mIndices[1] , face.mIndices[2] });
 		}
 
 		const unsigned int mNumIndices = mesh->mNumFaces * 3;
 
-		mesh_data.emplace_back(MeshMeta(currentIndex, mNumIndices, mesh->mMaterialIndex, min, max));
+		mesh_data.push_back(SubMesh(BaseVertex, BaseIndex, mNumIndices, mesh->mMaterialIndex, min, max));
 
-		currentIndex += mNumIndices;
+		BaseIndex += mesh->mNumFaces * 3;
+		BaseVertex += mesh->mNumVertices;
 	}
 
 	/* ----------------------------------- IMPORT TEXTURES ----------------------------------- */
@@ -185,9 +203,6 @@ void Mesh::Load(const std::string path) {
 	this->min = glm::vec3(FLT_MAX);
 
 	for (int i = 0; i < mesh_data.size(); ++i) {
-		std::cout << "min: " << glm::to_string(mesh_data[i].min) << std::endl;
-		std::cout << "max: " << glm::to_string(mesh_data[i].max) << std::endl;
-
 		this->min.x = std::min(this->min.x, mesh_data[i].min.x);
 		this->min.y = std::min(this->min.y, mesh_data[i].min.y);
 		this->min.z = std::min(this->min.z, mesh_data[i].min.z);
@@ -203,38 +218,34 @@ void Mesh::Load(const std::string path) {
 
 	/* ---------------------------------- POPULATE BUFFERS ----------------------------------- */
 
-	GLuint mBuffers[4];
+	GLuint mBuffers[2];
 
 	glGenVertexArrays(1, &VertexBuffer);
 	glBindVertexArray(VertexBuffer);
 
-	glGenBuffers(4, mBuffers);
+	glGenBuffers(2, mBuffers);
 
-	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[POSITION_LOCATION]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(positions[0]) * positions.size(), &positions[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	size_t Vertex_Size = sizeof(vertices[0]);
+
+	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[0]);
+	glBufferData(GL_ARRAY_BUFFER, Vertex_Size * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+	
+	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
 	glEnableVertexAttribArray(POSITION_LOCATION);
 
-	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[TEXTURE_LOCATION]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(textures[0]) * textures.size(), &textures[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(TEXTURE_LOCATION, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(TEXTURE_LOCATION, 2, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)12);
 	glEnableVertexAttribArray(TEXTURE_LOCATION);
 
-	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[NORMAL_LOCATION]);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(normals[0]) * normals.size(), &normals[0], GL_STATIC_DRAW);
-	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, 0, 0);
+	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)20);
 	glEnableVertexAttribArray(NORMAL_LOCATION);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[3]);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[1]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
 
 	glBindVertexArray(0);
 
-
-	std::cout << positions.size() << std::endl;
-	std::cout << textures.size() << std::endl;
-	std::cout << normals.size() << std::endl;
-	std::cout << indices.size() << std::endl;
+	std::cout << "vertices size: " << vertices.size() << std::endl;
+	std::cout << "indices size: " << indices.size() << std::endl;
 }
 
 void Mesh::Render() {
@@ -249,32 +260,56 @@ void Mesh::Render() {
 	
 	glBindVertexArray(VertexBuffer);
 
-	for (const MeshMeta& meta : mesh_data) {
 
-		GLuint tex = MaterialBuffer[meta.materialIndex].Get(TextureType_DIFFUSE);
+	for (const SubMesh& sub : mesh_data) {
 
-		std::cout << "got: " << tex << std::endl;
+		GLuint tex = MaterialBuffer[sub.materialIndex].Get(TextureType_DIFFUSE);
 
 		glBindTexture(GL_TEXTURE_2D, tex);
 
 		glDrawElementsBaseVertex(
-			GL_TRIANGLES,
-			meta.indexCount,
+			GL_LINES,
+			sub.indexCount,
 			GL_UNSIGNED_INT,
-			0,
-			meta.baseIndex
+			(void*)(sizeof(unsigned int) * sub.BaseIndex),
+			sub.BaseVertex
 		);
+
+
 	}
 
+	unsigned int offset = sizeof(unsigned int) * mesh_data[1].BaseIndex;
+
+	std::cout << "---------------" << std::endl;
+	std::cout << mesh_data[0].indexCount << std::endl;
+	std::cout << mesh_data[0].BaseIndex << std::endl;
+	std::cout << mesh_data[0].BaseVertex << std::endl;
+	std::cout << "--" << std::endl;
+	std::cout << mesh_data[1].indexCount << std::endl;
+	std::cout << mesh_data[1].BaseIndex << std::endl;
+	std::cout << mesh_data[1].BaseVertex << std::endl;
+	std::cout << "---------------" << std::endl;
+
+	glDrawElementsBaseVertex(
+		GL_LINES,
+		mesh_data[1].indexCount,
+		GL_UNSIGNED_INT,
+		(void*)(offset),
+		mesh_data[1].BaseVertex
+	);
+
+	checkGLErrors();
 
 	glBindVertexArray(0);
 }
 
-Mesh::MeshMeta::MeshMeta(unsigned int base, unsigned int count, unsigned int matIndex, glm::vec3 _min, glm::vec3 _max) {
+Mesh::SubMesh::SubMesh(unsigned int _BaseVertex, unsigned int _BaseIndex, unsigned int count, unsigned int matIndex, glm::vec3 _min, glm::vec3 _max) {
 	
-	baseIndex = base;
+	BaseVertex = _BaseVertex;
+	BaseIndex = _BaseIndex;
+
 	indexCount = count;
-	
+
 	materialIndex = matIndex;
 
 	min = _min;
@@ -283,3 +318,23 @@ Mesh::MeshMeta::MeshMeta(unsigned int base, unsigned int count, unsigned int mat
 	center = (min + max) * glm::vec3(0.5f);
 
 }
+
+
+
+/*
+NumIndices = mNumFaces * 3;
+BaseVertex = NumVertices;
+BaseIndex = NumIndices;
+
+NumVertices += mNumVertices;
+NumIndices += NumIndices;
+
+glDrawElementsBaseVertex(
+	GL_LINES,
+	NumIndices,
+	GL_UNSIGNED_INT,
+	(void*)(sizeof(unsigned int) * BaseIndex),
+	BaseVertex
+);
+
+*/

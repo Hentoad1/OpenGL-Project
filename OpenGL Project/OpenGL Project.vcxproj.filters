@@ -31,6 +31,9 @@
     <Filter Include="Source Files\Shaders\Texture">
       <UniqueIdentifier>{57426e12-b18f-41a1-a5e8-7c1406dc5862}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Vertex">
+      <UniqueIdentifier>{6db78850-d05a-4f61-b9ee-6da1b541dc2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -56,6 +59,9 @@
     </ClCompile>
     <ClCompile Include="Texture.cpp">
       <Filter>Source Files\Shaders\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Vertex.cpp">
+      <Filter>Source Files\Shaders\Vertex</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="Texture.h">
       <Filter>Source Files\Shaders\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
+      <Filter>Source Files\Shaders\Vertex</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

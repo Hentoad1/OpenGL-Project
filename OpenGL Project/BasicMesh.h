@@ -2,14 +2,20 @@
 
 #include "BasicShader.h"
 
-#define POSITION_LOCATION 0
-#define TEXTURE_LOCATION 1
-#define NORMAL_LOCATION 2
+#include "Vertex.h"
 
-enum TextureType : uint8_t{
+#define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_LINE | aiPrimitiveType_POINT
+
+constexpr int POSITION_LOCATION = 0;
+constexpr int TEXTURE_LOCATION = 1;
+constexpr int NORMAL_LOCATION = 2;
+
+static constexpr int UNIQUE_TEXTURE_TYPES = 3;
+
+enum TextureType : uint8_t {
 	TextureType_DIFFUSE = 0,
-	TextureType_SPECULAR = 0,
-	TextureType_AMBIENT = 0,
+	TextureType_SPECULAR = 1,
+	TextureType_AMBIENT = 2,
 };
 
 class Mesh {
@@ -21,14 +27,15 @@ public:
 
 	void Render();
 
-private:
-	void Load(const std::string);
+protected:
+	class SubMesh {
+	public:
+		SubMesh(unsigned int, unsigned int, unsigned int, unsigned int, glm::vec3, glm::vec3);
 
-	struct MeshMeta {
-		MeshMeta(unsigned int, unsigned int, unsigned int, glm::vec3, glm::vec3);
-
-		unsigned int baseIndex;
 		unsigned int indexCount;
+
+		unsigned int BaseVertex;
+		unsigned int BaseIndex;
 
 		unsigned int materialIndex;
 
@@ -37,9 +44,12 @@ private:
 
 		glm::vec3 center;
 	};
+private:
+	void Load(const std::string);
 
-	struct MatBuffer {
+	class MatBuffer {
 
+	public:
 		GLuint Get(TextureType type) const {
 			return buffers[type];
 		}
@@ -56,8 +66,9 @@ private:
 			buffers[type] = ID;
 		}
 
-		GLuint buffers[3]{};
-		bool bufLoaded[3] = { false, false, false };
+	private:
+		GLuint buffers[UNIQUE_TEXTURE_TYPES]{};
+		bool bufLoaded[UNIQUE_TEXTURE_TYPES] = { false, false, false };
 	};
 
 	//Bounding Box
@@ -72,9 +83,14 @@ private:
 	ShaderProgram* shader;
 
 	//Submesh Metadata
-	std::vector<MeshMeta> mesh_data;
+	std::vector<SubMesh> mesh_data;
 	
 	//OpenGL Buffers
 	GLuint VertexBuffer;
 	MatBuffer* MaterialBuffer;
+
+	//indices
+	std::vector<unsigned int> indices;
+
+	std::vector<Vertex> vertices;
 };
