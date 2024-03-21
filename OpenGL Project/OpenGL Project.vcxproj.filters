@@ -19,20 +19,26 @@
     <Filter Include="Libraries">
       <UniqueIdentifier>{29f42762-5f65-47cf-83bd-2707e9b0ef1b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Mesh">
-      <UniqueIdentifier>{3b8ac898-9d68-4abd-9582-a22fb95d7310}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{2f867880-801d-43ea-96c1-06aaae185651}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Shaders\Basic">
       <UniqueIdentifier>{52b25b25-4bc3-446f-8dce-5cdb3f56a7be}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders\Texture">
+    <Filter Include="Source Files\Loading Models">
+      <UniqueIdentifier>{c4759e2a-7107-4bc8-8f58-2c4db2a6e9ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Mesh">
+      <UniqueIdentifier>{3b8ac898-9d68-4abd-9582-a22fb95d7310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Texture">
       <UniqueIdentifier>{57426e12-b18f-41a1-a5e8-7c1406dc5862}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Shaders\Vertex">
+    <Filter Include="Source Files\Loading Models\Vertex">
       <UniqueIdentifier>{6db78850-d05a-4f61-b9ee-6da1b541dc2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Path">
+      <UniqueIdentifier>{fe44a07d-3538-47fd-b659-a16e4c648ada}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,7 +49,7 @@
       <Filter>Libraries</Filter>
     </ClCompile>
     <ClCompile Include="BasicMesh.cpp">
-      <Filter>Source Files\Mesh</Filter>
+      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -58,10 +64,13 @@
       <Filter>Source Files\Shaders\Basic</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Shaders\Texture</Filter>
+      <Filter>Source Files\Loading Models\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files\Shaders\Vertex</Filter>
+      <Filter>Source Files\Loading Models\Vertex</Filter>
+    </ClCompile>
+    <ClCompile Include="Path.cpp">
+      <Filter>Source Files\Loading Models\Path</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,10 +81,10 @@
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Source Files\Mesh</Filter>
+      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="BasicMesh.h">
-      <Filter>Source Files\Mesh</Filter>
+      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Source Files\Shaders</Filter>
@@ -96,10 +105,13 @@
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Source Files\Shaders\Texture</Filter>
+      <Filter>Source Files\Loading Models\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Source Files\Shaders\Vertex</Filter>
+      <Filter>Source Files\Loading Models\Vertex</Filter>
+    </ClInclude>
+    <ClInclude Include="Path.h">
+      <Filter>Source Files\Loading Models\Path</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +124,5 @@
     <None Include="BasicShaderF.glsl">
       <Filter>Source Files\Shaders\Basic</Filter>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

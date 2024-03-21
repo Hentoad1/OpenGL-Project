@@ -4,6 +4,7 @@
 
 #include "Texture.h"
 #include "Vertex.h"
+#include "Path.h"
 
 #define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_POINTS|aiPrimitiveType_LINES
 
@@ -38,7 +39,7 @@ void Mesh::Load(const std::string path) {
 	Assimp::Importer importer;
 
 	const aiScene* scene = importer.ReadFile(path,
-		
+
 		//required: only want triangles
 		aiProcess_Triangulate | \
 
@@ -47,6 +48,12 @@ void Mesh::Load(const std::string path) {
 
 		//required: creates sub-meshes
 		aiProcess_SortByPType | \
+		
+		//reiquired: otherwise meshes will not align properly
+		aiProcess_PreTransformVertices | \
+
+		aiProcess_GenUVCoords | \
+
 
 		//can be useful later for lighting
 		//aiProcess_CalcTangentSpace | \
@@ -86,7 +93,7 @@ void Mesh::Load(const std::string path) {
 	//std::vector<Vertex> vertices;
 
 	//std::vector<unsigned int> indices;
-	
+
 	const aiVector3D ZeroVector(0.0f, 0.0f, 0.0f);
 
 
@@ -107,13 +114,7 @@ void Mesh::Load(const std::string path) {
 			const aiVector3D& normal = mesh->mNormals[i];
 			const aiVector3D& tex = mesh->HasTextureCoords(0) ? mesh->mTextureCoords[0][i] : ZeroVector;
 
-			Vertex v;
-
-			v.SetPosition(pos);
-			v.SetTexture(tex);
-			v.SetNormal(normal);
-
-			vertices.push_back(v);
+			vertices.emplace_back(pos, tex, normal);
 
 			min.x = std::min(min.x, pos.x);
 			min.y = std::min(min.y, pos.y);
@@ -151,27 +152,69 @@ void Mesh::Load(const std::string path) {
 	}
 
 	/* ----------------------------------- IMPORT TEXTURES ----------------------------------- */
-	
+
 
 	MaterialBuffer = new MatBuffer[scene->mNumMaterials];
+
+	std::cout << "mNumMaterials: " << scene->mNumMaterials << std::endl;
 
 	for (unsigned int i = 0; i < scene->mNumMaterials; i++) {
 		aiMaterial* mat = scene->mMaterials[i];
 
 		unsigned int TexCount = mat->GetTextureCount(aiTextureType_DIFFUSE);
 
-		for (unsigned int i = 0; i < TexCount; i++) {
-			aiString path;
-			
-			mat->GetTexture(aiTextureType_DIFFUSE, 0, &path);
 
-			const aiTexture* texture = scene->GetEmbeddedTexture(path.C_Str());
+		//really this for loop should only exist if im rendering multiple textures, but whatevre
+		for (unsigned int j = 0; j < TexCount; j++) {
+			aiString texturePath;
+
+			//aiTextureMapping mappingType;
+			//unsigned int uvIndex;
+			//float blend;
+			//aiTextureOp textureOP;
+			//aiTextureMapMode mapMode[3];
+
+			mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
+
+			//mat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath, &mappingType, &uvIndex, &blend, &textureOP, mapMode);
+
+			//std::cout << mappingType << std::endl;
+			//std::cout << uvIndex << std::endl;
+			//std::cout << blend << std::endl;
+			//std::cout << (int)textureOP << std::endl;
+			//std::cout << (int)mapMode[0] << ", " << (int)mapMode[1] << ", " << (int)mapMode[2] << ", " << std::endl;
+
+			int z = aiTextureMapMode_Wrap | aiTextureMapMode_Clamp | aiTextureMapMode_Decal | aiTextureMapMode_Mirror;
+
+			const aiTexture* texture = scene->GetEmbeddedTexture(texturePath.C_Str());
 
 			if (texture == nullptr) {
 				//regular texture, in external file
 
 				std::cout << "normal" << std::endl;
-				std::cout << path.C_Str() << std::endl;
+				std::cout << texturePath.C_Str() << std::endl;
+
+				std::string result = CalculatePath(path, texturePath.C_Str());
+
+
+				std::cout << "path: " << path << std::endl;
+				std::cout << "texpath: " << texturePath.C_Str() << std::endl;
+				std::cout << "res: " << result << std::endl;
+
+
+				/*std::string a = texturePath.C_Str();
+
+				if (a.find("jpg") != -1) {
+					continue;
+				}*/
+
+
+				GLuint glTexture = LoadTexture(result);
+
+				if (!MaterialBuffer[i].Has(TextureType_DIFFUSE)) {
+					std::cout << "setting texture: " << glTexture << std::endl;
+					MaterialBuffer[i].Set(TextureType_DIFFUSE, glTexture);
+				}
 			}
 			else {
 				//embedded texture
@@ -184,19 +227,19 @@ void Mesh::Load(const std::string path) {
 				}
 
 				std::cout << "embedded" << std::endl;
-				std::cout << path.C_Str() << std::endl;
+				std::cout << texturePath.C_Str() << std::endl;
 			}
 		}
 
 		//aiTexture* tex = scene->mTextures[0];
 
-		
 
-		
-		
+
+
+
 
 	}
-	
+
 	/* ----------------------------- INITIALIZE CLASS VARIABLES ------------------------------ */
 
 	this->max = glm::vec3(-FLT_MAX);
@@ -260,15 +303,16 @@ void Mesh::Render() {
 	
 	glBindVertexArray(VertexBuffer);
 
-
 	for (const SubMesh& sub : mesh_data) {
 
 		GLuint tex = MaterialBuffer[sub.materialIndex].Get(TextureType_DIFFUSE);
 
+		//std::cout << sub.materialIndex << std::endl;
+
 		glBindTexture(GL_TEXTURE_2D, tex);
 
 		glDrawElementsBaseVertex(
-			GL_LINES,
+			GL_TRIANGLES,
 			sub.indexCount,
 			GL_UNSIGNED_INT,
 			(void*)(sizeof(unsigned int) * sub.BaseIndex),
@@ -277,28 +321,6 @@ void Mesh::Render() {
 
 
 	}
-
-	unsigned int offset = sizeof(unsigned int) * mesh_data[1].BaseIndex;
-
-	std::cout << "---------------" << std::endl;
-	std::cout << mesh_data[0].indexCount << std::endl;
-	std::cout << mesh_data[0].BaseIndex << std::endl;
-	std::cout << mesh_data[0].BaseVertex << std::endl;
-	std::cout << "--" << std::endl;
-	std::cout << mesh_data[1].indexCount << std::endl;
-	std::cout << mesh_data[1].BaseIndex << std::endl;
-	std::cout << mesh_data[1].BaseVertex << std::endl;
-	std::cout << "---------------" << std::endl;
-
-	glDrawElementsBaseVertex(
-		GL_LINES,
-		mesh_data[1].indexCount,
-		GL_UNSIGNED_INT,
-		(void*)(offset),
-		mesh_data[1].BaseVertex
-	);
-
-	checkGLErrors();
 
 	glBindVertexArray(0);
 }

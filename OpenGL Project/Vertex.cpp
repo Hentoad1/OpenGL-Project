@@ -1,7 +1,31 @@
 #include "pch.h"
 #include "Vertex.h"
 
-Vertex::Vertex() {}
+Vertex::Vertex(float x, float y, float z, float uvx, float uvy, float nx, float ny, float nz) {
+	position_x = x;
+	position_y = y;
+	position_z = z;
+
+	texture_x = uvx;
+	texture_y = uvy;
+
+	normal_x = nx;
+	normal_y = ny;
+	normal_z = nz;
+}
+
+Vertex::Vertex(const aiVector3D& pos, const aiVector3D& uv, const aiVector3D& normal) {
+	position_x = pos.x;
+	position_y = pos.y;
+	position_z = pos.z;
+
+	texture_x = uv.x;
+	texture_y = uv.y;
+
+	normal_x = normal.x;
+	normal_y = normal.y;
+	normal_z = normal.z;
+}
 
 Vertex::~Vertex() {}
 
@@ -17,14 +41,14 @@ void Vertex::SetPosition(const aiVector3D& pos) {
 	position_z = pos.z;
 }
 
-void Vertex::SetTexture(const glm::vec2& cords) {
-	texture_x = cords.x;
-	texture_y = cords.y;
+void Vertex::SetTexture(const glm::vec2& uv) {
+	texture_x = uv.x;
+	texture_y = uv.y;
 }
 
-void Vertex::SetTexture(const aiVector3D& cords) {
-	texture_x = cords.x;
-	texture_y = cords.y;
+void Vertex::SetTexture(const aiVector3D& uv) {
+	texture_x = uv.x;
+	texture_y = uv.y;
 }
 
 void Vertex::SetNormal(const glm::vec3& normal) {

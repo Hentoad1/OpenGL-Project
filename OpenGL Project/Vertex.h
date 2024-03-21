@@ -3,7 +3,9 @@
 #include "pch.h"
 
 struct Vertex{
-	Vertex();
+	Vertex(float, float, float, float, float, float, float, float);
+
+	Vertex(const aiVector3D&, const aiVector3D&, const aiVector3D&);
 
 	~Vertex();
 
