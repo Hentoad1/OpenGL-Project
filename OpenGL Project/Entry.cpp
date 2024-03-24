@@ -7,6 +7,9 @@ int main() {
 
 	Engine Engine;
 
+	//rotate image 90 degrees to see if its works. also use the new material system created.
+	//throw;
+
 	//low poly, embedded textures
 	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\2\\WomanCasual3.fbx");
 
@@ -21,6 +24,9 @@ int main() {
 
 	//chair
 	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\chair\\chair.fbx");
+
+	//jeep
+	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\jeep\\Jeep_Renegade_2016.fbx");
 
 	while (!Engine.ShouldClose())
 	{

@@ -105,6 +105,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="Material.cpp" />
+    <ClCompile Include="MaterialKeys.cpp" />
+    <ClCompile Include="MeshMeta.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -116,7 +119,10 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="Engine.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="MaterialKeys.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="MeshMeta.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Screen.h" />

@@ -40,6 +40,15 @@
     <Filter Include="Source Files\Loading Models\Path">
       <UniqueIdentifier>{fe44a07d-3538-47fd-b659-a16e4c648ada}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Loading Models\Material">
+      <UniqueIdentifier>{4b5b1f4b-a066-4c41-97a4-e7b071ce5bd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Mesh\Meta">
+      <UniqueIdentifier>{d2795968-9c65-4900-9581-78d6cf4b67c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Material\Meta">
+      <UniqueIdentifier>{40995a00-565c-4e1f-ad2f-19923297f9f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -71,6 +80,15 @@
     </ClCompile>
     <ClCompile Include="Path.cpp">
       <Filter>Source Files\Loading Models\Path</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Loading Models\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialKeys.cpp">
+      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshMeta.cpp">
+      <Filter>Source Files\Loading Models\Mesh\Meta</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,6 +130,15 @@
     </ClInclude>
     <ClInclude Include="Path.h">
       <Filter>Source Files\Loading Models\Path</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Source Files\Loading Models\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialKeys.h">
+      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+    </ClInclude>
+    <ClInclude Include="MeshMeta.h">
+      <Filter>Source Files\Loading Models\Mesh\Meta</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

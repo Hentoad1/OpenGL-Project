@@ -6,11 +6,19 @@
 
 static constexpr GLenum Type = GL_TEXTURE_2D;
 
-static GLuint AttachTexture(const stbi_uc* buff, const int& width, const int& height, const int& bits_per_pixel) {
+static GLuint AttachTexture(const stbi_uc* buff, const int width, const int height, const int bits_per_pixel) {
 	GLuint glTexture;
 	
 	glGenTextures(1, &glTexture);
 	glBindTexture(Type, glTexture);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+	std::cout << "SIZE:" << std::endl;
+	std::cout << "width:" << width << std::endl;
+	std::cout << "height:" << height << std::endl;
+	std::cout << "bpp:" << bits_per_pixel << std::endl;
+	std::cout << "bytes:" << bits_per_pixel * width * height << std::endl;
 
 	if (bits_per_pixel == 1) {
 
@@ -37,7 +45,6 @@ static GLuint AttachTexture(const stbi_uc* buff, const int& width, const int& he
 		throw;
 
 	}
-
 
 	glTexParameteri(Type, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 	glTexParameteri(Type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

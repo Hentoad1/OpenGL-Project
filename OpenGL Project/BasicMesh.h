@@ -4,8 +4,6 @@
 
 #include "Vertex.h"
 
-#define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_LINE | aiPrimitiveType_POINT
-
 constexpr int POSITION_LOCATION = 0;
 constexpr int TEXTURE_LOCATION = 1;
 constexpr int NORMAL_LOCATION = 2;

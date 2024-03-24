@@ -5,6 +5,8 @@
 #include "Texture.h"
 #include "Vertex.h"
 #include "Path.h"
+#include "Material.h"
+#include "MeshMeta.h"
 
 #define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_POINTS|aiPrimitiveType_LINES
 
@@ -52,7 +54,11 @@ void Mesh::Load(const std::string path) {
 		//reiquired: otherwise meshes will not align properly
 		aiProcess_PreTransformVertices | \
 
+		//does fix current issue but is good nonetheless
 		aiProcess_GenUVCoords | \
+
+		//sometimes this fixes something, sometimes it doesn't
+		//aiProcess_FlipUVs | \
 
 
 		//can be useful later for lighting
@@ -90,6 +96,35 @@ void Mesh::Load(const std::string path) {
 
 	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
 
+	auto& z = scene->mMetaData;
+
+	for (int i = 0; i < z->mNumProperties; i++) {
+		std::cout << "---------------" << std::endl;
+		std::cout << z->mKeys[i].C_Str() << std::endl;
+		std::cout << "(" << z->mValues[i].mType << ")" << z->mValues[i].mData << std::endl;
+		std::cout << "---------------" << std::endl;
+	}
+	
+	MeshMeta g = MeshMeta(scene->mMetaData);
+
+	g.LogProperties();
+
+	/*
+		AI_BOOL = 0,
+		AI_INT32 = 1,
+		AI_UINT64 = 2,
+		AI_FLOAT = 3,
+		AI_DOUBLE = 4,
+		AI_AISTRING = 5,
+		AI_AIVECTOR3D = 6,
+		AI_AIMETADATA = 7,
+		AI_INT64 = 8,
+		AI_UINT32 = 9,
+		AI_META_MAX = 10,
+	*/
+
+	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
+
 	//std::vector<Vertex> vertices;
 
 	//std::vector<unsigned int> indices;
@@ -114,6 +149,7 @@ void Mesh::Load(const std::string path) {
 			const aiVector3D& normal = mesh->mNormals[i];
 			const aiVector3D& tex = mesh->HasTextureCoords(0) ? mesh->mTextureCoords[0][i] : ZeroVector;
 
+
 			vertices.emplace_back(pos, tex, normal);
 
 			min.x = std::min(min.x, pos.x);
@@ -124,7 +160,6 @@ void Mesh::Load(const std::string path) {
 			max.y = std::max(max.y, pos.y);
 			max.z = std::max(max.z, pos.z);
 		}
-
 
 		unsigned int maxIndex = 0;
 
@@ -163,6 +198,7 @@ void Mesh::Load(const std::string path) {
 
 		unsigned int TexCount = mat->GetTextureCount(aiTextureType_DIFFUSE);
 
+		Material m = Material(mat);
 
 		//really this for loop should only exist if im rendering multiple textures, but whatevre
 		for (unsigned int j = 0; j < TexCount; j++) {

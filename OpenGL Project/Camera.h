@@ -18,23 +18,6 @@ public:
 private:
 	void CalculateVectors();
 
-	static constexpr glm::vec3 WORLD_ORIGIN = glm::vec3(0.0f, 0.0f, 0.0f);
-	static constexpr glm::vec3 FACING = glm::vec3(0.0f, 0.0f, 0.0f);
-	static constexpr glm::vec3 TOP = glm::vec3(0.0f, 1.0f, 0.0f);
-
-	static constexpr float FOV = glm::radians(70.0f);
-
-	static constexpr float CLIPPING_MIN = 0.1f;
-	static constexpr float CLIPPING_MAX = 1000.0f;
-
-
-	static constexpr float CAMERA_HEIGHT = 0.5f;
-
-	static constexpr float CAMERA_MIN_DISTANCE = 1.0f;
-
-	static constexpr float CAMERA_VERTICAL_MAX = glm::radians(89.9f);
-
-
 	float CAMERA_DISTANCE = 50.0f;
 
 	float CAMERA_HORIZONTAL_ROTATION = 0.0f;
