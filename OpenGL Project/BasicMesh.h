@@ -3,6 +3,7 @@
 #include "BasicShader.h"
 
 #include "Vertex.h"
+#include "Material.h"
 
 constexpr int POSITION_LOCATION = 0;
 constexpr int TEXTURE_LOCATION = 1;
@@ -85,10 +86,5 @@ private:
 	
 	//OpenGL Buffers
 	GLuint VertexBuffer;
-	MatBuffer* MaterialBuffer;
-
-	//indices
-	std::vector<unsigned int> indices;
-
-	std::vector<Vertex> vertices;
+	std::vector<Material> Materials;
 };

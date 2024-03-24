@@ -14,12 +14,6 @@ static GLuint AttachTexture(const stbi_uc* buff, const int width, const int heig
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	std::cout << "SIZE:" << std::endl;
-	std::cout << "width:" << width << std::endl;
-	std::cout << "height:" << height << std::endl;
-	std::cout << "bpp:" << bits_per_pixel << std::endl;
-	std::cout << "bytes:" << bits_per_pixel * width * height << std::endl;
-
 	if (bits_per_pixel == 1) {
 
 		glTexImage2D(Type, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, buff);
@@ -62,8 +56,6 @@ static GLuint AttachTexture(const stbi_uc* buff, const int width, const int heig
 	glGenerateMipmap(Type);
 
 	glBindTexture(Type, 0);
-
-	checkGLErrors();
 
 	return glTexture;
 }

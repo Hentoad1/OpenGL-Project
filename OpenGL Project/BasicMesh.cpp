@@ -2,10 +2,7 @@
 #include "pch.h"
 #include "BasicMesh.h"
 
-#include "Texture.h"
 #include "Vertex.h"
-#include "Path.h"
-#include "Material.h"
 #include "MeshMeta.h"
 
 #define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_POINTS|aiPrimitiveType_LINES
@@ -29,7 +26,6 @@ Mesh::Mesh(const std::string path, Camera* mCam) {
 
 Mesh::~Mesh() {
 	delete shader;
-	delete[] MaterialBuffer;
 }
 
 
@@ -96,38 +92,9 @@ void Mesh::Load(const std::string path) {
 
 	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
 
-	auto& z = scene->mMetaData;
+	std::vector<Vertex> vertices;
 
-	for (int i = 0; i < z->mNumProperties; i++) {
-		std::cout << "---------------" << std::endl;
-		std::cout << z->mKeys[i].C_Str() << std::endl;
-		std::cout << "(" << z->mValues[i].mType << ")" << z->mValues[i].mData << std::endl;
-		std::cout << "---------------" << std::endl;
-	}
-	
-	MeshMeta g = MeshMeta(scene->mMetaData);
-
-	g.LogProperties();
-
-	/*
-		AI_BOOL = 0,
-		AI_INT32 = 1,
-		AI_UINT64 = 2,
-		AI_FLOAT = 3,
-		AI_DOUBLE = 4,
-		AI_AISTRING = 5,
-		AI_AIVECTOR3D = 6,
-		AI_AIMETADATA = 7,
-		AI_INT64 = 8,
-		AI_UINT32 = 9,
-		AI_META_MAX = 10,
-	*/
-
-	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
-
-	//std::vector<Vertex> vertices;
-
-	//std::vector<unsigned int> indices;
+	std::vector<unsigned int> indices;
 
 	const aiVector3D ZeroVector(0.0f, 0.0f, 0.0f);
 
@@ -188,92 +155,8 @@ void Mesh::Load(const std::string path) {
 
 	/* ----------------------------------- IMPORT TEXTURES ----------------------------------- */
 
-
-	MaterialBuffer = new MatBuffer[scene->mNumMaterials];
-
-	std::cout << "mNumMaterials: " << scene->mNumMaterials << std::endl;
-
-	for (unsigned int i = 0; i < scene->mNumMaterials; i++) {
-		aiMaterial* mat = scene->mMaterials[i];
-
-		unsigned int TexCount = mat->GetTextureCount(aiTextureType_DIFFUSE);
-
-		Material m = Material(mat);
-
-		//really this for loop should only exist if im rendering multiple textures, but whatevre
-		for (unsigned int j = 0; j < TexCount; j++) {
-			aiString texturePath;
-
-			//aiTextureMapping mappingType;
-			//unsigned int uvIndex;
-			//float blend;
-			//aiTextureOp textureOP;
-			//aiTextureMapMode mapMode[3];
-
-			mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), texturePath);
-
-			//mat->GetTexture(aiTextureType_DIFFUSE, 0, &texturePath, &mappingType, &uvIndex, &blend, &textureOP, mapMode);
-
-			//std::cout << mappingType << std::endl;
-			//std::cout << uvIndex << std::endl;
-			//std::cout << blend << std::endl;
-			//std::cout << (int)textureOP << std::endl;
-			//std::cout << (int)mapMode[0] << ", " << (int)mapMode[1] << ", " << (int)mapMode[2] << ", " << std::endl;
-
-			int z = aiTextureMapMode_Wrap | aiTextureMapMode_Clamp | aiTextureMapMode_Decal | aiTextureMapMode_Mirror;
-
-			const aiTexture* texture = scene->GetEmbeddedTexture(texturePath.C_Str());
-
-			if (texture == nullptr) {
-				//regular texture, in external file
-
-				std::cout << "normal" << std::endl;
-				std::cout << texturePath.C_Str() << std::endl;
-
-				std::string result = CalculatePath(path, texturePath.C_Str());
-
-
-				std::cout << "path: " << path << std::endl;
-				std::cout << "texpath: " << texturePath.C_Str() << std::endl;
-				std::cout << "res: " << result << std::endl;
-
-
-				/*std::string a = texturePath.C_Str();
-
-				if (a.find("jpg") != -1) {
-					continue;
-				}*/
-
-
-				GLuint glTexture = LoadTexture(result);
-
-				if (!MaterialBuffer[i].Has(TextureType_DIFFUSE)) {
-					std::cout << "setting texture: " << glTexture << std::endl;
-					MaterialBuffer[i].Set(TextureType_DIFFUSE, glTexture);
-				}
-			}
-			else {
-				//embedded texture
-
-				GLuint glTexture = LoadTexture(texture);
-
-				if (!MaterialBuffer[i].Has(TextureType_DIFFUSE)) {
-					std::cout << "setting texture: " << glTexture << std::endl;
-					MaterialBuffer[i].Set(TextureType_DIFFUSE, glTexture);
-				}
-
-				std::cout << "embedded" << std::endl;
-				std::cout << texturePath.C_Str() << std::endl;
-			}
-		}
-
-		//aiTexture* tex = scene->mTextures[0];
-
-
-
-
-
-
+	for (int i = 0; i < scene->mNumMaterials; i++) {
+		Materials.emplace_back(scene, i, path);
 	}
 
 	/* ----------------------------- INITIALIZE CLASS VARIABLES ------------------------------ */
@@ -340,10 +223,7 @@ void Mesh::Render() {
 	glBindVertexArray(VertexBuffer);
 
 	for (const SubMesh& sub : mesh_data) {
-
-		GLuint tex = MaterialBuffer[sub.materialIndex].Get(TextureType_DIFFUSE);
-
-		//std::cout << sub.materialIndex << std::endl;
+		GLuint tex = Materials[sub.materialIndex].Get(aiTextureType_DIFFUSE);
 
 		glBindTexture(GL_TEXTURE_2D, tex);
 

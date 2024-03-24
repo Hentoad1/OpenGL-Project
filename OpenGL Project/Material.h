@@ -2,20 +2,20 @@
 
 #include "pch.h";
 
-
+static constexpr unsigned int numTexTypes = 12;
 
 class Material {
 
 public:
 	
-	Material(const aiMaterial*);
+	Material(const aiScene*, const int, const std::string&);
 
 	GLuint Get(aiTextureType) const;
 
-	bool Has(aiTextureType) const ;
+	bool Has(aiTextureType) const;
 
 private:
 
-	GLuint textures[12];
-	bool loaded[12];
+	GLuint textures[numTexTypes];
+	bool loaded[numTexTypes];
 };
