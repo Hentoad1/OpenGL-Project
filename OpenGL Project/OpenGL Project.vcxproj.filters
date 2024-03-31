@@ -81,14 +81,17 @@
     <ClCompile Include="Path.cpp">
       <Filter>Source Files\Loading Models\Path</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Loading Models\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="MaterialKeys.cpp">
+    <ClCompile Include="MaterialMeta3.cpp">
       <Filter>Source Files\Loading Models\Material\Meta</Filter>
     </ClCompile>
     <ClCompile Include="MeshMeta.cpp">
       <Filter>Source Files\Loading Models\Mesh\Meta</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialMeta.cpp">
+      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Loading Models\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,11 +137,14 @@
     <ClInclude Include="Material.h">
       <Filter>Source Files\Loading Models\Material</Filter>
     </ClInclude>
-    <ClInclude Include="MaterialKeys.h">
+    <ClInclude Include="MaterialMeta3.h">
       <Filter>Source Files\Loading Models\Material\Meta</Filter>
     </ClInclude>
     <ClInclude Include="MeshMeta.h">
       <Filter>Source Files\Loading Models\Mesh\Meta</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialMeta.h">
+      <Filter>Source Files\Loading Models\Material\Meta</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h";
+#include "pch.h"
 #include "BasicShader.h"
 
 #include "Screen.h"
@@ -10,16 +10,15 @@ BasicShader::BasicShader(Camera* mCam, glm::vec3 center) : ShaderProgram("./Basi
 
     glm::vec3 offset = center * glm::vec3(-1);
 
-    std::cout << glm::to_string(center) << std::endl;
-
     mModel = glm::mat4(1.0f);
     mModel = glm::translate(mModel, offset);
 
-    std::cout << glm::to_string(mModel) << std::endl;
+    setBool("useTexture", true);
 }
 
 //Update assumes the shader is in use.
 void BasicShader::Update() {
+    setVec3("lightPos", glm::vec3(0, 0, 100));
 
     setMat4("projection", mCamera->GetProjection());
 

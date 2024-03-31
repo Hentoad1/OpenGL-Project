@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "MaterialKeys.h"
+#include "MaterialMeta3.h"
 
 static constexpr bool defaultInitalized[28] = {
 	false,
@@ -33,6 +33,45 @@ static constexpr bool defaultInitalized[28] = {
 	false
 };
 
+MaterialMeta::MaterialMeta(const aiMaterial* mat) {
+	int index = 0;
+
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_NAME, _NAME);
+
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_DIFFUSE, _COLOR_DIFFUSE);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_SPECULAR, _COLOR_SPECULAR);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_AMBIENT, _COLOR_AMBIENT);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_EMISSIVE, _COLOR_EMISSIVE);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_TRANSPARENT, _COLOR_TRANSPARENT);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_COLOR_REFLECTIVE, _COLOR_REFLECTIVE);
+
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_ENABLE_WIREFRAME, _WIREFRAME);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TWOSIDED, _TWOSIDED);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_SHADING_MODEL, _SHADING_MODEL);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_BLEND_FUNC, _BLEND_FUNC);
+
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_OPACITY, _OPACITY);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS, _SHININESS);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS_STRENGTH, _SHININESS_STRENGTH);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_REFRACTI, _REFRACTI);
+
+	index++;
+	index++;
+	index++;
+	
+	index++;
+	index++;
+	index++;
+	index++;
+	index++;
+	index++;
+
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_BUMPSCALING, _BUMPSCALING);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_GLOBAL_BACKGROUND_IMAGE, _BACKGROUND_IMAGE);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_REFLECTIVITY, _REFLECTIVITY);
+	index++;
+}
+
 MaterialMeta::MaterialMeta(const aiMaterial* mat, const aiTextureType& type) {
 	int index = 0;
 
@@ -55,25 +94,25 @@ MaterialMeta::MaterialMeta(const aiMaterial* mat, const aiTextureType& type) {
 	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_SHININESS_STRENGTH, _SHININESS_STRENGTH);
 	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_REFRACTI, _REFRACTI);
 
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXTURE(aiTextureType_DIFFUSE, 0), _PATH);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXBLEND(aiTextureType_DIFFUSE, 0), _TEXBLEND);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXOP(aiTextureType_DIFFUSE, 0), _TEXOP);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXTURE(type, 0), _PATH);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXBLEND(type, 0), _TEXBLEND);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXOP(type, 0), _TEXOP);
 
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_MAPPING(aiTextureType_DIFFUSE, 0), _MAPPING);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_UVWSRC(aiTextureType_DIFFUSE, 0), _UVWSRC);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_MAPPINGMODE_U(aiTextureType_DIFFUSE, 0), _MAPPINGMODE_U);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_MAPPINGMODE_V(aiTextureType_DIFFUSE, 0), _MAPPINGMODE_V);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXMAP_AXIS(aiTextureType_DIFFUSE, 0), _TEXMAP_AXIS);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXFLAGS(aiTextureType_DIFFUSE, 0), _TEXFLAGS);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_MAPPING(type, 0), _MAPPING);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_UVWSRC(type, 0), _UVWSRC);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_MAPPINGMODE_U(type, 0), _MAPPINGMODE_U);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_MAPPINGMODE_V(type, 0), _MAPPINGMODE_V);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXMAP_AXIS(type, 0), _TEXMAP_AXIS);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_TEXFLAGS(type, 0), _TEXFLAGS);
 
 	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_BUMPSCALING, _BUMPSCALING);
 	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_GLOBAL_BACKGROUND_IMAGE, _BACKGROUND_IMAGE);
 	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_REFLECTIVITY, _REFLECTIVITY);
-	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_UVTRANSFORM(aiTextureType_DIFFUSE, 0), _UVTRANSFORM);
+	VarsInitalized[index++] = AI_SUCCESS == mat->Get(AI_MATKEY_UVTRANSFORM(type, 0), _UVTRANSFORM);
 }
 
 bool MaterialMeta::PropertyIsInitalized(const MatMetaProperty& prop) const {
-	return VarsInitalized[prop];
+	return VarsInitalized[prop] || defaultInitalized[prop];
 }
 
 MatProp MaterialMeta::GetProperty(const MatMetaProperty& prop) const {

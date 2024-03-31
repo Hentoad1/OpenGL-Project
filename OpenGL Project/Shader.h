@@ -118,9 +118,12 @@ public:
 
     virtual void Update() = 0;
 
-protected:
     void setBool(const std::string& name, bool value) {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
+    }
+
+    void setBools(const std::string& name, int* value, int count) {
+        glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, &value[0]);
     }
 
     void setInt(const std::string& name, int value) {
@@ -135,24 +138,20 @@ protected:
         glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
     }
 
-    void setVec2(const std::string& name, float x, float y) {
-        glUniform2f(glGetUniformLocation(ID, name.c_str()), x, y);
-    }
-
     void setVec3(const std::string& name, const glm::vec3& value) {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
     }
 
-    void setVec3(const std::string& name, float x, float y, float z) {
-        glUniform3f(glGetUniformLocation(ID, name.c_str()), x, y, z);
+    void setVec3s(const std::string& name, const GLfloat* value, int count) {
+        glUniform3fv(glGetUniformLocation(ID, name.c_str()), count * 3, value);
     }
 
     void setVec4(const std::string& name, const glm::vec4& value) {
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
     }
 
-    void setVec4(const std::string& name, float x, float y, float z, float w) {
-        glUniform4f(glGetUniformLocation(ID, name.c_str()), x, y, z, w);
+    void setVec4s(const std::string& name, const GLfloat* value, int count) {
+        glUniform4fv(glGetUniformLocation(ID, name.c_str()), count * 4, value);
     }
 
     void setMat2(const std::string& name, const glm::mat2& mat) {
@@ -169,6 +168,14 @@ protected:
 
     void setMat4(const std::string& name, const aiMatrix4x4& mat) {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
+    }
+
+    void setTexture(const std::string& name, const GLint tex) {
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), tex);
+    }
+
+    void setTextures(const std::string& name, const GLint* tex, int count) {
+        glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, tex);
     }
 
 private:

@@ -92,6 +92,8 @@ struct MatProp {
 class MaterialMeta{
 
 public:
+	MaterialMeta(const aiMaterial*);
+
 	MaterialMeta(const aiMaterial*, const aiTextureType&);
 
 	bool PropertyIsInitalized(const MatMetaProperty&) const;
@@ -120,16 +122,14 @@ private:
 	float _SHININESS_STRENGTH = 1.0f;
 	float _REFRACTI = 1.0f;
 	aiString _PATH;
-	float _TEXBLEND;
-	int _TEXOP;
-	int _MAPPING;
-	int _UVWSRC;
-	int _MAPPINGMODE_U;
-	int _MAPPINGMODE_V;
+	float _TEXBLEND = -FLT_MAX;
+	int _TEXOP = INT_MIN;
+	int _MAPPING = INT_MIN;
+	int _UVWSRC = INT_MIN;
+	int _MAPPINGMODE_U = INT_MIN;
+	int _MAPPINGMODE_V = INT_MIN;
 	aiVector3D _TEXMAP_AXIS;
 	int _TEXFLAGS;
-
-	//How much a bump map effects the texture. Only relevant if a bump map exists. Default is 1.
 	int _BUMPSCALING;
 	int _BACKGROUND_IMAGE;
 	int _REFLECTIVITY;

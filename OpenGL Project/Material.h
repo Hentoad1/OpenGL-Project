@@ -1,8 +1,8 @@
 #pragma once
 
-#include "pch.h";
+#include "pch.h"
 
-static constexpr unsigned int numTexTypes = 12;
+static constexpr unsigned int numTexTypes = 3;
 
 class Material {
 
@@ -10,12 +10,15 @@ public:
 	
 	Material(const aiScene*, const int, const std::string&);
 
-	GLuint Get(aiTextureType) const;
+	GLint* GetTextures() const;
 
-	bool Has(aiTextureType) const;
+	GLint* GetTexturesExist() const;
+
+	float* GetColors() const;
 
 private:
-
-	GLuint textures[numTexTypes];
-	bool loaded[numTexTypes];
+	GLint textures[numTexTypes];
+	GLint loaded[numTexTypes];
+	float MaterialColors[numTexTypes * 4];
 };
+

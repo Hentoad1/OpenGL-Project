@@ -83,6 +83,7 @@ GLuint LoadTexture(const aiTexture* texture) {
 		int height;
 		int bits_per_pixel;
 
+		stbi_set_flip_vertically_on_load(1);
 
 		//if no components are requested then i guess bits per pixel is returned?
 		stbi_uc* buff = stbi_load_from_memory(compressedBuff, len, &width, &height, &bits_per_pixel, 0);

@@ -43,5 +43,5 @@
 #include <glm/glm.hpp>
 
 #ifdef _DEBUG
-#include "Debug.h";
+#include "Debug.h"
 #endif
