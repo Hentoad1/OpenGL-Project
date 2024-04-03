@@ -2,6 +2,7 @@
 
 #include "Camera.h"
 #include "World.h"
+#include "Config.h"
 
 class Engine {
 
@@ -22,9 +23,16 @@ public:
 
 	Camera* GetCamera() const;
 
+	glm::dvec2 CursorPos;
+
 private:
 	Camera* eCamera;
 	World* eWorld;
 
 	GLFWwindow* eWindow;
+
+	double previousDrawTime = 0;
+	double previousUpdateTime = 0;
+
+
 };

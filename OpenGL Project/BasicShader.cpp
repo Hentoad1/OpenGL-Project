@@ -12,13 +12,16 @@ BasicShader::BasicShader(Camera* mCam, glm::vec3 center) : ShaderProgram("./Basi
 
     mModel = glm::mat4(1.0f);
     mModel = glm::translate(mModel, offset);
-
-    setBool("useTexture", true);
 }
 
 //Update assumes the shader is in use.
 void BasicShader::Update() {
+#ifdef ENGINE_SETTING_DISPLAY_MODEL
+    setVec3("lightPos", mCamera->LightPos);
+#else
     setVec3("lightPos", glm::vec3(0, 0, 100));
+#endif // DEBUG
+
 
     setMat4("projection", mCamera->GetProjection());
 

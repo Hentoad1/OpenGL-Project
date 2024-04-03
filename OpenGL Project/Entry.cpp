@@ -5,6 +5,12 @@
 
 int main() {
 
+	//throw;
+
+
+	
+
+
 	Engine Engine;
 
 	//rotate image 90 degrees to see if its works. also use the new material system created.

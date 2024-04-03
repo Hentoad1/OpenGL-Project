@@ -61,7 +61,11 @@ Engine::Engine() {
 	glfwSetCursorPosCallback(eWindow, onCursorMovement);
 
 	//Set Mouse Cursor Style
-	glfwSetInputMode(eWindow, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	if (glfwRawMouseMotionSupported()){
+		glfwSetInputMode(eWindow, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
+	}
+
+	glfwSetInputMode(eWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	//Stop Overlap
 	glEnable(GL_DEPTH_TEST);
@@ -96,6 +100,20 @@ void Engine::Draw() {
 }
 
 void Engine::Update() {
+
+#ifdef ENGINE_SETTING_DISPLAY_MODEL
+	/*std::cout << "----------------------------------" << std::endl;
+	std::cout << "          Camera Position         " << std::endl;
+	std::cout << "----------------------------------" << std::endl;
+	std::cout << std::fixed << std::setprecision(3) << 
+		"(" << eCamera->GetPosition().x << ", " << eCamera->GetPosition().y << ", " << eCamera->GetPosition().z << ")" << std::endl;
+	std::cout << "----------------------------------" << std::endl;
+	std::cout << "         Camera Direction         " << std::endl;
+	std::cout << "----------------------------------" << std::endl;
+	std::cout << std::fixed << std::setprecision(3) <<
+		"(" << eCamera->GetDirection().x << ", " << eCamera->GetDirection().y << ", " << eCamera->GetDirection().z << ")" << std::endl;*/
+#endif
+
 	//Process Input -- maybe should be handled in input eventually.
 	if (glfwGetKey(eWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(eWindow, true);
@@ -112,7 +130,9 @@ Camera* Engine::GetCamera() const {
 	return eCamera;
 }
 
-/* --------------------------------- CALLBACK FUNCTIONS ---------------------------------- */
+/* ---------------------------- MESH VIEW CALLBACK FUNCTIONS ----------------------------- */
+
+#ifdef ENGINE_SETTING_DISPLAY_MODEL
 
 static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
@@ -128,33 +148,143 @@ static void onInput(GLFWwindow* window, int key, int scancode, int action, int m
 
 	switch (key)
 	{
-	case(GLFW_KEY_RIGHT):
-		e->GetCamera()->Rotate(true, amount);
+	case(GLFW_KEY_W):
+		e->GetCamera()->Move(1, 0, 0);
 		break;
-	case(GLFW_KEY_LEFT):
-		e->GetCamera()->Rotate(true, -amount);
+	case(GLFW_KEY_A):
+		e->GetCamera()->Move(0, 0, -1);
 		break;
-	case(GLFW_KEY_UP):
-		e->GetCamera()->Rotate(false, amount);
+	case(GLFW_KEY_S):
+		e->GetCamera()->Move(-1, 0, 0);
 		break;
-	case(GLFW_KEY_DOWN):
-		e->GetCamera()->Rotate(false, -amount);
+	case(GLFW_KEY_D):
+		e->GetCamera()->Move(0, 0, 1);
+		break;
+	case(GLFW_KEY_SPACE):
+		e->GetCamera()->Move(0, 1, 0);
+		break;
+	case(GLFW_KEY_LEFT_CONTROL):
+		e->GetCamera()->Move(0, -1, 0);
+		break;
+	case(GLFW_KEY_F):
+		e->GetCamera()->LightPos = e->GetCamera()->GetPosition();
 		break;
 	default:
 		break;
 	}
 }
 
-static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset) {
-	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
 
-	e->GetCamera()->Zoom(yoffset);
+static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset) {
+	
 }
 
-static void onResize(GLFWwindow* window, int width, int height){
+static void onResize(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-static void onCursorMovement(GLFWwindow * window, double xpos, double ypos) {
+static void onCursorMovement(GLFWwindow* window, double xpos, double ypos) {
+	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
+
+
+	//Change (in pixels) since last event
+	double deltaCursorX = -(e->CursorPos.x - xpos); //inverted
+	double deltaCursorY = e->CursorPos.y - ypos;
+
+	e->CursorPos = glm::dvec2(xpos, ypos);
+
+	//Change (in % of screen) since last event
+	double percentDeltaCursorX = deltaCursorX / SCREEN_WIDTH;
+	double percentDeltaCursorY = deltaCursorY / SCREEN_HEIGHT;
+
+
+	//Change (in % of screen) with adjusted sensitivy
+	static constexpr int SENSITIVITY_MAX = 150;
+	static constexpr int SENSITIVITY_MIN = 30;
+
+	double adjustedDeltaCursorX = percentDeltaCursorX * SENSITIVITY_MIN;
+	double adjustedDeltaCursorY = percentDeltaCursorY * SENSITIVITY_MIN;
+
+	e->GetCamera()->Rotate(adjustedDeltaCursorX, adjustedDeltaCursorY);
+}
+#endif // ENGINE_SETTING_DISPLAY_MODEL
+
+
+
+/* ------------------------------- MAIN CALLBACK FUNCTIONS ------------------------------- */
+
+
+
+#ifdef ENGINE_SETTING_MAIN
+
+static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
+
+	float amount = 0.2f;
+
+	if (action == GLFW_REPEAT) {
+		amount = 0.1f;
+	}
+	else if (action == GLFW_RELEASE) {
+		return;
+	}
+
+	switch (key)
+	{
+	case(GLFW_KEY_W):
+		e->GetCamera()->Move(1, 0, 0);
+		break;
+	case(GLFW_KEY_A):
+		e->GetCamera()->Move(0, 0, -1);
+		break;
+	case(GLFW_KEY_S):
+		e->GetCamera()->Move(-1, 0, 0);
+		break;
+	case(GLFW_KEY_D):
+		e->GetCamera()->Move(0, 0, 1);
+		break;
+	case(GLFW_KEY_SPACE):
+		e->GetCamera()->Move(0, 1, 0);
+		break;
+	case(GLFW_KEY_LEFT_CONTROL):
+		e->GetCamera()->Move(0, -1, 0);
+		break;
+	default:
+		break;
+	}
+}
+
+
+static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset) {
 
 }
+
+static void onResize(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
+static void onCursorMovement(GLFWwindow* window, double xpos, double ypos) {
+	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
+
+
+	//Change (in pixels) since last event
+	double deltaCursorX = -(e->CursorPos.x - xpos); //inverted
+	double deltaCursorY = e->CursorPos.y - ypos;
+
+	e->CursorPos = glm::dvec2(xpos, ypos);
+
+	//Change (in % of screen) since last event
+	double percentDeltaCursorX = deltaCursorX / SCREEN_WIDTH;
+	double percentDeltaCursorY = deltaCursorY / SCREEN_HEIGHT;
+
+
+	//Change (in % of screen) with adjusted sensitivy
+	static constexpr int SENSITIVITY_MAX = 150;
+	static constexpr int SENSITIVITY_MIN = 30;
+
+	double adjustedDeltaCursorX = percentDeltaCursorX * SENSITIVITY_MIN;
+	double adjustedDeltaCursorY = percentDeltaCursorY * SENSITIVITY_MIN;
+
+	e->GetCamera()->Rotate(adjustedDeltaCursorX, adjustedDeltaCursorY);
+}
+#endif // ENGINE_SETTING_MAIN

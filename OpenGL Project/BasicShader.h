@@ -4,6 +4,7 @@
 
 #include "Shader.h"
 #include "Camera.h"
+#include "Config.h"
 
 class BasicShader : ShaderProgram {
 public:

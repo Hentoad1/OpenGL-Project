@@ -60,9 +60,6 @@
     <ClCompile Include="BasicMesh.cpp">
       <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
@@ -93,6 +90,9 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\Loading Models\Material</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -115,9 +115,6 @@
     </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="Engine.h">
       <Filter>Source Files\Engine</Filter>
@@ -145,6 +142,12 @@
     </ClInclude>
     <ClInclude Include="MaterialMeta.h">
       <Filter>Source Files\Loading Models\Material\Meta</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Source Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

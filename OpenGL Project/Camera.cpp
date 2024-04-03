@@ -1,66 +1,86 @@
-
 #include "pch.h"
-#include "Camera.h"
 
+#include "Camera.h"
 #include "Screen.h"
 
+static constexpr glm::vec3 GLOBAL_UP = glm::vec3(0.0f, 1.0f, 0.0f);
+//static constexpr glm::vec3 GLOBAL_RIGHT = glm::normalize(glm::cross(GLOBAL_UP, cameraDirection));
 
-static constexpr glm::vec3 WORLD_ORIGIN = glm::vec3(0.0f, 0.0f, 0.0f);
-static constexpr glm::vec3 FACING = glm::vec3(0.0f, 0.0f, 0.0f);
-static constexpr glm::vec3 TOP = glm::vec3(0.0f, 1.0f, 0.0f);
+//static const glm::quat QUAT_GLOBAL_UP = glm::normalize(glm::quat(glm::vec3(0.0f, 1.0f, 0.0f)));
+//static const glm::quat QUAT_GLOBAL_RIGHT = glm::normalize(glm::quat(glm::vec3(1.0f, 0.0f, 0.0f)));
+
+//static const float PI = std::atan(1) * 4;
 
 static constexpr float FOV = glm::radians(70.0f);
 
 static constexpr float CLIPPING_MIN = 0.1f;
 static constexpr float CLIPPING_MAX = 1000.0f;
 
-
-static constexpr float CAMERA_HEIGHT = 0.5f;
-
-static constexpr float CAMERA_MIN_DISTANCE = 1.0f;
-
-static constexpr float CAMERA_VERTICAL_MAX = glm::radians(89.9f);
-
-
 Camera::Camera() {
 	projection = glm::perspective(FOV, SCREEN_WIDTH_F / SCREEN_HEIGHT_F, CLIPPING_MIN, CLIPPING_MAX);
 
-	CalculateVectors();
+	position = glm::vec3(250, 0, 0);
+	orientation = glm::vec3(-1, 0 ,0);
+
+	yaw = 180;
+	pitch = 0;
+
+	CalculateAxis();
+	CalculateView();
 }
 
-void Camera::Zoom(double amount) {
-	CAMERA_DISTANCE = std::max(CAMERA_MIN_DISTANCE, (float)(CAMERA_DISTANCE + amount));
+void Camera::Move(float x, float y, float z) {
 
-	CalculateVectors();
+	glm::vec3 deltaPos = 
+		(glm::vec3(x) * cameraFront) +
+		(glm::vec3(y) * cameraUp) +
+		(glm::vec3(z) * cameraRight);
+
+	position += deltaPos;
+
+	CalculateView();
 }
 
-void Camera::Rotate(bool horizontal, float radians) {
+void Camera::Rotate(float y, float p) {
+	yaw += y;
+	pitch += p;
 
-	if (horizontal) {
-		CAMERA_HORIZONTAL_ROTATION = (float)std::fmod(CAMERA_HORIZONTAL_ROTATION + radians, 360);
+	if (pitch > 89.0f) {
+		pitch = 89.0f;
+	}else if (pitch < -89.0f) {
+		pitch = -89.0f;
 	}
-	else {
-		CAMERA_VERITCAL_ROTATION += radians;
-		CAMERA_VERITCAL_ROTATION = std::min(CAMERA_VERITCAL_ROTATION, CAMERA_VERTICAL_MAX);
-		CAMERA_VERITCAL_ROTATION = std::max(CAMERA_VERITCAL_ROTATION, -CAMERA_VERTICAL_MAX);
-	}
 
-	CalculateVectors();
+	std::cout << "yaw: " << yaw << std::endl;
+	std::cout << "pitch: " << pitch << std::endl;
+
+	CalculateAxis();
+	CalculateView();
 }
 
-void Camera::CalculateVectors() {
-	float horizontalDistance = cos(CAMERA_VERITCAL_ROTATION) * CAMERA_DISTANCE;
-	float cameraY = sin(CAMERA_VERITCAL_ROTATION) * CAMERA_DISTANCE;
+void Camera::CalculateAxis() {
+	cameraFront = glm::normalize(glm::vec3(
+		cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
+		sin(glm::radians(pitch)),
+		sin(glm::radians(yaw)) * cos(glm::radians(pitch))
+	));
 
-	float cameraX = cos(CAMERA_HORIZONTAL_ROTATION) * horizontalDistance;
-	float cameraZ = sin(CAMERA_HORIZONTAL_ROTATION) * horizontalDistance;
+	cameraRight = glm::normalize(glm::cross(cameraFront, GLOBAL_UP));
+	cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
+}
 
-	glm::vec3 position = WORLD_ORIGIN + glm::vec3(
-		cameraX, cameraY, cameraZ
-	);
+void Camera::CalculateView() {
+	view = glm::lookAt(position, position + cameraFront, GLOBAL_UP);
 
-	view = glm::lookAt(position, WORLD_ORIGIN, TOP);
 	viewProjection = view * projection;
+}
+
+glm::vec3 Camera::GetPosition() const {
+	return position;
+}
+
+glm::vec3 Camera::GetDirection() const {
+	return orientation;
 }
 
 glm::mat4 Camera::GetView() const {

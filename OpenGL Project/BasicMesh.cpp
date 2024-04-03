@@ -226,18 +226,8 @@ void Mesh::Render() {
 		
 		Material mat = Materials[sub.materialIndex];
 
-		//Texture tex = mat.Get(aiTextureType_DIFFUSE);
-
-		//array of bools, corresponding to if each 
-
-		glBindTexture(GL_TEXTURE_2D, mat.GetTextures()[0]);
-
-		shader->setTextures("Textures", mat.GetTextures(), numTexTypes);
 		shader->setBools("TexturesExist", mat.GetTexturesExist(), numTexTypes);
 		shader->setVec4s("Colors", mat.GetColors(), numTexTypes); //6 vec 3 = 18.
-
-		GLint shaderID = shader->ID;
-		
 
 		GLint textureIndices[numTexTypes];
 		int textureIndex = 0;
@@ -251,19 +241,7 @@ void Mesh::Render() {
 			}
 		}
 
-		std::cout << "indices: " << textureIndices[0] << ", " << textureIndices[1] << ", " << textureIndices[2] << std::endl;
-
 		shader->setTextures("Textures", textureIndices, numTexTypes);
-
-		for (int i = 0; i < numTexTypes; i++) {
-			std::cout << i << ":" << std::endl;
-			std::cout << "Color: " << mat.GetColors()[i * 4] << ", " << mat.GetColors()[i * 4 + 1] << ", " << mat.GetColors()[i * 4 + 2] << ", " << mat.GetColors()[i * 4 + 3] << std::endl;
-			std::cout << "Texture: " << mat.GetTextures()[i] << std::endl;
-			std::cout << "TextureExists: " << mat.GetTexturesExist()[i] << std::endl;
-		}
-
-
-		//glBindTexture(GL_TEXTURE_2D, tex.image);
 
 		//Draw
 		glDrawElementsBaseVertex(
