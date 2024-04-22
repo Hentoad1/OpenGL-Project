@@ -9,6 +9,7 @@ public:
 	Camera();
 
 	void Move(float, float, float);
+	void MoveAbsolute(float, float, float);
 
 	void Rotate(float, float);
 

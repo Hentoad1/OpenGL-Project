@@ -16,9 +16,7 @@
 
 	/* -------------------------------- DEFAULT CONSTRUCTORS --------------------------------- */
 
-Mesh::Mesh(const std::string path, Camera* mCam) {
-	mCamera = mCam;
-	
+Mesh::Mesh(const std::string path, Camera* mCam) : mCamera(mCam) {
 	Load(path);
 }
 
@@ -161,22 +159,24 @@ void Mesh::Load(const std::string path) {
 
 	/* ----------------------------- INITIALIZE CLASS VARIABLES ------------------------------ */
 
-	this->max = glm::vec3(-FLT_MAX);
-	this->min = glm::vec3(FLT_MAX);
+	glm::vec3 max = glm::vec3(-FLT_MAX);
+	glm::vec3 min = glm::vec3(FLT_MAX);
 
 	for (int i = 0; i < mesh_data.size(); ++i) {
-		this->min.x = std::min(this->min.x, mesh_data[i].min.x);
-		this->min.y = std::min(this->min.y, mesh_data[i].min.y);
-		this->min.z = std::min(this->min.z, mesh_data[i].min.z);
 
-		this->max.x = std::max(this->max.x, mesh_data[i].max.x);
-		this->max.y = std::max(this->max.y, mesh_data[i].max.y);
-		this->max.z = std::max(this->max.z, mesh_data[i].max.z);
+
+		min.x = std::min(min.x, mesh_data[i].min.x);
+		min.y = std::min(min.y, mesh_data[i].min.y);
+		min.z = std::min(min.z, mesh_data[i].min.z);
+
+		max.x = std::max(max.x, mesh_data[i].max.x);
+		max.y = std::max(max.y, mesh_data[i].max.y);
+		max.z = std::max(max.z, mesh_data[i].max.z);
 	}
 
-	this->center = (this->min + this->max) * glm::vec3(0.5f);
+	bounds = BoundingBox(min, max);
 
-	shader = (ShaderProgram*)new BasicShader(mCamera, this->center);
+	shader = (ShaderProgram*)new BasicShader(mCamera, bounds.Center());
 
 	/* ---------------------------------- POPULATE BUFFERS ----------------------------------- */
 

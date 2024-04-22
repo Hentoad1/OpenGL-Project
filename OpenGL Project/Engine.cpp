@@ -55,7 +55,6 @@ Engine::Engine() {
 	glfwSetWindowUserPointer(eWindow, reinterpret_cast<void*>(this));
 
 	//Set Callbacks
-	glfwSetKeyCallback(eWindow, onInput);
 	glfwSetScrollCallback(eWindow, onMouseWheel);
 	glfwSetFramebufferSizeCallback(eWindow, onResize);
 	glfwSetCursorPosCallback(eWindow, onCursorMovement);
@@ -101,23 +100,49 @@ void Engine::Draw() {
 
 void Engine::Update() {
 
-#ifdef ENGINE_SETTING_DISPLAY_MODEL
-	/*std::cout << "----------------------------------" << std::endl;
-	std::cout << "          Camera Position         " << std::endl;
-	std::cout << "----------------------------------" << std::endl;
-	std::cout << std::fixed << std::setprecision(3) << 
-		"(" << eCamera->GetPosition().x << ", " << eCamera->GetPosition().y << ", " << eCamera->GetPosition().z << ")" << std::endl;
-	std::cout << "----------------------------------" << std::endl;
-	std::cout << "         Camera Direction         " << std::endl;
-	std::cout << "----------------------------------" << std::endl;
-	std::cout << std::fixed << std::setprecision(3) <<
-		"(" << eCamera->GetDirection().x << ", " << eCamera->GetDirection().y << ", " << eCamera->GetDirection().z << ")" << std::endl;*/
-#endif
 
-	//Process Input -- maybe should be handled in input eventually.
-	if (glfwGetKey(eWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+	//Determine if window should be closed.
+	if (GetKeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS) {
 		glfwSetWindowShouldClose(eWindow, true);
 	}
+
+#ifdef ENGINE_SETTING_DISPLAY_MODEL
+	
+	int8_t ForwardState = GetKeyState(ACTION_WALK_FORWARD);
+	int8_t BackwardState = GetKeyState(ACTION_WALK_BACKWARD);
+	int8_t LeftState = GetKeyState(ACTION_WALK_LEFT);
+	int8_t RightState = GetKeyState(ACTION_WALK_RIGHT);
+	int8_t JumpState = GetKeyState(ACTION_JUMP);
+	int8_t CrouchState = GetKeyState(ACTION_CROUCH);
+	int8_t InteractState = GetKeyState(ACTION_INTERACT);
+
+	if (ForwardState == GLFW_PRESS) {
+		GetCamera()->Move(1, 0, 0);
+	}
+	if (BackwardState == GLFW_PRESS) {
+		GetCamera()->Move(-1, 0, 0);
+	}
+	if (LeftState == GLFW_PRESS) {
+		GetCamera()->Move(0, 0, -1);
+	}
+	if (RightState == GLFW_PRESS) {
+		GetCamera()->Move(0, 0, 1);
+	}
+
+	if (JumpState == GLFW_PRESS) {
+		GetCamera()->MoveAbsolute(0, 1, 0);
+	}
+	if (CrouchState == GLFW_PRESS) {
+		GetCamera()->MoveAbsolute(0, -1, 0);
+	}
+
+	if (InteractState == GLFW_PRESS) {
+		GetCamera()->LightPos = GetCamera()->GetPosition();
+	}
+#else
+
+#endif
+
 
 	glfwPollEvents();
 }
@@ -128,6 +153,10 @@ bool Engine::ShouldClose() const {
 
 Camera* Engine::GetCamera() const {
 	return eCamera;
+}
+
+int8_t Engine::GetKeyState(int key) {
+	return glfwGetKey(eWindow, key);
 }
 
 /* ---------------------------- MESH VIEW CALLBACK FUNCTIONS ----------------------------- */
@@ -161,10 +190,10 @@ static void onInput(GLFWwindow* window, int key, int scancode, int action, int m
 		e->GetCamera()->Move(0, 0, 1);
 		break;
 	case(GLFW_KEY_SPACE):
-		e->GetCamera()->Move(0, 1, 0);
+		e->GetCamera()->MoveAbsolute(0, 1, 0);
 		break;
 	case(GLFW_KEY_LEFT_CONTROL):
-		e->GetCamera()->Move(0, -1, 0);
+		e->GetCamera()->MoveAbsolute(0, -1, 0);
 		break;
 	case(GLFW_KEY_F):
 		e->GetCamera()->LightPos = e->GetCamera()->GetPosition();

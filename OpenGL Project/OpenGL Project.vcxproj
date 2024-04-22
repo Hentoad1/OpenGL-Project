@@ -102,6 +102,7 @@
     </ClCompile>
     <ClCompile Include="BasicMesh.cpp" />
     <ClCompile Include="BasicShader.cpp" />
+    <ClCompile Include="BoundingBox2.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entry.cpp" />
@@ -110,6 +111,7 @@
     <ClCompile Include="MaterialMeta.cpp" />
     <ClCompile Include="MeshMeta.cpp" />
     <ClCompile Include="Path.cpp" />
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="World.cpp" />
@@ -117,6 +119,7 @@
   <ItemGroup>
     <ClInclude Include="BasicMesh.h" />
     <ClInclude Include="BasicShader.h" />
+    <ClInclude Include="BoundingBox2.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Config.h" />
     <ClInclude Include="Debug.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="MeshMeta.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="Screen.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />

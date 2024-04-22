@@ -49,6 +49,12 @@
     <Filter Include="Source Files\Loading Models\Material\Meta">
       <UniqueIdentifier>{40995a00-565c-4e1f-ad2f-19923297f9f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Loading Models\Mesh\BoundingBox">
+      <UniqueIdentifier>{82e49612-7296-461c-aba6-02294c8944e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Mesh\Bounding Box old">
+      <UniqueIdentifier>{1ec6c30a-c87c-4d35-920e-4c29d30ef346}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -92,6 +98,12 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox2.cpp">
+      <Filter>Source Files\Loading Models\Mesh\Bounding Box old</Filter>
+    </ClCompile>
+    <ClCompile Include="BoundingBox.cpp">
+      <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -148,6 +160,12 @@
     </ClInclude>
     <ClInclude Include="Config.h">
       <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox2.h">
+      <Filter>Source Files\Loading Models\Mesh\Bounding Box old</Filter>
+    </ClInclude>
+    <ClInclude Include="BoundingBox.h">
+      <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

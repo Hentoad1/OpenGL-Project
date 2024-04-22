@@ -29,6 +29,16 @@ Camera::Camera() {
 	CalculateView();
 }
 
+/*
+*/
+
+void Camera::MoveAbsolute(float x, float y, float z) {
+
+	position += glm::vec3(x, y, z);
+
+	CalculateView();
+}
+
 void Camera::Move(float x, float y, float z) {
 
 	glm::vec3 deltaPos = 

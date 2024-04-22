@@ -5,6 +5,8 @@
 #include "Vertex.h"
 #include "Material.h"
 
+#include "BoundingBox.h"
+
 constexpr int POSITION_LOCATION = 0;
 constexpr int TEXTURE_LOCATION = 1;
 constexpr int NORMAL_LOCATION = 2;
@@ -71,9 +73,7 @@ private:
 	};
 
 	//Bounding Box
-	glm::vec3 min;
-	glm::vec3 max;
-	glm::vec3 center;
+	BoundingBox bounds;
 
 	//Camera
 	Camera* mCamera;
