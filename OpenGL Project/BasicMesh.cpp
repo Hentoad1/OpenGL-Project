@@ -176,8 +176,11 @@ void Mesh::Load(const std::string path) {
 
 	bounds = BoundingBox(min, max);
 
-	shader = (ShaderProgram*)new BasicShader(mCamera, bounds.Center());
+#ifdef _DEBUG
+	bounds.BindGL(mCamera);
+#endif
 
+	shader = (ShaderProgram*)new BasicShader(mCamera, bounds.Position());
 	/* ---------------------------------- POPULATE BUFFERS ----------------------------------- */
 
 	GLuint mBuffers[2];
@@ -211,6 +214,8 @@ void Mesh::Load(const std::string path) {
 }
 
 void Mesh::Render() {
+
+	shader->SetPosition(bounds.Position());
 
 	/* -------------------------------- USE AND UPDATE SHADER -------------------------------- */
 	
@@ -256,6 +261,20 @@ void Mesh::Render() {
 	}
 
 	glBindVertexArray(0);
+
+
+#ifdef _DEBUG
+	bounds.Render();
+#endif
+}
+
+bool Mesh::CollidesWith(const BoundingBox& other) {
+
+	//only physics meshes should be tested.
+#ifdef TEST_ALL_MESHES
+	return bounds.CollidesWith(other);
+#endif
+	return false;
 }
 
 Mesh::SubMesh::SubMesh(unsigned int _BaseVertex, unsigned int _BaseIndex, unsigned int count, unsigned int matIndex, glm::vec3 _min, glm::vec3 _max) {

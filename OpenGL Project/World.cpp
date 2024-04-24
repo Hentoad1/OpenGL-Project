@@ -29,3 +29,14 @@ void World::Render() {
 		(*it)->Render();
 	}
 }
+
+glm::vec3 World::TestCollision(const BoundingBox& other) {
+
+	for (auto it = content.begin(); it != content.end(); ++it) {
+		if ((*it)->CollidesWith(other)) {
+			std::cout << "Collision found" << std::endl;
+		}
+	}
+
+	return glm::vec3(0);
+}

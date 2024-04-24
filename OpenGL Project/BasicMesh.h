@@ -28,6 +28,8 @@ public:
 
 	void Render();
 
+	bool CollidesWith(const BoundingBox& other);
+
 protected:
 	class SubMesh {
 	public:

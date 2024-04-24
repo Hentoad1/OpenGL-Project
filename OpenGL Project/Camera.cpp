@@ -41,10 +41,14 @@ void Camera::MoveAbsolute(float x, float y, float z) {
 
 void Camera::Move(float x, float y, float z) {
 
+	glm::vec3 front = glm::normalize(glm::vec3(cameraFront.x, 0, cameraFront.z));
+	glm::vec3 right = glm::normalize(glm::vec3(cameraRight.x, 0, cameraRight.z));
+
 	glm::vec3 deltaPos = 
-		(glm::vec3(x) * cameraFront) +
-		(glm::vec3(y) * cameraUp) +
-		(glm::vec3(z) * cameraRight);
+		(glm::vec3(x) * front) +
+		(glm::vec3(z) * right);
+
+	deltaPos.y = 0;
 
 	position += deltaPos;
 
@@ -60,9 +64,6 @@ void Camera::Rotate(float y, float p) {
 	}else if (pitch < -89.0f) {
 		pitch = -89.0f;
 	}
-
-	std::cout << "yaw: " << yaw << std::endl;
-	std::cout << "pitch: " << pitch << std::endl;
 
 	CalculateAxis();
 	CalculateView();
@@ -89,7 +90,7 @@ glm::vec3 Camera::GetPosition() const {
 	return position;
 }
 
-glm::vec3 Camera::GetDirection() const {
+glm::vec3 Camera::GetOrientation() const {
 	return orientation;
 }
 

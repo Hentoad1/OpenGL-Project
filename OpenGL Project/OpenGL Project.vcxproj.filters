@@ -52,8 +52,8 @@
     <Filter Include="Source Files\Loading Models\Mesh\BoundingBox">
       <UniqueIdentifier>{82e49612-7296-461c-aba6-02294c8944e7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading Models\Mesh\Bounding Box old">
-      <UniqueIdentifier>{1ec6c30a-c87c-4d35-920e-4c29d30ef346}</UniqueIdentifier>
+    <Filter Include="Source Files\Shaders\Debug">
+      <UniqueIdentifier>{7cdd8baf-f4ba-4495-a2d6-e73cd0a4a428}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -99,11 +99,11 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
-    <ClCompile Include="BoundingBox2.cpp">
-      <Filter>Source Files\Loading Models\Mesh\Bounding Box old</Filter>
-    </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugShader.cpp">
+      <Filter>Source Files\Shaders\Debug</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,11 +161,11 @@
     <ClInclude Include="Config.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="BoundingBox2.h">
-      <Filter>Source Files\Loading Models\Mesh\Bounding Box old</Filter>
-    </ClInclude>
     <ClInclude Include="BoundingBox.h">
       <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugShader.h">
+      <Filter>Source Files\Shaders\Debug</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -177,6 +177,12 @@
     </None>
     <None Include="BasicShaderF.glsl">
       <Filter>Source Files\Shaders\Basic</Filter>
+    </None>
+    <None Include="DebugShaderF.glsl">
+      <Filter>Source Files\Shaders\Debug</Filter>
+    </None>
+    <None Include="DebugShaderV.glsl">
+      <Filter>Source Files\Shaders\Debug</Filter>
     </None>
   </ItemGroup>
 </Project>

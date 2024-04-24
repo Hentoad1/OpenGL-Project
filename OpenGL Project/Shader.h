@@ -118,6 +118,10 @@ public:
 
     virtual void Update() = 0;
 
+    virtual void SetPosition(glm::vec3) = 0;
+
+    virtual void SetPosition(glm::mat4) = 0;
+
     void setBool(const std::string& name, bool value) {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
     }

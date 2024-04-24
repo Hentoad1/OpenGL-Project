@@ -14,6 +14,8 @@ public:
 
 	void Render();
 
+	glm::vec3 TestCollision(const BoundingBox&);
+
 private:
 	Camera* wCamera;
 

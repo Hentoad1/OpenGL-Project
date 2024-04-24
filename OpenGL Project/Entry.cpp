@@ -32,8 +32,18 @@ int main() {
 
 int main() {
 
-	//throw;
+	/*
+	COLLISION WORKS NOW YIPPEE
 
+	replace the struct system and store normals, vertices, and indexes in the boundingbox.
+
+	optimize alogirthm to only generate axis after first test fails.
+
+	I think there is something else i forgot but whatever.
+
+	Eventually remove all this testing shit from engine and basicmesh.
+	*/
+	throw;
 
 	
 

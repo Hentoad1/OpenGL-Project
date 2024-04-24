@@ -33,6 +33,8 @@ public:
 
 	Camera* GetCamera() const;
 
+	World* GetWorld() const;
+
 	int8_t GetKeyState(int);
 
 	glm::dvec2 CursorPos;

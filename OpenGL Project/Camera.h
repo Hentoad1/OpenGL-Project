@@ -20,7 +20,7 @@ public:
 	glm::mat4 GetViewAndProjection() const;
 
 	glm::vec3 GetPosition() const;
-	glm::vec3 GetDirection() const;
+	glm::vec3 GetOrientation() const;
 
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
 	//Light position for view mesh

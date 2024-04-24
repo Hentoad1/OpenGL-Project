@@ -79,8 +79,17 @@ void Engine::Terminate() {
 	glfwTerminate();
 }
 
+
+#ifdef CAMERA_HAS_COLLISION
+BoundingBox cameraBounds = BoundingBox(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
+#endif // CAMERA_HAS_COLLISION
+
 void Engine::Load(std::string path) {
 	eWorld->Load(path);
+
+#ifdef CAMERA_HAS_COLLISION
+	cameraBounds.BindGL(eCamera);
+#endif // CAMERA_HAS_COLLISION
 }
 
 void Engine::Draw() {
@@ -91,6 +100,10 @@ void Engine::Draw() {
 
 	//Render content
 	eWorld->Render();
+
+#ifdef CAMERA_HAS_COLLISION
+	cameraBounds.Render();
+#endif // CAMERA_HAS_COLLISION
 
 
 	//Manage Events
@@ -139,9 +152,18 @@ void Engine::Update() {
 	if (InteractState == GLFW_PRESS) {
 		GetCamera()->LightPos = GetCamera()->GetPosition();
 	}
+
+#ifdef CAMERA_HAS_COLLISION
+	cameraBounds.SetPosition(GetCamera()->GetPosition());
+	cameraBounds.SetOrientation(GetCamera()->GetOrientation());
+
+	GetWorld()->TestCollision(cameraBounds);
+#endif // CAMERA_HAS_COLLISION
+
 #else
 
 #endif
+
 
 
 	glfwPollEvents();
@@ -155,6 +177,10 @@ Camera* Engine::GetCamera() const {
 	return eCamera;
 }
 
+World* Engine::GetWorld() const {
+	return eWorld;
+}
+
 int8_t Engine::GetKeyState(int key) {
 	return glfwGetKey(eWindow, key);
 }
@@ -163,6 +189,7 @@ int8_t Engine::GetKeyState(int key) {
 
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
 
+//FUNCTION CURRENTLY NOT IN USE.
 static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
 
@@ -201,6 +228,7 @@ static void onInput(GLFWwindow* window, int key, int scancode, int action, int m
 	default:
 		break;
 	}
+
 }
 
 

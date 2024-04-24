@@ -6,9 +6,11 @@
 #include "Camera.h"
 #include "Config.h"
 
-class BasicShader : ShaderProgram {
+class DebugShader : ShaderProgram {
 public:
-    BasicShader(Camera* mCam, glm::vec3 center);
+    DebugShader(Camera* mCam, glm::vec3 center);
+
+    DebugShader(Camera* mCam, glm::vec3 center, glm::vec4 color);
 
     void SetPosition(glm::vec3);
 
@@ -19,4 +21,6 @@ private:
     glm::mat4 sModel;
 
     Camera* sCamera;
+
+    glm::vec4 sColor;
 };

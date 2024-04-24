@@ -5,27 +5,31 @@
 
 #include "Screen.h"
 
-BasicShader::BasicShader(Camera* mCam, glm::vec3 center) : ShaderProgram("./BasicShaderV.glsl", "./BasicShaderF.glsl") {
-    mCamera = mCam;
-
-    glm::vec3 offset = center * glm::vec3(-1);
-
-    mModel = glm::mat4(1.0f);
-    mModel = glm::translate(mModel, offset);
+BasicShader::BasicShader(Camera* mCam, glm::vec3 pos) : ShaderProgram("./BasicShaderV.glsl", "./BasicShaderF.glsl"), sCamera(mCam) {
+    SetPosition(pos);
 }
 
 //Update assumes the shader is in use.
 void BasicShader::Update() {
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
-    setVec3("lightPos", mCamera->LightPos);
+    setVec3("lightPos", sCamera->LightPos);
 #else
     setVec3("lightPos", glm::vec3(0, 0, 100));
 #endif // DEBUG
 
 
-    setMat4("projection", mCamera->GetProjection());
+    setMat4("projection", sCamera->GetProjection());
 
-    setMat4("view", mCamera->GetView());
+    setMat4("view", sCamera->GetView());
 
-    setMat4("model", mModel);
+    setMat4("model", sModel);
+}
+
+void BasicShader::SetPosition(glm::vec3 pos){
+    sModel = glm::mat4(1.0f);
+    sModel = glm::translate(sModel, pos * glm::vec3(-1));
+}
+
+void BasicShader::SetPosition(glm::mat4 mod) {
+    sModel = mod;
 }

@@ -2,18 +2,31 @@
 
 #include "pch.h"
 
+#include "Shader.h"
+
+
+#ifdef _DEBUG
+#include "Camera.h"
+#endif // _DEBUG
+
+struct Face {
+	Face(glm::vec3, glm::vec3, glm::vec3, glm::vec3);
+
+	glm::vec3 vertices[3];
+	glm::vec3 normal;
+};
+
 class BoundingBox {
 
 public:
 	BoundingBox() {}
 
 	BoundingBox(
-		std::vector<glm::vec3> _edges,
-		std::vector<glm::vec3> _vertices,
+		std::vector<Face> _faces,
 		glm::vec3 _position,
 		glm::vec3 _orientation,
 		glm::vec3 _center
-	) : edges(_edges), vertices(_vertices), position(_position), orientation(_orientation), center(_center) {}
+	) : faces(_faces), position(_position), orientation(_orientation), center(_center) {}
 
 	BoundingBox(glm::vec3 min, glm::vec3 max);
 
@@ -29,28 +42,32 @@ public:
 
 	bool CollidesWith(const BoundingBox&);
 
+#ifdef _DEBUG
+	void BindGL(Camera*);
+
+	void Render();
+#endif // _DEBUG
+
 private:
-	const std::vector<glm::vec3> Edges() const {
-		return edges;
-	}
+	//faces remain static, regardless of orientation or position
+	std::vector<Face> faces;
 
-	const std::vector<glm::vec3> Vertices() const {
-		return vertices;
-	}
-
-	//edges remain static, regardless of orientation or position
-	std::vector<glm::vec3> edges;
-	
-	//vertices remain static, regardless of orientation or position
-	std::vector<glm::vec3> vertices;
+	//normals remain static, regardless of orientation or position
+	std::vector<glm::vec3> normals;
 
 	//center remain static, regardless of orientation or position
 	glm::vec3 center;
 
 	//position is dynamic, changing possbily every frame.
-	glm::vec3 position;
+	glm::vec3 position = glm::vec3(0);
 
 	//orientation is dynamic, chaning possibly every frame.
 	glm::vec3 orientation;
 
+#ifdef _DEBUG
+	std::vector<glm::vec3> renderVertices;
+
+	ShaderProgram* shader{};
+	GLuint VertexBuffer{};
+#endif
 };
