@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "Camera.h"
-#include "Screen.h"
+#include "EngineInternal.h"
 
 static constexpr glm::vec3 GLOBAL_UP = glm::vec3(0.0f, 1.0f, 0.0f);
 //static constexpr glm::vec3 GLOBAL_RIGHT = glm::normalize(glm::cross(GLOBAL_UP, cameraDirection));
@@ -20,33 +20,25 @@ Camera::Camera() {
 	projection = glm::perspective(FOV, SCREEN_WIDTH_F / SCREEN_HEIGHT_F, CLIPPING_MIN, CLIPPING_MAX);
 
 	position = glm::vec3(250, 0, 0);
-	orientation = glm::vec3(-1, 0 ,0);
 
-	yaw = 180;
-	pitch = 0;
+	orientation.SetYaw(180);
+	orientation.SetPitch(0);
 
-	CalculateAxis();
+	RelativeAxis = orientation.GetAxis();
 	CalculateView();
 }
 
 /*
 */
 
-void Camera::MoveAbsolute(float x, float y, float z) {
+void Camera::Move(const glm::vec3& delta) {
 
-	position += glm::vec3(x, y, z);
-
-	CalculateView();
-}
-
-void Camera::Move(float x, float y, float z) {
-
-	glm::vec3 front = glm::normalize(glm::vec3(cameraFront.x, 0, cameraFront.z));
-	glm::vec3 right = glm::normalize(glm::vec3(cameraRight.x, 0, cameraRight.z));
+	glm::vec3 front = glm::normalize(glm::vec3(RelativeAxis.Front.x, 0, RelativeAxis.Front.z));
+	glm::vec3 right = glm::normalize(glm::vec3(RelativeAxis.Right.x, 0, RelativeAxis.Right.z));
 
 	glm::vec3 deltaPos = 
-		(glm::vec3(x) * front) +
-		(glm::vec3(z) * right);
+		(glm::vec3(delta.x) * front) +
+		(glm::vec3(delta.z) * right);
 
 	deltaPos.y = 0;
 
@@ -55,9 +47,22 @@ void Camera::Move(float x, float y, float z) {
 	CalculateView();
 }
 
-void Camera::Rotate(float y, float p) {
-	yaw += y;
-	pitch += p;
+void Camera::MoveAbsolute(const glm::vec3& delta) {
+	position += delta;
+
+	CalculateView();
+}
+
+void Camera::SetPosition(const glm::vec3& pos) {
+	position = pos;
+}
+
+void Camera::Rotate(const glm::vec3& rot) {
+	float yaw = orientation.GetYaw();
+	float pitch = orientation.GetPitch();
+	
+	yaw += rot.x;
+	pitch += rot.y;
 
 	if (pitch > 89.0f) {
 		pitch = 89.0f;
@@ -65,43 +70,42 @@ void Camera::Rotate(float y, float p) {
 		pitch = -89.0f;
 	}
 
-	CalculateAxis();
+	orientation.SetYaw(yaw);
+	orientation.SetPitch(pitch);
+
+	RelativeAxis = orientation.GetAxis();
 	CalculateView();
 }
 
-void Camera::CalculateAxis() {
-	cameraFront = glm::normalize(glm::vec3(
-		cos(glm::radians(yaw)) * cos(glm::radians(pitch)),
-		sin(glm::radians(pitch)),
-		sin(glm::radians(yaw)) * cos(glm::radians(pitch))
-	));
+void Camera::SetOrientation(const Orientation& other) {
+	orientation = other;
 
-	cameraRight = glm::normalize(glm::cross(cameraFront, GLOBAL_UP));
-	cameraUp = glm::normalize(glm::cross(cameraRight, cameraFront));
+	RelativeAxis = orientation.GetAxis();
+	CalculateView();
 }
 
 void Camera::CalculateView() {
-	view = glm::lookAt(position, position + cameraFront, GLOBAL_UP);
+	view = glm::lookAt(position, position + RelativeAxis.Front, GLOBAL_UP);
 
 	viewProjection = view * projection;
 }
 
-glm::vec3 Camera::GetPosition() const {
+const glm::vec3& Camera::GetPosition() const {
 	return position;
 }
 
-glm::vec3 Camera::GetOrientation() const {
+const Orientation& Camera::GetOrientation() const {
 	return orientation;
 }
 
-glm::mat4 Camera::GetView() const {
+const glm::mat4& Camera::GetView() const {
 	return view;
 }
 
-glm::mat4 Camera::GetProjection() const {
+const glm::mat4& Camera::GetProjection() const {
 	return projection;
 }
 
-glm::mat4 Camera::GetViewAndProjection() const {
+const glm::mat4& Camera::GetViewAndProjection() const {
 	return viewProjection;
 }

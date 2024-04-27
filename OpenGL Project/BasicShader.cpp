@@ -3,7 +3,7 @@
 #include "pch.h"
 #include "BasicShader.h"
 
-#include "Screen.h"
+#include "EngineInternal.h"
 
 BasicShader::BasicShader(Camera* mCam, glm::vec3 pos) : ShaderProgram("./BasicShaderV.glsl", "./BasicShaderF.glsl"), sCamera(mCam) {
     SetPosition(pos);

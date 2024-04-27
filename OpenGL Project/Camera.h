@@ -1,26 +1,25 @@
 #pragma once
 
 #include "pch.h"
-#include "Config.h"
+#include "EngineInternal.h"
+#include "Orientation.h"
 
 class Camera {
 
 public:
 	Camera();
 
-	void Move(float, float, float);
-	void MoveAbsolute(float, float, float);
+	void Move(const glm::vec3&);
+	void MoveAbsolute(const glm::vec3&);
+	void SetPosition(const glm::vec3&);
+	void Rotate(const glm::vec3&);
+	void SetOrientation(const Orientation&);
 
-	void Rotate(float, float);
-
-	glm::mat4 GetView() const;
-
-	glm::mat4 GetProjection() const;
-
-	glm::mat4 GetViewAndProjection() const;
-
-	glm::vec3 GetPosition() const;
-	glm::vec3 GetOrientation() const;
+	const glm::mat4& GetView() const;
+	const glm::mat4& GetProjection() const;
+	const glm::mat4& GetViewAndProjection() const;
+	const glm::vec3& GetPosition() const;
+	const Orientation& GetOrientation() const;
 
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
 	//Light position for view mesh
@@ -30,18 +29,10 @@ public:
 private:
 	void CalculateView();
 
-	void CalculateAxis();
+	Orientation orientation;
+	AxisVectors RelativeAxis;
 
-	float yaw;
-	float pitch;
-
-	//data about camera position
-	glm::vec3 orientation;
 	glm::vec3 position;
-
-	glm::vec3 cameraUp;
-	glm::vec3 cameraRight;
-	glm::vec3 cameraFront;
 
 	//mat4x4 for shaders
 	glm::mat4 view;

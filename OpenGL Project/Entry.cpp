@@ -2,48 +2,16 @@
 #include "pch.h"
 
 #include "Engine.h"
-//#include "BoundingBox.h"
-
-/*
-int main() {
-	
-	glm::vec3 polygonAMin = glm::vec3(0.5, 0, 3);
-	glm::vec3 polygonAMax = glm::vec3(3, 8, 5);
-
-	glm::vec3 polygonBMin = glm::vec3(-2, 1, 2);
-	glm::vec3 polygonBMax = glm::vec3(1, 3, 7);
-
-
-	BoundingBox a = BoundingBox(polygonAMin, polygonAMax);
-	BoundingBox b = BoundingBox(polygonBMin, polygonBMax);
-
-	bool result = a.CollidesWith(b);
-
-	std::cout << "return result: " << result << std::endl;
-	
-	std::cout << glm::to_string((glm::vec3(0, 5, 2) + glm::vec3(2, 1, 5)) * 0.5f) << std::endl;
-	std::cout << glm::to_string(a.Center()) << std::endl;
-	std::cout << glm::to_string(b.Center()) << std::endl;
-
-	return 0;
-}
-*/
-
 
 int main() {
 
 	/*
-	COLLISION WORKS NOW YIPPEE
-
-	replace the struct system and store normals, vertices, and indexes in the boundingbox.
-
-	optimize alogirthm to only generate axis after first test fails.
-
-	I think there is something else i forgot but whatever.
-
-	Eventually remove all this testing shit from engine and basicmesh.
+	* add actual physics mesh
+	* 
+	* 
+	* 
+	* remove testing shit for collision
 	*/
-	throw;
 
 	
 
@@ -57,8 +25,12 @@ int main() {
 	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\2\\WomanCasual3.fbx");
 
 	//high poly, external textures
-	Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\anime\\Agnes.fbx");
+	Engine.GetWorld()->Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\anime\\Agnes.fbx");
 	
+	CameraMesh* a = new CameraMesh(BoundingBox(glm::vec3(0,0,0), glm::vec3(1, 1, 1)), Engine.GetCamera());
+
+	Engine.GetWorld()->Load((Mesh*)a);
+
 	//has big ass box and no textures
 	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\shit anime\\model.fbx");
 

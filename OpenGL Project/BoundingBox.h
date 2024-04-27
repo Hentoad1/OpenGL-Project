@@ -2,19 +2,12 @@
 
 #include "pch.h"
 
-#include "Shader.h"
-
+#include "Orientation.h"
 
 #ifdef _DEBUG
+#include "Shader.h"
 #include "Camera.h"
 #endif // _DEBUG
-
-struct Face {
-	Face(glm::vec3, glm::vec3, glm::vec3, glm::vec3);
-
-	glm::vec3 vertices[3];
-	glm::vec3 normal;
-};
 
 class BoundingBox {
 
@@ -22,23 +15,29 @@ public:
 	BoundingBox() {}
 
 	BoundingBox(
-		std::vector<Face> _faces,
-		glm::vec3 _position,
-		glm::vec3 _orientation,
-		glm::vec3 _center
-	) : faces(_faces), position(_position), orientation(_orientation), center(_center) {}
+		const std::vector<glm::vec3>& _vertices,
+		const std::vector<unsigned int>& _indices,
+		const std::vector<glm::vec3>& _normals,
+		const glm::vec3& _position,
+		const Orientation& _orientation,
+		const glm::vec3& _center
+	) : vertices(_vertices), indices(_indices), normals(_normals), position(_position), orientation(_orientation), center(_center) {}
 
 	BoundingBox(glm::vec3 min, glm::vec3 max);
 
-	glm::vec3 Center() const;
+	const glm::vec3& Center() const;
 
-	glm::vec3 Position() const;
+	const glm::vec3& Position() const;
 
-	void Move(glm::vec3);
+	const Orientation& GetOrientation() const;
 
-	void SetPosition(glm::vec3);
+	void MoveRelative(const glm::vec3&);
 
-	void SetOrientation(glm::vec3);
+	void MoveAbsolute(const glm::vec3&);
+
+	void SetPosition(const glm::vec3&);
+
+	void SetOrientation(const Orientation&);
 
 	bool CollidesWith(const BoundingBox&);
 
@@ -49,25 +48,30 @@ public:
 #endif // _DEBUG
 
 private:
-	//faces remain static, regardless of orientation or position
-	std::vector<Face> faces;
+	bool AxisCollidesWith(const glm::vec3&, const BoundingBox&);
 
-	//normals remain static, regardless of orientation or position
+	//vertices remains static, regardless of orientation or position
+	std::vector<glm::vec3> vertices;
+
+	//indices remains static, regardless of orientation or position
+	std::vector<unsigned int> indices;
+
+	//normals remains static, regardless of orientation or position
 	std::vector<glm::vec3> normals;
 
-	//center remain static, regardless of orientation or position
+	//center remains static, regardless of orientation or position
 	glm::vec3 center;
 
 	//position is dynamic, changing possbily every frame.
 	glm::vec3 position = glm::vec3(0);
 
-	//orientation is dynamic, chaning possibly every frame.
-	glm::vec3 orientation;
+	//orientation is dynamic, changing possibly every frame.
+	Orientation orientation;
 
 #ifdef _DEBUG
-	std::vector<glm::vec3> renderVertices;
+	unsigned int numIndices;
 
-	ShaderProgram* shader{};
-	GLuint VertexBuffer{};
+	ShaderProgram* shader;
+	GLuint VertexBuffer;
 #endif
 };

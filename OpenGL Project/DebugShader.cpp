@@ -3,7 +3,7 @@
 #include "pch.h"
 #include "DebugShader.h"
 
-#include "Screen.h"
+#include "EngineInternal.h"
 
 DebugShader::DebugShader(Camera* sCam, glm::vec3 pos) : ShaderProgram("./DebugShaderV.glsl", "./DebugShaderF.glsl"), sCamera(sCam), sColor(glm::vec4(0, 191, 255, 0.5)) {
     SetPosition(pos);

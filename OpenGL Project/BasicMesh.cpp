@@ -7,29 +7,9 @@
 
 #define AI_CONFIG_PP_SBP_REMOVE aiPrimitiveType_POINTS|aiPrimitiveType_LINES
 
+Mesh::Mesh(const BoundingBox& _bounds, Camera* cam) : bounds(_bounds), mCamera(cam), shader(nullptr), VertexBuffer(0xffffffff) {}
 
-	/* ---------------------------------- COPY CONSTRUCTOR ----------------------------------- */
-
-/*Mesh::Mesh(const Mesh& ref) {
-
-}*/
-
-	/* -------------------------------- DEFAULT CONSTRUCTORS --------------------------------- */
-
-Mesh::Mesh(const std::string path, Camera* mCam) : mCamera(mCam) {
-	Load(path);
-}
-
-	/* ------------------------------------ DECONSTRUCTOR ------------------------------------ */
-
-Mesh::~Mesh() {
-	delete shader;
-}
-
-
-
-void Mesh::Load(const std::string path) {
-
+Mesh::Mesh(const std::string& path, Camera* mCam) : mCamera(mCam) {
 	/* ------------------------------------ IMPORT SCENE ------------------------------------- */
 
 	Assimp::Importer importer;
@@ -44,7 +24,7 @@ void Mesh::Load(const std::string path) {
 
 		//required: creates sub-meshes
 		aiProcess_SortByPType | \
-		
+
 		//reiquired: otherwise meshes will not align properly
 		aiProcess_PreTransformVertices | \
 
@@ -181,6 +161,11 @@ void Mesh::Load(const std::string path) {
 #endif
 
 	shader = (ShaderProgram*)new BasicShader(mCamera, bounds.Position());
+
+#ifdef _DEBUG
+	shader->SetPosition(bounds.Position());
+#endif
+
 	/* ---------------------------------- POPULATE BUFFERS ----------------------------------- */
 
 	GLuint mBuffers[2];
@@ -194,7 +179,7 @@ void Mesh::Load(const std::string path) {
 
 	glBindBuffer(GL_ARRAY_BUFFER, mBuffers[0]);
 	glBufferData(GL_ARRAY_BUFFER, Vertex_Size * vertices.size(), &vertices[0], GL_STATIC_DRAW);
-	
+
 	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
 	glEnableVertexAttribArray(POSITION_LOCATION);
 
@@ -213,12 +198,38 @@ void Mesh::Load(const std::string path) {
 	std::cout << "indices size: " << indices.size() << std::endl;
 }
 
+Mesh::~Mesh() {
+	delete shader;
+}
+
+Camera* Mesh::GetCamera() {
+	return mCamera;
+}
+
+BoundingBox& Mesh::GetBoundingBox() {
+	return bounds;
+}
+
+void Mesh::SetPosition(const glm::vec3& p) {
+	bounds.SetPosition(p);
+}
+
+void Mesh::SetOrientation(const Orientation& o) {
+	bounds.SetOrientation(o);
+}
+
 void Mesh::Render() {
 
-	shader->SetPosition(bounds.Position());
+#ifdef _DEBUG
+	bounds.Render();
+#endif
+
+	if (VertexBuffer == 0xffffffff) {
+		return;
+	}
 
 	/* -------------------------------- USE AND UPDATE SHADER -------------------------------- */
-	
+
 	shader->Use();
 
 	shader->Update();
@@ -261,20 +272,11 @@ void Mesh::Render() {
 	}
 
 	glBindVertexArray(0);
-
-
-#ifdef _DEBUG
-	bounds.Render();
-#endif
 }
 
+//TODO: basicmesh should have no physics properties or collision.
 bool Mesh::CollidesWith(const BoundingBox& other) {
-
-	//only physics meshes should be tested.
-#ifdef TEST_ALL_MESHES
 	return bounds.CollidesWith(other);
-#endif
-	return false;
 }
 
 Mesh::SubMesh::SubMesh(unsigned int _BaseVertex, unsigned int _BaseIndex, unsigned int count, unsigned int matIndex, glm::vec3 _min, glm::vec3 _max) {

@@ -20,17 +20,29 @@ enum TextureType : uint8_t {
 };
 
 class Mesh {
-	
-public:
-	Mesh(const std::string, Camera*);
 
-	~Mesh();
+public:
+	Mesh(const std::string&, Camera*);
+
+	Mesh(const BoundingBox&, Camera*);
+
+	virtual ~Mesh();
+
+	//function does nothing, but it not pure virtual.
+	virtual void Update(const InputState&) {};
 
 	void Render();
 
 	bool CollidesWith(const BoundingBox& other);
 
+	void SetPosition(const glm::vec3&);
+	void SetOrientation(const Orientation&);
+
 protected:
+	virtual BoundingBox& GetBoundingBox();
+
+	virtual Camera* GetCamera();
+private:
 	class SubMesh {
 	public:
 		SubMesh(unsigned int, unsigned int, unsigned int, unsigned int, glm::vec3, glm::vec3);
@@ -47,8 +59,6 @@ protected:
 
 		glm::vec3 center;
 	};
-private:
-	void Load(const std::string);
 
 	class MatBuffer {
 

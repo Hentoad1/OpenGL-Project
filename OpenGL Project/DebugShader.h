@@ -4,7 +4,7 @@
 
 #include "Shader.h"
 #include "Camera.h"
-#include "Config.h"
+#include "EngineInternal.h"
 
 class DebugShader : ShaderProgram {
 public:

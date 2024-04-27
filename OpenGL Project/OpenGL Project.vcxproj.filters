@@ -55,6 +55,12 @@
     <Filter Include="Source Files\Shaders\Debug">
       <UniqueIdentifier>{7cdd8baf-f4ba-4495-a2d6-e73cd0a4a428}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Engine\Camera">
+      <UniqueIdentifier>{881bc3dd-bc86-49a2-aa42-b4613f410af6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Mesh\BoundingBox\Orientation">
+      <UniqueIdentifier>{18c29e04-955b-43f6-b7c0-6ffe4d8fcec0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -96,25 +102,28 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\Loading Models\Material</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
     </ClCompile>
     <ClCompile Include="DebugShader.cpp">
       <Filter>Source Files\Shaders\Debug</Filter>
     </ClCompile>
+    <ClCompile Include="PhysicsMesh.cpp">
+      <Filter>Source Files\Loading Models\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Engine\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Orientation.cpp">
+      <Filter>Source Files\Loading Models\Mesh\BoundingBox\Orientation</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMesh.cpp">
+      <Filter>Source Files\Loading Models\Mesh</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Screen.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="BasicMesh.h">
       <Filter>Source Files\Loading Models\Mesh</Filter>
@@ -155,17 +164,26 @@
     <ClInclude Include="MaterialMeta.h">
       <Filter>Source Files\Loading Models\Material\Meta</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Config.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="BoundingBox.h">
       <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
     </ClInclude>
     <ClInclude Include="DebugShader.h">
       <Filter>Source Files\Shaders\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsMesh.h">
+      <Filter>Source Files\Loading Models\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Source Files\Engine\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Orientation.h">
+      <Filter>Source Files\Loading Models\Mesh\BoundingBox\Orientation</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMesh.h">
+      <Filter>Source Files\Loading Models\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineInternal.h">
+      <Filter>Source Files\Engine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
