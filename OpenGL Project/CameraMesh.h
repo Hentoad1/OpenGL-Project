@@ -12,7 +12,7 @@ public:
 
 	~CameraMesh();
 
-	void Update(const InputState&) override;
+	void Update(const FrameData&) override;
 
 	//put things like velocity, physics, and collision here.
 

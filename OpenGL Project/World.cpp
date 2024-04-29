@@ -4,13 +4,18 @@
 
 #include "EngineInternal.h"
 
-World::World(Camera* wCam) {
+static Camera* wCamera;
+
+static std::list<Mesh*> physicsObjects;
+static std::list<Mesh*> content;
+
+void World::Create(Camera* wCam) {
 	content = std::list<Mesh*>();
 	wCamera = wCam;
 }
 
-World::~World() {
-	
+void World::Destory() {
+
 	for (auto it = content.begin(); it != content.end(); ++it) {
 		delete* it;
 	}
@@ -22,10 +27,15 @@ void World::Load(const std::string& path) {
 	Mesh* newContent = new Mesh(path, wCamera);
 
 	content.push_back(newContent);
+	physicsObjects.push_back(newContent);
 }
 
-void World::Load(Mesh* mesh) {
+void World::Load(Mesh* mesh, bool physics) {
 	content.push_back(mesh);
+	if (physics) {
+		physicsObjects.push_back(mesh);
+	}
+
 }
 
 void World::Render() {
@@ -34,19 +44,34 @@ void World::Render() {
 	}
 }
 
-void World::Update(const InputState& state) {
+void World::Update(const FrameData& state) {
 	for (auto it = content.begin(); it != content.end(); ++it) {
 		(*it)->Update(state);
 	}
 }
 
-glm::vec3 World::TestCollision(const BoundingBox& other) {
+bool World::TestCollision(const BoundingBox& other) {
+	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {
+		Mesh* mesh = (*it);
 
-	for (auto it = content.begin(); it != content.end(); ++it) {
 		if ((*it)->CollidesWith(other)) {
-			std::cout << "Collision found" << std::endl;
+			return true;
+		}
+		
+	}
+
+	return false;
+}
+
+CollisionInfo World::TestCollision(const BoundingBox& other, const glm::vec3& otherVelocity) {
+
+	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {
+		CollisionInfo info = (*it)->CollidesWith(other, otherVelocity);
+
+		if (info.collided) {
+			return info;
 		}
 	}
 
-	return glm::vec3(0);
+	return CollisionInfo{false, 0, glm::vec3(0)};
 }

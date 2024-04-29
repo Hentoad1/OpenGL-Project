@@ -11,7 +11,7 @@
 #undef ENGINE_SETTING_MAIN
 #endif
 
-struct InputState {
+struct FrameData {
 	int8_t WALK_FORWARD = GLFW_KEY_UNKNOWN;
 	int8_t WALK_BACKWARD = GLFW_KEY_UNKNOWN;
 	int8_t WALK_LEFT = GLFW_KEY_UNKNOWN;
@@ -22,6 +22,7 @@ struct InputState {
 	glm::dvec2 CURSOR_POSITION = glm::dvec2(0);
 	glm::dvec2 DELTA_CURSOR_POSITION = glm::dvec2(0);
 	glm::dvec2 ADJUSTED_DELTA_CURSOR_POSITION = glm::dvec2(0);
+	double DeltaTime;
 };
 
 
@@ -30,3 +31,15 @@ constexpr int SCREEN_HEIGHT = 600;
 
 constexpr float SCREEN_WIDTH_F = 800.0f;
 constexpr float SCREEN_HEIGHT_F = 600.0f;
+
+struct CollisionInfo {
+
+	//If the collision happened.
+	bool collided;
+
+	//The coefficient to applied to the axis to move an object back to where it collided.
+	float overlapAmount;
+
+	//The velocity resulting from the collision.
+	glm::vec3 collisionVelocity;
+};

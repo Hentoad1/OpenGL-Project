@@ -25,17 +25,17 @@ public:
 
 	Camera* GetCamera() const;
 
-	World* GetWorld() const;
+	//World* GetWorld() const;
 
 	int8_t GetKeyState(int);
 
 private:
 
-	InputState currentActionState;
+	FrameData currentActionState;
 	bool seenMouseMovement;
 
 	Camera* eCamera;
-	World* eWorld;
+	//World* eWorld;
 
 	GLFWwindow* eWindow;
 

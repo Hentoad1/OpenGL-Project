@@ -23,7 +23,9 @@ void onCursorMovement(GLFWwindow* window, double xpos, double ypos);
 
 /* ----------------------------------- CLASS FUNCTIONS ----------------------------------- */
 
-Engine::Engine() : eCamera(new Camera()), eWorld(new World(eCamera)) {
+Engine::Engine() : eCamera(new Camera()) /*, eWorld(new World(eCamera))*/ {
+
+	World::Create(eCamera);
 
 	currentActionState.CURSOR_POSITION = glm::dvec2(0);
 	currentActionState.DELTA_CURSOR_POSITION = glm::dvec2(0);
@@ -83,7 +85,8 @@ Engine::Engine() : eCamera(new Camera()), eWorld(new World(eCamera)) {
 
 Engine::~Engine() {
 	delete eCamera;
-	delete eWorld;
+	//delete eWorld;
+	World::Destory();
 }
 
 void Engine::Terminate() {
@@ -97,7 +100,7 @@ void Engine::Draw() {
 
 
 	//Render content
-	eWorld->Render();
+	World::Render();
 
 	//Manage Events
 	glfwSwapBuffers(eWindow);
@@ -106,13 +109,16 @@ void Engine::Draw() {
 
 void Engine::Update() {
 
+	
+	double time = glfwGetTime();
+
+	currentActionState.DeltaTime = time - previousUpdateTime;
+	previousUpdateTime = time;
+
 	double xpos;
 	double ypos;
 
 	glfwGetCursorPos(eWindow, &xpos, &ypos);
-
-	std::cout << xpos << std::endl;
-	std::cout << ypos << std::endl;
 
 	if (!seenMouseMovement) {
 		seenMouseMovement = true;
@@ -141,7 +147,6 @@ void Engine::Update() {
 
 	currentActionState.CURSOR_POSITION = glm::dvec2(xpos, ypos);
 
-
 	currentActionState.WALK_FORWARD = GetKeyState(GLFW_ACTION_WALK_FORWARD);
 	currentActionState.WALK_BACKWARD = GetKeyState(GLFW_ACTION_WALK_BACKWARD);
 	currentActionState.WALK_LEFT = GetKeyState(GLFW_ACTION_WALK_LEFT);
@@ -150,7 +155,7 @@ void Engine::Update() {
 	currentActionState.CROUCH = GetKeyState(GLFW_ACTION_CROUCH);
 	currentActionState.INTERACT = GetKeyState(GLFW_ACTION_INTERACT);
 
-	eWorld->Update(currentActionState);
+	World::Update(currentActionState);
 
 	//Determine if window should be closed.
 	if (GetKeyState(GLFW_KEY_ESCAPE) == GLFW_PRESS) {
@@ -200,9 +205,9 @@ Camera* Engine::GetCamera() const {
 	return eCamera;
 }
 
-World* Engine::GetWorld() const {
+/*World* Engine::GetWorld() const {
 	return eWorld;
-}
+}*/
 
 int8_t Engine::GetKeyState(int key) {
 	return glfwGetKey(eWindow, key);

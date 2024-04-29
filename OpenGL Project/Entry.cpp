@@ -6,11 +6,21 @@
 int main() {
 
 	/*
-	* add actual physics mesh
+	* collision does not work at high speeds. The coefficient is fucked. 
+	* 
+	* 
+	* Maybe take reverse velocity and project it to get dot products and 
+	* then generate a coefficient in terms of how many 1D projected velocity lengths it would take to reach min / max?
+	* 	
+	* 
+	* The World is a bandaid solution on bandaid solution.
+	* Remove physics object list and instead have one list but take mesh pointer so you can test if they are equal or not.
+	* Eventually use the thing in minecraft to save time like octoids or some shit
 	* 
 	* 
 	* 
 	* remove testing shit for collision
+	* octoids
 	*/
 
 	
@@ -25,11 +35,11 @@ int main() {
 	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\2\\WomanCasual3.fbx");
 
 	//high poly, external textures
-	Engine.GetWorld()->Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\anime\\Agnes.fbx");
+	World::Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\anime\\Agnes.fbx");
 	
-	CameraMesh* a = new CameraMesh(BoundingBox(glm::vec3(0,0,0), glm::vec3(1, 1, 1)), Engine.GetCamera());
+	CameraMesh* a = new CameraMesh(BoundingBox(glm::vec3(0,0,30), glm::vec3(1, 1, 31)), Engine.GetCamera());
 
-	Engine.GetWorld()->Load((Mesh*)a);
+	World::Load((Mesh*)a, false);
 
 	//has big ass box and no textures
 	//Engine.Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\fbx files\\shit anime\\model.fbx");

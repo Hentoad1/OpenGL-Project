@@ -82,15 +82,11 @@ void BoundingBox::SetOrientation(const Orientation& o) {
 }
 
 void BoundingBox::MoveRelative(const glm::vec3& delta) {
-	auto& z = GetOrientation();
-	
-	z.GetAxis();
-
 	AxisVectors directions = GetOrientation().GetAxis();
 
-	glm::vec3 rotatedDelta =
-		(glm::vec3(delta.x) * directions.Front) +
-		(glm::vec3(delta.z) * directions.Right);
+	glm::vec3 rotatedDelta = 
+		(glm::vec3(delta.x) * glm::normalize(glm::vec3(directions.Front.x, 0, directions.Front.z))) +
+		(glm::vec3(delta.z) * glm::normalize(glm::vec3(directions.Right.x, 0, directions.Right.z)));
 
 	rotatedDelta.y = 0;
 	
@@ -109,9 +105,16 @@ void BoundingBox::MoveAbsolute(const glm::vec3& delta) {
 	}
 }
 
-bool BoundingBox::CollidesWith(const BoundingBox& boxB) {
-	std::vector<glm::vec3> axis;
+glm::vec3 BoundingBox::ConvertAbsolute(glm::vec3 value) const {
+	AxisVectors directions = GetOrientation().GetAxis();
 
+	return 
+		(glm::vec3(value.x) * directions.Front) +
+		(glm::vec3(value.y) * directions.Up) +
+		(glm::vec3(value.z) * directions.Right);
+}
+
+bool BoundingBox::CollidesWith(const BoundingBox& boxB) {
 	int numAxisA = normals.size();
 	int numAxisB = boxB.normals.size();
 	int numAxisCross = numAxisA * numAxisB;
@@ -120,7 +123,7 @@ bool BoundingBox::CollidesWith(const BoundingBox& boxB) {
 	for (int i = 0; i < normals.size(); ++i) {
 		glm::vec3 axis = glm::normalize(normals[i]);
 		
-		if (!AxisCollidesWith(axis, boxB)) {
+		if (GetAxisOverlap(axis, boxB) == 0) {
 			return false;
 		}
 	}
@@ -128,7 +131,7 @@ bool BoundingBox::CollidesWith(const BoundingBox& boxB) {
 	for (int i = 0; i < boxB.normals.size(); ++i) {
 		glm::vec3 axis = glm::normalize(boxB.normals[i]);
 
-		if (!AxisCollidesWith(axis, boxB)) {
+		if (GetAxisOverlap(axis, boxB) == 0) {
 			return false;
 		}
 	}
@@ -143,7 +146,7 @@ bool BoundingBox::CollidesWith(const BoundingBox& boxB) {
 
 			glm::vec3 axis = glm::normalize(cross);
 
-			if (!AxisCollidesWith(axis, boxB)) {
+			if (GetAxisOverlap(axis, boxB) == 0) {
 				return false;
 			}
 		}
@@ -152,7 +155,81 @@ bool BoundingBox::CollidesWith(const BoundingBox& boxB) {
 	return true;
 }
 
-bool BoundingBox::AxisCollidesWith(const glm::vec3& axis, const BoundingBox& boxB) {
+CollisionInfo BoundingBox::CollidesWith(const BoundingBox& boxB, const glm::vec3& velocity) {
+	int numAxisA = normals.size();
+	int numAxisB = boxB.normals.size();
+	int numAxisCross = numAxisA * numAxisB;
+	int totalAxis = numAxisA + numAxisB + numAxisCross;
+
+	//axis, overlap
+	std::vector<glm::vec3> axisWithOverlap;
+	std::vector<float> adjustedOverlapAmounts;
+
+	for (int i = 0; i < normals.size(); ++i) {
+		glm::vec3 axis = glm::normalize(normals[i]);
+
+		float overlap = GetAxisOverlap(axis, boxB);
+
+		if (overlap == 0) {
+			return CollisionInfo{ false, 0, glm::vec3(0) };
+		}
+		else {
+			axisWithOverlap.push_back(axis);
+			adjustedOverlapAmounts.push_back(glm::dot(axis, velocity));
+		}
+	}
+
+	for (int i = 0; i < boxB.normals.size(); ++i) {
+		glm::vec3 axis = glm::normalize(boxB.normals[i]);
+
+		float overlap = GetAxisOverlap(axis, boxB);
+
+		if (overlap == 0) {
+			return CollisionInfo{ false, 0, glm::vec3(0) };
+		}
+		else {
+			axisWithOverlap.push_back(axis);
+			adjustedOverlapAmounts.push_back(glm::dot(axis, velocity));
+		}
+	}
+
+	for (int i = 0; i < normals.size(); ++i) {
+		for (int j = 0; j < boxB.normals.size(); ++j) {
+			glm::vec3 cross = glm::cross(normals[i], boxB.normals[j]);
+
+			if (cross == glm::vec3(0, 0, 0)) {
+				continue;
+			}
+
+			glm::vec3 axis = glm::normalize(cross);
+
+			float overlap = GetAxisOverlap(axis, boxB);
+
+			if (overlap == 0) {
+				return CollisionInfo{ false, 0, glm::vec3(0) };
+			}
+			else {
+				axisWithOverlap.push_back(axis);
+				adjustedOverlapAmounts.push_back(glm::dot(axis, velocity));
+			}
+		}
+	}
+
+	//If the code has gotten to here it means a collision did happen.
+	int maxOverlapIndex = -1;
+
+	for (int i = 0; i < adjustedOverlapAmounts.size(); ++i) {
+
+		if (maxOverlapIndex == -1 || adjustedOverlapAmounts[maxOverlapIndex] < adjustedOverlapAmounts[i]) {
+			maxOverlapIndex = i;
+		}
+	}
+
+
+	return CollisionInfo{true, adjustedOverlapAmounts[maxOverlapIndex], axisWithOverlap[maxOverlapIndex]};
+}
+
+float BoundingBox::GetAxisOverlap(const glm::vec3& axis, const BoundingBox& boxB) {
 	float amin = FLT_MAX;
 	float amax = -FLT_MAX;
 	float bmin = FLT_MAX;
@@ -193,26 +270,25 @@ bool BoundingBox::AxisCollidesWith(const glm::vec3& axis, const BoundingBox& box
 		}
 	}
 
-	bool hasOverlap = (amin < bmax && amin > bmin) || (bmin < amax && bmin > amin);
+	float overlap = std::min(amax, bmax) - std::max(amin, bmin);
 
-	/*
-	std::cout << "---------------------------------------------------------" << std::endl;
-	std::cout << "axis: " << glm::to_string(axis[i]) << std::endl;
+	/*std::cout << "---------------------------------------------------------" << std::endl;
+	std::cout << "axis: " << glm::to_string(axis) << std::endl;
 	std::cout << "position1: " << glm::to_string(position) << std::endl;
 	std::cout << "position2: " << glm::to_string(boxB.position) << std::endl;
-	std::cout << "overlap: " << (hasOverlap ? "true" : "false") << std::endl;
+	std::cout << "overlap: " << overlap << std::endl;
 	std::cout << "amin: " << amin << "     " << glm::to_string(aminP) << std::endl;
 	std::cout << "amax: " << amax << "     " << glm::to_string(amaxP) << std::endl;
 	std::cout << "bmin: " << bmin << "     " << glm::to_string(bminP) << std::endl;
-	std::cout << "bmax: " << bmax << "     " << glm::to_string(bmaxP) << std::endl;
-	*/
+	std::cout << "bmax: " << bmax << "     " << glm::to_string(bmaxP) << std::endl;*/
 
-
-	/*
-	if overlap is true, next axis is tested.
-	if overlap is false, collision does not exist and processing can be stopped.
-	*/
-	return hasOverlap;
+	
+	if (overlap < 0) {
+		return 0;
+	}
+	else {
+		return overlap;
+	}
 }
 
 #ifdef _DEBUG

@@ -3,6 +3,7 @@
 #include "pch.h"
 
 #include "Orientation.h"
+#include "EngineInternal.h";
 
 #ifdef _DEBUG
 #include "Shader.h"
@@ -39,7 +40,11 @@ public:
 
 	void SetOrientation(const Orientation&);
 
+	CollisionInfo CollidesWith(const BoundingBox&, const glm::vec3&);
+
 	bool CollidesWith(const BoundingBox&);
+
+	glm::vec3 ConvertAbsolute(glm::vec3) const;
 
 #ifdef _DEBUG
 	void BindGL(Camera*);
@@ -48,7 +53,7 @@ public:
 #endif // _DEBUG
 
 private:
-	bool AxisCollidesWith(const glm::vec3&, const BoundingBox&);
+	float GetAxisOverlap(const glm::vec3&, const BoundingBox&);
 
 	//vertices remains static, regardless of orientation or position
 	std::vector<glm::vec3> vertices;

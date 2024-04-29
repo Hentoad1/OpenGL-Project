@@ -29,11 +29,12 @@ public:
 	virtual ~Mesh();
 
 	//function does nothing, but it not pure virtual.
-	virtual void Update(const InputState&) {};
+	virtual void Update(const FrameData&) {};
 
 	void Render();
 
 	bool CollidesWith(const BoundingBox& other);
+	CollisionInfo CollidesWith(const BoundingBox&, const glm::vec3&);
 
 	void SetPosition(const glm::vec3&);
 	void SetOrientation(const Orientation&);

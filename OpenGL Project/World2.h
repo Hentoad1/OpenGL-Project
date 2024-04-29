@@ -8,22 +8,25 @@
 
 #include "EngineInternal.h"
 
-namespace World{
+class World {
 
-	void Create(Camera*);
+public:
+	World(Camera*);
 
-	void Destory();
+	~World();
 
 	void Load(const std::string&);
 
-	void Load(Mesh*, bool);
+	void Load(Mesh*);
 
 	void Render();
 
 	void Update(const FrameData&);
 
-	bool TestCollision(const BoundingBox&);
+	glm::vec3 TestCollision(const BoundingBox&);
 
-	CollisionInfo TestCollision(const BoundingBox&, const glm::vec3&);
+private:
+	Camera* wCamera;
 
-}
+	std::list<Mesh*> content;
+};

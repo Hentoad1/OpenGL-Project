@@ -274,9 +274,12 @@ void Mesh::Render() {
 	glBindVertexArray(0);
 }
 
-//TODO: basicmesh should have no physics properties or collision.
 bool Mesh::CollidesWith(const BoundingBox& other) {
 	return bounds.CollidesWith(other);
+}
+
+CollisionInfo Mesh::CollidesWith(const BoundingBox& other, const glm::vec3& otherVelocity) {
+	return bounds.CollidesWith(other, otherVelocity);
 }
 
 Mesh::SubMesh::SubMesh(unsigned int _BaseVertex, unsigned int _BaseIndex, unsigned int count, unsigned int matIndex, glm::vec3 _min, glm::vec3 _max) {

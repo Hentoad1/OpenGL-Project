@@ -118,6 +118,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="World.cpp" />
+    <ClCompile Include="World2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BasicMesh.h" />
@@ -127,6 +128,7 @@
     <ClInclude Include="DebugShader.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineInternal.h" />
+    <ClInclude Include="World.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialMeta3.h" />
     <ClInclude Include="MaterialMeta.h" />
@@ -140,7 +142,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Vertex.h" />
-    <ClInclude Include="World.h" />
+    <ClInclude Include="World2.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="CreateHeader.txt" />

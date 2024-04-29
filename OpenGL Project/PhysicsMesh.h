@@ -12,7 +12,7 @@ public:
 
 	~PhysicsMesh();
 
-	void Update(const InputState&) override;
+	void Update(const FrameData&) override;
 
 	//put things like velocity, physics, and collision here.
 
@@ -27,7 +27,8 @@ protected:
 	BoundingBox& GetBoundingBox() override {
 		return Mesh::GetBoundingBox();
 	}
-private:
 
 	glm::vec3 velocity;
+
+private:
 };
