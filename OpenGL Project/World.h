@@ -2,9 +2,12 @@
 
 #include "Camera.h"
 
-#include "BasicMesh.h"
-#include "PhysicsMesh.h"
-#include "CameraMesh.h"
+#include "Mesh.h"
+//#include "BasicMesh.h"
+//#include "PhysicsMesh.h"
+//#include "CameraMesh.h"
+
+#include "ModelData.h"
 
 #include "EngineInternal.h"
 
@@ -14,9 +17,12 @@ namespace World{
 
 	void Destory();
 
-	void Load(const std::string&);
+	void Load(Mesh*);
 
-	void Load(Mesh*, bool);
+	//void Load(const std::string&);
+
+	//why the hell is this here?
+	//void Load(Mesh*, bool);
 
 	void Render();
 

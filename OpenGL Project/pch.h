@@ -21,6 +21,7 @@
 #include <filesystem>
 #include <functional>
 #include <array>
+#include <bitset>
 
 #include <assimp/config.h>
 

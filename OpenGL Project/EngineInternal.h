@@ -32,14 +32,31 @@ constexpr int SCREEN_HEIGHT = 600;
 constexpr float SCREEN_WIDTH_F = 800.0f;
 constexpr float SCREEN_HEIGHT_F = 600.0f;
 
+enum CollisionType : uint8_t {
+	//Axis normal where abs(y) < 0.05
+	COLLISIONTYPE_WALL = 0,
+
+	//Axis normal where y < -0.95
+	COLLISIONTYPE_CEILING = 1,
+
+	//Axis normal where y > 0.95
+	COLLISIONTYPE_FLOOR = 2,
+
+	//Axis normal where that meets none of the above
+	COLLISIONTYPE_SLANTED_FLOOR = 3, //might end up being bouncy or something else
+};
+
 struct CollisionInfo {
 
 	//If the collision happened.
 	bool collided;
 
-	//The coefficient to applied to the axis to move an object back to where it collided.
-	float overlapAmount;
+	//The position that the object should be moved to
+	glm::vec3 newPosition;
 
 	//The velocity resulting from the collision.
 	glm::vec3 collisionVelocity;
+
+	//The type of surface hit
+	CollisionType collisionType;
 };

@@ -23,7 +23,7 @@ void World::Destory() {
 	content.clear();
 }
 
-void World::Load(const std::string& path) {
+/*void World::Load(const std::string& path) {
 	Mesh* newContent = new Mesh(path, wCamera);
 
 	content.push_back(newContent);
@@ -36,6 +36,10 @@ void World::Load(Mesh* mesh, bool physics) {
 		physicsObjects.push_back(mesh);
 	}
 
+}*/
+
+void World::Load(Mesh* m) {
+	content.push_back(m);
 }
 
 void World::Render() {
@@ -54,7 +58,7 @@ bool World::TestCollision(const BoundingBox& other) {
 	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {
 		Mesh* mesh = (*it);
 
-		if ((*it)->CollidesWith(other)) {
+		if ((*it)->GetBoundingBox().CollidesWith(other)) {
 			return true;
 		}
 		
@@ -66,12 +70,12 @@ bool World::TestCollision(const BoundingBox& other) {
 CollisionInfo World::TestCollision(const BoundingBox& other, const glm::vec3& otherVelocity) {
 
 	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {
-		CollisionInfo info = (*it)->CollidesWith(other, otherVelocity);
+		CollisionInfo info = (*it)->GetBoundingBox().CollidesWith(other, otherVelocity);
 
 		if (info.collided) {
 			return info;
 		}
 	}
 
-	return CollisionInfo{false, 0, glm::vec3(0)};
+	return CollisionInfo{false};
 }

@@ -1,0 +1,52 @@
+#pragma once
+
+#include "pch.h"
+
+#include "BasicShader.h"
+
+#include "ModelData.h"
+
+#include "InputComponent.h"
+#include "RenderComponent.h"
+#include "PhysicsComponent.h"
+
+#include "ComponentData.h"
+
+#include "EngineInternal.h"
+
+enum TextureType : uint8_t {
+	TextureType_DIFFUSE = 0,
+	TextureType_SPECULAR = 1,
+	TextureType_AMBIENT = 2,
+};
+
+class Mesh {
+
+public:
+	Mesh(Camera*, const ModelBuffers*, const ComponentMeta&);
+
+	~Mesh();
+
+	void Update(const FrameData&);
+
+	void Render();
+
+	BoundingBox& GetBoundingBox();
+
+private:
+	
+	//Info shared between components
+	ComponentData cData;
+	ComponentMeta cMeta;
+
+	//Components
+	RenderComponent* cRender;
+	PhysicsComponent* cPhysics;
+	InputComponent* cInput;
+
+	//Camera
+	Camera* mCamera;
+
+	//Shader
+	//ShaderProgram* shader;
+};

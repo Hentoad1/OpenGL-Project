@@ -37,12 +37,15 @@ void PhysicsMesh::Update(const FrameData& data) {
 		std::cout << "-----------------------------------------------------" << std::endl;
 		std::cout << "Position: " << glm::to_string(GetBoundingBox().Position()) << std::endl;
 		std::cout << "Velocity: " << glm::to_string(velocity) << std::endl;
-		std::cout << "OverlapAmount: " << info.overlapAmount << std::endl;
-		std::cout << "CollisionVelocity: " << glm::to_string(info.collisionVelocity) << std::endl;
+		std::cout << "CollisionVelocity: " << glm::to_string(info.newPosition) << std::endl;
 
-		GetBoundingBox().SetPosition(GetBoundingBox().Position() - (info.collisionVelocity * info.overlapAmount));
+		GetBoundingBox().SetPosition(GetBoundingBox().Position() - (info.newPosition));
 
-		//velocity = glm::vec3(0);
+		std::cout << "position" << glm::to_string(GetBoundingBox().Position()) << std::endl;
+
+
+		velocity = info.collisionVelocity;
+		//velocity = info.collisionVelocity;
 	}
 	
 	GetBoundingBox().MoveAbsolute(velocity);

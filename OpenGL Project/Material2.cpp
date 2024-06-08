@@ -5,9 +5,6 @@
 #include "Texture.h"
 #include "Path.h"
 
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb/stb_image.h>
-
 static void LogMetaData(const aiMaterial* mat, const aiTextureType type = (aiTextureType)(-1)) {
 	aiString _NAME;
 	aiColor3D _COLOR_DIFFUSE = aiColor3D(0);
@@ -39,9 +36,9 @@ static void LogMetaData(const aiMaterial* mat, const aiTextureType type = (aiTex
 	aiUVTransform _UVTRANSFORM;
 
 	//properties with default values
+	
 
-
-	std::cout <<
+	std::cout << 
 		"---------------------------------------------------------------" << std::endl <<
 		"                      METADATA PROPERTIES                      " << std::endl <<
 		"---------------------------------------------------------------" << std::endl;
@@ -52,7 +49,7 @@ static void LogMetaData(const aiMaterial* mat, const aiTextureType type = (aiTex
 	const int secondColumnWidth = 15;
 
 	mat->Get(AI_MATKEY_NAME, _NAME);
-	std::cout <<
+	std::cout << 
 		std::setw(firstColumnWidth) << "AI_MATKEY_NAME" <<
 		std::setw(secondColumnWidth) << "STRING" <<
 		_NAME.C_Str() << std::endl;
@@ -253,6 +250,7 @@ static void LogMetaData(const aiMaterial* mat, const aiTextureType type = (aiTex
 	std::cout << "---------------------------------------------------------------" << std::endl;
 }
 
+
 static constexpr aiTextureType texTypes[12] = {
 	aiTextureType_DIFFUSE,
 	aiTextureType_SPECULAR,
@@ -301,22 +299,46 @@ static constexpr int aiTexureTypeToIndex(aiTextureType type) {
 	}
 }
 
+GLint* Material::GetTextures() const {
+	return (GLint*)textures;
+}
+
+GLint* Material::GetTexturesExist() const {
+	return (GLint*)loaded;
+}
+
+float* Material::GetColors() const {
+	return (float*)MaterialColors;
+}
+
 Material::Material(const aiScene* scene, const int index, const std::string& root) {
 
 	aiMaterial* mat = scene->mMaterials[index];
 
-	Textures.fill(nullptr);
+	std::fill(loaded, loaded + numTexTypes, false);
+	std::fill(textures, textures + numTexTypes, 0);
 
-	Colors.fill(Color(aiColor3D(0)));
+	aiColor3D clrs[numTexTypes];
 
-	aiColor3D temp;
+	std::fill(clrs, clrs + numTexTypes, aiColor3D(0));
 
-	mat->Get(AI_MATKEY_COLOR_DIFFUSE, temp);
-	Colors[0] = Color(temp);
-	mat->Get(AI_MATKEY_COLOR_SPECULAR, temp);
-	Colors[1] = Color(temp);
-	mat->Get(AI_MATKEY_COLOR_AMBIENT, temp);
-	Colors[2] = Color(temp);
+	mat->Get(AI_MATKEY_COLOR_DIFFUSE, clrs[0]);
+	mat->Get(AI_MATKEY_COLOR_SPECULAR, clrs[1]);
+	mat->Get(AI_MATKEY_COLOR_AMBIENT, clrs[2]);
+	//mat->Get(AI_MATKEY_COLOR_EMISSIVE, clrs[3]);
+	//mat->Get(AI_MATKEY_COLOR_TRANSPARENT, clrs[4]);
+	//mat->Get(AI_MATKEY_COLOR_REFLECTIVE, clrs[5]);
+
+	for (int i = 0; i < numTexTypes; i++) {
+		int index = i * 4;
+		
+		MaterialColors[index] = clrs[i].r;
+		MaterialColors[index + 1] = clrs[i].g;
+		MaterialColors[index + 2] = clrs[i].b;
+		MaterialColors[index + 3] = 1; // "a" value of 1
+	}
+
+	//memcpy(MaterialColors, clrs, sizeof(float) * numTexTypes * 3);
 
 	for (int i = 0; i < numTexTypes; i++) {
 
@@ -331,11 +353,6 @@ Material::Material(const aiScene* scene, const int index, const std::string& roo
 
 		unsigned int TexCount = mat->GetTextureCount(type);
 
-		if (TexCount > 1) {
-			std::cout << "need to layer textures. not prepared for this." << std::endl;
-			throw;
-		}
-
 		//this for loop is a glorified if statement, if 2 or more textures exist they are not layered. (this needs to be implemented)
 		for (unsigned int j = 0; j < TexCount; j++) {
 			aiString texturePath;
@@ -345,86 +362,33 @@ Material::Material(const aiScene* scene, const int index, const std::string& roo
 			const aiTexture* embedded = scene->GetEmbeddedTexture(texturePath.C_Str());
 
 			if (embedded == nullptr) {
+
 				std::string result = CalculatePath(root, texturePath.C_Str());
 
-				Textures[index] = new Texture(result);
+				GLuint glTexture = LoadTexture(result);
+
+				if (TexCount > 1) {
+					std::cout << "need to layer textures. not prepared for this." << std::endl;
+					throw;
+				}
+
+				textures[index] = glTexture;
+				loaded[index] = true;
 			}
 			else {
 				//embedded texture
 
-				Textures[index] = new Texture(embedded);
+				GLuint glTexture = LoadTexture(embedded);
+
+				if (TexCount > 1) {
+					std::cout << "need to layer textures. not prepared for this." << std::endl;
+					throw;
+				}
+
+
+				textures[index] = glTexture;
+				loaded[index] = true;
 			}
 		}
 	}
-}
-
-const std::array<Texture*, numTexTypes>& Material::GetTextures() const {
-	return Textures;
-}
-
-const std::array<Color, numTexTypes>& Material::GetColors() const {
-	return Colors;
-}
-
-Material::~Material() {
-	for (int i = 0; i < Textures.size(); ++i) {
-		delete Textures[i];
-	}
-}
-
-Texture::~Texture() {
-	std::cout << "deleting with: " << std::endl;
-	std::cout << "data: " << data << std::endl;
-	std::cout << "isnullptr: " << (data == nullptr) << std::endl;
-	std::cout << "w: " << width << std::endl;
-	std::cout << "h: " << height << std::endl;
-	std::cout << "bpp: " << bits_per_pixel << std::endl;
-	stbi_image_free(&data);
-}
-
-//Texture::Texture() : data(nullptr), width(0), height(0), bits_per_pixel(0){}
-
-Texture::Texture(const aiTexture* texture) {
-
-	//Regular 2D file
-	if (texture->mHeight != 0) {
-		//glGenTextures(1, &glTexture);
-		//glBindTexture(GL_TEXTURE_1D, glTexture);
-
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->mWidth, texture->mHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, &texture->pcData[0]);
-
-		std::cout << "we are getting textures here";
-		throw;
-	}
-	//Compressed file
-	else {
-		stbi_uc* compressedBuff = (stbi_uc*)&texture->pcData[0];
-		int len = texture->mWidth * sizeof(texture->pcData[0]);
-
-		stbi_set_flip_vertically_on_load(1);
-
-		//if no components are requested then i guess bits per pixel is returned?
-		data = stbi_load_from_memory(compressedBuff, len, &width, &height, &bits_per_pixel, 0);
-	}
-}
-
-Texture::Texture(const std::string& path) {
-
-	stbi_set_flip_vertically_on_load(1);
-
-	//if no components are requested then i guess bits per pixel is returned?
-	data = stbi_load(path.c_str(), &width, &height, &bits_per_pixel, 0);
-
-	if (data == nullptr) {
-		std::cout << stbi_failure_reason();
-		throw;
-	}
-}
-
-Color::Color(const aiColor3D& clr) {
-	r = clr.r;
-	g = clr.g;
-	b = clr.b;
-
-	a = 1.0f;
 }

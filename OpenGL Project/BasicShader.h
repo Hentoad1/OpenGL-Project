@@ -10,11 +10,11 @@ class BasicShader : ShaderProgram {
 public:
     BasicShader(Camera* mCam, glm::vec3 center);
 
-    void SetPosition(glm::vec3);
+    void SetPosition(glm::vec3) override;
 
-    void SetPosition(glm::mat4);
+    void SetPosition(glm::mat4) override;
 
-    void Update();
+    void Update() override;
 private:
     glm::mat4 sModel;
 

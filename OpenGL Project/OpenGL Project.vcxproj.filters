@@ -28,38 +28,53 @@
     <Filter Include="Source Files\Loading Models">
       <UniqueIdentifier>{c4759e2a-7107-4bc8-8f58-2c4db2a6e9ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading Models\Mesh">
-      <UniqueIdentifier>{3b8ac898-9d68-4abd-9582-a22fb95d7310}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Texture">
-      <UniqueIdentifier>{57426e12-b18f-41a1-a5e8-7c1406dc5862}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Vertex">
-      <UniqueIdentifier>{6db78850-d05a-4f61-b9ee-6da1b541dc2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Path">
-      <UniqueIdentifier>{fe44a07d-3538-47fd-b659-a16e4c648ada}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Material">
-      <UniqueIdentifier>{4b5b1f4b-a066-4c41-97a4-e7b071ce5bd4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Mesh\Meta">
-      <UniqueIdentifier>{d2795968-9c65-4900-9581-78d6cf4b67c3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Material\Meta">
-      <UniqueIdentifier>{40995a00-565c-4e1f-ad2f-19923297f9f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Mesh\BoundingBox">
-      <UniqueIdentifier>{82e49612-7296-461c-aba6-02294c8944e7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Shaders\Debug">
       <UniqueIdentifier>{7cdd8baf-f4ba-4495-a2d6-e73cd0a4a428}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Engine\Camera">
       <UniqueIdentifier>{881bc3dd-bc86-49a2-aa42-b4613f410af6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading Models\Mesh\BoundingBox\Orientation">
+    <Filter Include="Source Files\Loading Models\Importer">
+      <UniqueIdentifier>{3fabb51d-3687-4876-bac7-21ce7ce6ca76}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData">
+      <UniqueIdentifier>{7c3a6986-7939-4b20-802c-904c5fa8b4cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData\Material">
+      <UniqueIdentifier>{4b5b1f4b-a066-4c41-97a4-e7b071ce5bd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData\Material\Meta">
+      <UniqueIdentifier>{40995a00-565c-4e1f-ad2f-19923297f9f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData\Path">
+      <UniqueIdentifier>{fe44a07d-3538-47fd-b659-a16e4c648ada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData\Texture">
+      <UniqueIdentifier>{57426e12-b18f-41a1-a5e8-7c1406dc5862}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData\Vertex">
+      <UniqueIdentifier>{6db78850-d05a-4f61-b9ee-6da1b541dc2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components">
+      <UniqueIdentifier>{3d797fb3-8532-407d-b361-deb04de7969e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components\Mesh">
+      <UniqueIdentifier>{3b8ac898-9d68-4abd-9582-a22fb95d7310}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components\Mesh\Meta">
+      <UniqueIdentifier>{d2795968-9c65-4900-9581-78d6cf4b67c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components\Mesh\BoundingBox">
+      <UniqueIdentifier>{82e49612-7296-461c-aba6-02294c8944e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components\Mesh\BoundingBox\Orientation">
       <UniqueIdentifier>{18c29e04-955b-43f6-b7c0-6ffe4d8fcec0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components\Mesh\Old System">
+      <UniqueIdentifier>{d155788b-0183-4ecd-9254-54f54828a20d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Mesh &amp; Components\Mesh\Components">
+      <UniqueIdentifier>{835a8c0b-68c7-4f65-acb3-1507972f2116}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,67 +84,85 @@
     <ClCompile Include="..\..\..\..\..\Libraries\glad\src\glad.c">
       <Filter>Libraries</Filter>
     </ClCompile>
-    <ClCompile Include="BasicMesh.cpp">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
-    </ClCompile>
     <ClCompile Include="Engine.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="World2.cpp">
       <Filter>Source Files\Engine</Filter>
     </ClCompile>
     <ClCompile Include="BasicShader.cpp">
       <Filter>Source Files\Shaders\Basic</Filter>
     </ClCompile>
     <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Loading Models\Texture</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Texture</Filter>
     </ClCompile>
     <ClCompile Include="Vertex.cpp">
-      <Filter>Source Files\Loading Models\Vertex</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Vertex</Filter>
     </ClCompile>
     <ClCompile Include="Path.cpp">
-      <Filter>Source Files\Loading Models\Path</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Path</Filter>
     </ClCompile>
     <ClCompile Include="MaterialMeta3.cpp">
-      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
     </ClCompile>
     <ClCompile Include="MeshMeta.cpp">
-      <Filter>Source Files\Loading Models\Mesh\Meta</Filter>
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Meta</Filter>
     </ClCompile>
     <ClCompile Include="MaterialMeta.cpp">
-      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
     </ClCompile>
-    <ClCompile Include="Material.cpp">
-      <Filter>Source Files\Loading Models\Material</Filter>
+    <ClCompile Include="Material2.cpp">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
-      <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
+      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox</Filter>
     </ClCompile>
     <ClCompile Include="DebugShader.cpp">
       <Filter>Source Files\Shaders\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysicsMesh.cpp">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files\Engine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Orientation.cpp">
-      <Filter>Source Files\Loading Models\Mesh\BoundingBox\Orientation</Filter>
-    </ClCompile>
-    <ClCompile Include="CameraMesh.cpp">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
+      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox\Orientation</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicMesh.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Old System</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraMesh.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Old System</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsMesh.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Old System</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderComponent.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicsComponent.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="InputComponent.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="World2.cpp">
+      <Filter>Source Files\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomImporter.cpp">
+      <Filter>Source Files\Loading Models\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="MaterialBuffer.cpp">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="BasicMesh.h">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>Source Files\Shaders</Filter>
@@ -143,53 +176,83 @@
     <ClInclude Include="Engine.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="World2.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Texture.h">
-      <Filter>Source Files\Loading Models\Texture</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Vertex.h">
-      <Filter>Source Files\Loading Models\Vertex</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Vertex</Filter>
     </ClInclude>
     <ClInclude Include="Path.h">
-      <Filter>Source Files\Loading Models\Path</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Path</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>Source Files\Loading Models\Material</Filter>
+    <ClInclude Include="Material2.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClInclude>
     <ClInclude Include="MaterialMeta3.h">
-      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
     </ClInclude>
     <ClInclude Include="MeshMeta.h">
-      <Filter>Source Files\Loading Models\Mesh\Meta</Filter>
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Meta</Filter>
     </ClInclude>
     <ClInclude Include="MaterialMeta.h">
-      <Filter>Source Files\Loading Models\Material\Meta</Filter>
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
     </ClInclude>
     <ClInclude Include="BoundingBox.h">
-      <Filter>Source Files\Loading Models\Mesh\BoundingBox</Filter>
+      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox</Filter>
     </ClInclude>
     <ClInclude Include="DebugShader.h">
       <Filter>Source Files\Shaders\Debug</Filter>
-    </ClInclude>
-    <ClInclude Include="PhysicsMesh.h">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Source Files\Engine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Orientation.h">
-      <Filter>Source Files\Loading Models\Mesh\BoundingBox\Orientation</Filter>
-    </ClInclude>
-    <ClInclude Include="CameraMesh.h">
-      <Filter>Source Files\Loading Models\Mesh</Filter>
+      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox\Orientation</Filter>
     </ClInclude>
     <ClInclude Include="EngineInternal.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicMesh.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Old System</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraMesh.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Old System</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsMesh.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Old System</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderComponent.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentData.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicsComponent.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="InputComponent.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="World2.h">
+      <Filter>Source Files\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelData.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomImporter.h">
+      <Filter>Source Files\Loading Models\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="MaterialBuffer.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

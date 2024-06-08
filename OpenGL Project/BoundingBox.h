@@ -3,7 +3,7 @@
 #include "pch.h"
 
 #include "Orientation.h"
-#include "EngineInternal.h";
+#include "EngineInternal.h"
 
 #ifdef _DEBUG
 #include "Shader.h"
@@ -30,6 +30,8 @@ public:
 
 	const glm::vec3& Position() const;
 
+	const std::vector<glm::vec3>& Vertices() const;
+
 	const Orientation& GetOrientation() const;
 
 	void MoveRelative(const glm::vec3&);
@@ -53,8 +55,6 @@ public:
 #endif // _DEBUG
 
 private:
-	float GetAxisOverlap(const glm::vec3&, const BoundingBox&);
-
 	//vertices remains static, regardless of orientation or position
 	std::vector<glm::vec3> vertices;
 

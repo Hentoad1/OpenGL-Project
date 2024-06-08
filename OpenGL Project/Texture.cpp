@@ -74,7 +74,7 @@ GLuint LoadTexture(const aiTexture* texture) {
 
 		return 0;
 	}
-	//Embedded file
+	//Compressed file
 	else {
 		stbi_uc* compressedBuff = (stbi_uc*)&texture->pcData[0];
 		int len = texture->mWidth * sizeof(texture->pcData[0]);
