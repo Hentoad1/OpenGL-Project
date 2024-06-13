@@ -5,16 +5,47 @@ in vec3 fPos;
 in vec2 fUV;
 in vec3 fNormal;
 
+
+/*    Light Sources    */
+
+
+struct SceneLight{
+    vec3 direction;
+  
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+struct LightSource{
+    
+    //if the light source is loaded or not.
+    bool loaded;
+
+    //position of the light source.
+    vec3 position;
+    
+    // strength of the light.
+    float strength;
+
+    //Factor for decreasing light spread linearly.
+    float linear;
+
+    //Factor for decreasing light spread quadratically.
+    float quadratic;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+uniform SceneLight sceneLight;
+uniform LightSource LightSources[10];
+
+/*    Material Information    */
+
+
 #define NUM_TEXTURE_TYPES 3
-
-uniform sampler2D Textures[NUM_TEXTURE_TYPES];
-uniform bool TexturesExist[NUM_TEXTURE_TYPES];
-uniform vec4 Colors[NUM_TEXTURE_TYPES];
-
-uniform vec3 viewPos;
-
-
-uniform vec3 lightPos;
 
 #define DIFFUSE_INDEX 0
 #define SPECULAR_INDEX 1
@@ -23,33 +54,50 @@ uniform vec3 lightPos;
 #define TRANSPARENT_INDEX 4
 #define REFLECTIVE_INDEX 5
 
+uniform sampler2D Textures[NUM_TEXTURE_TYPES];
+uniform bool TexturesExist[NUM_TEXTURE_TYPES];
+uniform vec4 Colors[NUM_TEXTURE_TYPES];
+
 const float shininess = 1;
 
-const vec4 lightColor = vec4(1);
-const float lightPower = 10000;
+
+/*    Camera Information    */
+
+uniform vec3 viewPos;
+
+
+/*    Functions    */
 
 void main()
 {
 
     //---------------------- Load Colors ----------------------
 
-    vec4 TextureColors[NUM_TEXTURE_TYPES];
+    vec4 MaterialColors[NUM_TEXTURE_TYPES];
 
     for (int i = 0; i < NUM_TEXTURE_TYPES; i++){
         if (TexturesExist[i]){
-            TextureColors[i] = texture(Textures[i], fUV);
+            MaterialColors[i] = texture(Textures[i], fUV);
         }else{
-            TextureColors[i] = Colors[i];
+            MaterialColors[i] = Colors[i];
         }
     }
 
-    //----------------------- Distances -----------------------
+    //----------------------- Variables -----------------------
 
     // Normal of the computed fragment, in camera space
-     vec3 n = normalize( fNormal );
+    vec3 n = normalize( fNormal );
+     
+    // Eye vector (towards the camera)
+    vec3 E = normalize( viewPos - fPos );
 
-     // Direction of the light (from the fragment to the light)
-     vec3 l = normalize( lightPos - fPos );
+
+
+    //--------------------- Scene Lighting --------------------
+
+    // Direction of the light (from the fragment to the light)
+    vec3 l = normalize( sceneLight.direction );
+
 
     // Cosine of the angle between the normal and the light direction,
     // clamped above 0
@@ -57,44 +105,76 @@ void main()
     //  - light is perpendicular to the triangle -> 0
     float cosTheta = clamp(dot( n, l ), 0, 1);
 
-
-    // Eye vector (towards the camera)
-    vec3 E = normalize( viewPos - fPos );
-
-    // Direction in which the triangle reflects the light
-    vec3 R = reflect(-l,n);
-
-    // Cosine of the angle between the Eye vector and the Reflect vector,
-    // clamped to 0
-    //  - Looking into the reflection -> 1
-    //  - Looking elsewhere -> < 1
-    float cosAlpha = clamp( dot( E,R ), 0,1 );
+        
+    // Direction in which the triangle reflects the light.
+    vec3 R = reflect(-l, n);
 
 
-    // Distance fragment is from light source squared
-    float distanceFromLightSqrd = pow(distance(lightPos, fPos), 2);
-
-    //---------------------- Light Color ----------------------
-
-    //Diffuse Light
-    vec4 DiffuseColor = TextureColors[DIFFUSE_INDEX];
-
-
-    //Ambient Light
-    vec4 AmbientColor = TextureColors[AMBIENT_INDEX];
+    // Calculation for specular light.
+    float spec = pow(max(dot(E, R), 0.0), shininess);
     
 
-    //Specular Light
-    vec3 lightDir = normalize(lightPos - fPos);
-    vec3 viewDir = normalize(viewPos - fPos);
-    vec3 halfwayDir = normalize(lightDir + viewDir);
+    // Combine results
+    vec3 ambient  = sceneLight.ambient * MaterialColors[DIFFUSE_INDEX].xyz;
+    vec3 diffuse  = sceneLight.diffuse * cosTheta * MaterialColors[DIFFUSE_INDEX].xyz;
+    vec3 specular = sceneLight.specular * spec * MaterialColors[SPECULAR_INDEX].xyz;
 
-    float spec = pow(max(dot(fNormal, halfwayDir), 0.0), shininess);
-    vec4 SpecularColor = TextureColors[SPECULAR_INDEX] * spec;
+    
+    vec3 FragmentColor = (ambient + diffuse + specular); 
 
-    //All of them together
-    FragColor = 
-        AmbientColor + 
-        (DiffuseColor * lightColor * lightPower * cosTheta / distanceFromLightSqrd) + 
-        (SpecularColor * lightColor * lightPower * pow(cosAlpha, 5) / distanceFromLightSqrd);
+
+
+
+
+    //--------------------- Light Sources ---------------------
+
+    for (int i = 0; i < 10; i++){
+
+        LightSource light = LightSources[i];
+
+        if (!light.loaded){
+            continue;
+        }
+
+
+        // Direction of the light (from the fragment to the light)
+        vec3 l = normalize( light.position - fPos );
+
+
+        // Cosine of the angle between the normal and the light direction,
+        // clamped above 0
+        //  - light is at the vertical of the triangle -> 1
+        //  - light is perpendicular to the triangle -> 0
+        float cosTheta = clamp(dot( n, l ), 0, 1);
+
+        
+        // Direction in which the triangle reflects the light.
+        vec3 R = reflect(-l, n);
+
+
+        // Calculation for specular light.
+        float spec = pow(max(dot(E, R), 0.0), shininess);
+
+
+        // Attenuation, decrease of light at farther distances.
+        float d = length(light.position - fPos);
+        float attenuation = 1.0 / (1.0 + light.linear * d + 
+  			         light.quadratic * (d * d));
+    
+
+        // Combine results
+        vec3 ambient  = light.ambient * MaterialColors[DIFFUSE_INDEX].xyz;
+        vec3 diffuse  = light.diffuse * cosTheta * MaterialColors[DIFFUSE_INDEX].xyz;
+        vec3 specular = light.specular * spec * MaterialColors[SPECULAR_INDEX].xyz;
+    
+
+        ambient *= attenuation;
+        diffuse *= attenuation;
+        specular *= attenuation;
+
+    
+        FragmentColor += (ambient + diffuse + specular) * light.strength;
+    }
+
+    FragColor = vec4(FragmentColor, 1);
 }

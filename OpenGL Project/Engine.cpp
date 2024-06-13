@@ -16,10 +16,10 @@ enum Action {
 
 /* -------------------------------- CALLBACK DECLARATIONS -------------------------------- */
 
-static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods);
-static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset);
-static void onResize(GLFWwindow* window, int width, int height);
-void onCursorMovement(GLFWwindow* window, double xpos, double ypos);
+//static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods);
+//static void onMouseWheel(GLFWwindow* window, double xoffset, double yoffset);
+//static void onResize(GLFWwindow* window, int width, int height);
+//void onCursorMovement(GLFWwindow* window, double xpos, double ypos);
 
 /* ----------------------------------- CLASS FUNCTIONS ----------------------------------- */
 
@@ -68,9 +68,9 @@ Engine::Engine() : eCamera(new Camera()) /*, eWorld(new World(eCamera))*/ {
 	glfwSetWindowUserPointer(eWindow, reinterpret_cast<void*>(this));
 
 	//Set Callbacks
-	glfwSetScrollCallback(eWindow, onMouseWheel);
-	glfwSetFramebufferSizeCallback(eWindow, onResize);
-	glfwSetCursorPosCallback(eWindow, onCursorMovement);
+	//glfwSetScrollCallback(eWindow, onMouseWheel);
+	//glfwSetFramebufferSizeCallback(eWindow, onResize);
+	//glfwSetCursorPosCallback(eWindow, onCursorMovement);
 
 	//Set Mouse Cursor Style
 	if (glfwRawMouseMotionSupported()){
@@ -81,6 +81,10 @@ Engine::Engine() : eCamera(new Camera()) /*, eWorld(new World(eCamera))*/ {
 
 	//Stop Overlap
 	glEnable(GL_DEPTH_TEST);
+
+	//Transparent objects
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 Engine::~Engine() {
@@ -218,6 +222,8 @@ int8_t Engine::GetKeyState(int key) {
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
 
 //FUNCTION CURRENTLY NOT IN USE.
+
+/*
 static void onInput(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	Engine* e = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
 
@@ -251,7 +257,9 @@ static void onInput(GLFWwindow* window, int key, int scancode, int action, int m
 		e->GetCamera()->MoveAbsolute(glm::vec3(0, -1, 0));
 		break;
 	case(GLFW_KEY_F):
-		e->GetCamera()->LightPos = e->GetCamera()->GetPosition();
+		//e->GetCamera()->LightPos = e->GetCamera()->GetPosition();
+		Scene::AddLight(LightSource{ true, e->GetCamera()->GetPosition() });
+		std::cout << "adding light" << std::endl;
 		break;
 	default:
 		break;
@@ -291,13 +299,13 @@ static void onCursorMovement(GLFWwindow* window, double xpos, double ypos) {
 
 		//e->currentActionState.DELTA_CURSOR_POSITION = glm::dvec2(deltaCursorX, deltaCursorY);
 		//e->currentActionState.ADJUSTED_DELTA_CURSOR_POSITION = glm::dvec2(adjustedDeltaCursorX, adjustedDeltaCursorY);
-	}*/
+	}
 
 	//e->currentActionState.CURSOR_POSITION = glm::dvec2(xpos, ypos);
 }
+
+*/
 #endif // ENGINE_SETTING_DISPLAY_MODEL
-
-
 
 /* ------------------------------- MAIN CALLBACK FUNCTIONS ------------------------------- */
 

@@ -18,11 +18,14 @@ std::array<Color, numTexTypes> MaterialBuffer::GetColors() const {
 static constexpr GLenum Type = GL_TEXTURE_2D;
 
 MaterialBuffer::MaterialBuffer(const Material* mat) : MaterialColors(mat->GetColors()) {
-	const std::array<Texture*, numTexTypes>& textures = mat->GetTextures();
+	const std::array<Texture*, numTexTypes>& texturedata = mat->GetTextures();
 
-	for (int i = 0; i < textures.size(); ++i) {
+	textures = std::array<GLint, numTexTypes>();
+	loaded = std::array<GLint, numTexTypes>();
+
+	for (int i = 0; i < texturedata.size(); ++i) {
 		
-		const Texture* tex = textures[i];
+		const Texture* tex = texturedata[i];
 
 		if (tex == nullptr) {
 			//texture is empty / does not exist.
@@ -85,8 +88,9 @@ MaterialBuffer::MaterialBuffer(const Material* mat) : MaterialColors(mat->GetCol
 
 		glGenerateMipmap(Type);
 
-		glBindTexture(Type, 0);
-
+		//glBindTexture(Type, 0);
+		
+		textures[i] = glTexture;
 		loaded[i] = true;
 	}
 }

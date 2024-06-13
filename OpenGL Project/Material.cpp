@@ -8,6 +8,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
+static Color SCENE_AMBIENT_LIGHT = Color(1, 1, 1, 0.125);
+
 static void LogMetaData(const aiMaterial* mat, const aiTextureType type = (aiTextureType)(-1)) {
 	aiString _NAME;
 	aiColor3D _COLOR_DIFFUSE = aiColor3D(0);
@@ -315,8 +317,11 @@ Material::Material(const aiScene* scene, const int index, const std::string& roo
 	Colors[0] = Color(temp);
 	mat->Get(AI_MATKEY_COLOR_SPECULAR, temp);
 	Colors[1] = Color(temp);
-	mat->Get(AI_MATKEY_COLOR_AMBIENT, temp);
-	Colors[2] = Color(temp);
+	
+	//mat->Get(AI_MATKEY_COLOR_AMBIENT, temp);
+	//Colors[2] = Color(temp);
+
+	Colors[2] = SCENE_AMBIENT_LIGHT;
 
 	for (int i = 0; i < numTexTypes; i++) {
 
@@ -428,3 +433,5 @@ Color::Color(const aiColor3D& clr) {
 
 	a = 1.0f;
 }
+
+Color::Color(float _r, float _g, float _b, float _a) : r(_r), g(_g), b(_b), a(_a) {}

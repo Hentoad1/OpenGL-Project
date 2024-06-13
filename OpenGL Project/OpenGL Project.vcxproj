@@ -118,7 +118,9 @@
     <ClCompile Include="MaterialMeta3.cpp" />
     <ClCompile Include="MaterialMeta.cpp" />
     <ClCompile Include="Mesh.cpp" />
-    <ClCompile Include="MeshMeta.cpp" />
+    <ClCompile Include="MeshMeta.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="Orientation.cpp" />
     <ClCompile Include="Path.cpp" />
     <ClCompile Include="BoundingBox.cpp" />
@@ -130,6 +132,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Texture.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -158,13 +161,16 @@
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="Material2.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="MaterialMeta3.h" />
     <ClInclude Include="MaterialMeta.h" />
-    <ClInclude Include="MeshMeta.h" />
+    <ClInclude Include="MeshMeta.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="Orientation.h" />
     <ClInclude Include="Path.h" />
     <ClInclude Include="pch.h" />

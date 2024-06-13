@@ -4,7 +4,6 @@
 
 static constexpr unsigned int numTexTypes = 3;
 
-
 struct Texture {
 
 	Texture(Texture& ref) {
@@ -23,7 +22,8 @@ struct Texture {
 };
 
 struct Color {
-	Color() {}
+	Color() : r(0), g(0), b(0), a(0){}
+	Color(float, float, float, float);
 	Color(const aiColor3D&);
 
 	float r;

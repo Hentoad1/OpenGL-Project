@@ -7,7 +7,28 @@
 
 int main() {
 
+	//potentially use material struct instead of parallel arrays or just procrastinate for later.
+	
+	//animations
+
+	//create a method in storing image data only once. this can allow for efficient batch rendering
+
 	/*
+	RENDERING:
+
+	Right now BasicShader stores textures in 3 arrays of uniforms. A more efficient approach would be
+	using a Shader Storeage Buffer Object (https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object)
+	or a Uniform Buffer Object (https://www.khronos.org/opengl/wiki/Uniform_Buffer_Object)
+
+
+	OpenGL does not copy the data placed into a Shader Storeage Buffer Object, so ideally a system would be in place to reuse textures and materials, using minial memory.
+
+	When doing this batch rendering can be done very efficiently. All the data of a material can be placed into one of these buffers, and then every object using that material is rendered.
+
+	*/
+
+	/*
+	PHYSICS:
 	* The velocity needs to be inverted along the collision axis and then multiplied by negative one 
 	* (possbily something that lowers the speed a bit like -0.5).
 	* Collision also has allow a person to move alongside a wall without inverting the velocity, but high speed crashes should bounce (hopefully)
@@ -23,10 +44,9 @@ int main() {
 	* 
 	* remove testing shit for collision
 	* octoids
+	* 
+	* clean up scuffed callbacks
 	*/
-
-	
-
 
 	Engine Engine;
 
@@ -63,17 +83,31 @@ int main() {
 	Mesh* warwick = new Mesh(
 		Engine.GetCamera(),
 		z,
-		MESH_COMPONENT_RENDER |
-		MESH_COMPONENT_PHYSICS |
-		MESH_COMPONENT_INPUT |
-
+		MESH_COMPONENT_RENDER | 
 		MESH_USECOLLISION | 
-		MESH_ATTACHEDCAMERA | 
 
 		MESH_SHADERTYPE_BASIC 
 	);
-	
+
 	World::Load(warwick);
+
+	//load player
+
+	ModelBuffers* m = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1) };
+
+	Mesh* player = new Mesh(
+		Engine.GetCamera(),
+		m,
+		MESH_COMPONENT_PHYSICS |
+		MESH_COMPONENT_INPUT |
+
+		MESH_USECOLLISION |
+		MESH_ATTACHEDCAMERA |
+
+		MESH_SHADERTYPE_BASIC
+	);
+	
+	World::Load(player);
 
 	while (!Engine.ShouldClose())
 	{
@@ -83,7 +117,7 @@ int main() {
 
 	Engine.Terminate();
 
-	
+	delete m;
 
 	return 0;
 }

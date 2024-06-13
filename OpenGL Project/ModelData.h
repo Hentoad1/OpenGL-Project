@@ -59,7 +59,7 @@ struct ModelBuffers {
 	GLuint VAO;
 
 	//Material Buffer Object
-	std::vector<MaterialBuffer> MBO;
+	std::vector<MaterialBuffer*> MBO;
 
 	std::vector<SubMesh> mesh_data;
 

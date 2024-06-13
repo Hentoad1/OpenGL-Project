@@ -11,11 +11,22 @@ BasicShader::BasicShader(Camera* mCam, glm::vec3 pos) : ShaderProgram("./BasicSh
 
 //Update assumes the shader is in use.
 void BasicShader::Update() {
-#ifdef ENGINE_SETTING_DISPLAY_MODEL
+
+    SetLight("sceneLight", Scene::GetSceneLight());
+
+    const LightSource* sources = Scene::GetLightSources();
+
+    for (int i = 0; i < NUM_LIGHT_SOURCES; ++i) {
+        std::string loc = std::string("LightSources[") + std::to_string(i) + std::string("]");
+
+        SetLight(loc, &sources[i]);
+    }
+
+/*#ifdef ENGINE_SETTING_DISPLAY_MODEL
     setVec3("lightPos", sCamera->LightPos);
 #else
     setVec3("lightPos", glm::vec3(0, 0, 100));
-#endif // DEBUG
+#endif*/
 
 
     setMat4("projection", sCamera->GetProjection());

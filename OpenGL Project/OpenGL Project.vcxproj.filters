@@ -76,6 +76,9 @@
     <Filter Include="Source Files\Mesh &amp; Components\Mesh\Components">
       <UniqueIdentifier>{835a8c0b-68c7-4f65-acb3-1507972f2116}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Scene">
+      <UniqueIdentifier>{0efe1143-73a9-426e-b5d6-a20673b0bc26}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -159,6 +162,9 @@
     <ClCompile Include="MaterialBuffer.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -230,9 +236,6 @@
     <ClInclude Include="RenderComponent.h">
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ComponentData.h">
-      <Filter>Source Files\Mesh &amp; Components\Mesh</Filter>
-    </ClInclude>
     <ClInclude Include="PhysicsComponent.h">
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClInclude>
@@ -253,6 +256,12 @@
     </ClInclude>
     <ClInclude Include="MaterialBuffer.h">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentData.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Source Files\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

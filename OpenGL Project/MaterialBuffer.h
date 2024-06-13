@@ -8,6 +8,10 @@ class MaterialBuffer {
 
 public:
 
+	MaterialBuffer(const MaterialBuffer& ref) {
+		throw;
+	}
+
 	MaterialBuffer(const Material* mat);
 
 	~MaterialBuffer();

@@ -24,6 +24,8 @@ public:
 	//Creates a ModelData Object, Attaches it, returns buffer object, and deletes unnecessary ModelData.
 	ModelBuffers* ImportAndAttach(const std::string& path);
 
+	void Free(void*);
+
 private:
 	std::vector<ModelData*> mData;
 	std::vector<ModelBuffers*> mBuffers;

@@ -118,9 +118,9 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 		const unsigned int mNumIndices = mesh->mNumFaces * 3;
 
-		mesh_data.push_back(SubMesh(BaseVertex, BaseIndex, mNumIndices, mesh->mMaterialIndex, min, max));
+		mesh_data.push_back(SubMesh{ mNumIndices, BaseVertex, BaseIndex, mesh->mMaterialIndex, min, max });
 
-		BaseIndex += mesh->mNumFaces * 3;
+		BaseIndex += mNumIndices;
 		BaseVertex += mesh->mNumVertices;
 	}
 
@@ -185,10 +185,12 @@ ModelBuffers* CustomImporter::Attach(ModelData* data) {
 
 	glBindVertexArray(0);
 
-	std::vector<MaterialBuffer> MBO = std::vector<MaterialBuffer>();
+	std::vector<MaterialBuffer*> MBO = std::vector<MaterialBuffer*>();
 
 	for (int i = 0; i < data->Materials.size(); ++i) {
-		MBO.emplace_back(data->Materials[i]);
+		MaterialBuffer* buf = new MaterialBuffer(data->Materials[i]);
+
+		MBO.push_back(buf);
 	}
 
 	ModelBuffers* CreatedData = new ModelBuffers{ VAO, MBO, data->mesh_data, data->min, data->max };
@@ -202,15 +204,30 @@ ModelBuffers* CustomImporter::ImportAndAttach(const std::string& path) {
 	ModelData* data = Import(path);
 	ModelBuffers* buf = Attach(data);
 
+	Free(data);
+
+	return buf;
+}
+
+
+void CustomImporter::Free(void* ptr) {
+
 	for (int i = 0; i < mData.size(); i++) {
-		if (mData[i] == data) {
-			delete data;
+		if (mData[i] == ptr) {
+			delete mData[i];
 			mData.erase(mData.begin() + i);
-			break;
+			return;
 		}
 	}
 
-	return buf;
+	for (int i = 0; i < mBuffers.size(); i++) {
+		if (mBuffers[i] == ptr) {
+			delete mBuffers[i];
+			mBuffers.erase(mBuffers.begin() + i);
+			return;
+		}
+	}
+
 }
 
 CustomImporter::~CustomImporter() {
@@ -222,4 +239,3 @@ CustomImporter::~CustomImporter() {
 		delete mBuffers[i];
 	}
 }
-

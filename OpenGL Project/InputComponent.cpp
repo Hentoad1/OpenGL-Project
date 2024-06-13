@@ -5,6 +5,28 @@
 InputComponent::InputComponent(ComponentData* _cData, const ComponentMeta* _cMeta) : cData(_cData) {}
 
 void InputComponent::Update(const FrameData& input) {
+	/* --------------------------------- PROCESS MOUSE INPUT --------------------------------- */
+
+	const Orientation& InitialOrientation = cData->bounds.GetOrientation();
+
+	float yaw = InitialOrientation.GetYaw();
+	float pitch = InitialOrientation.GetPitch();
+	float roll = InitialOrientation.GetRoll();
+
+	yaw += input.ADJUSTED_DELTA_CURSOR_POSITION.x;
+	pitch += input.ADJUSTED_DELTA_CURSOR_POSITION.y;
+
+	if (pitch > 89.0f) {
+		pitch = 89.0f;
+	}
+	else if (pitch < -89.0f) {
+		pitch = -89.0f;
+	}
+
+	cData->bounds.SetOrientation(Orientation(yaw, pitch, roll));
+
+	/* --------------------------------- PROCESS USER INPUT ---------------------------------- */
+
 	if (input.JUMP == GLFW_PRESS || input.JUMP == GLFW_REPEAT) {
 		cData->velocity += glm::vec3(0, 1, 0);
 	}
@@ -42,8 +64,11 @@ void InputComponent::Update(const FrameData& input) {
 	}
 
 	if (input.INTERACT == GLFW_PRESS || input.INTERACT == GLFW_REPEAT) {
+
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
-		cData->camera->LightPos = cData->bounds.Position();
+
+		Scene::AddLight(LightSource{ true, cData->camera->GetPosition(), 100.0f, 0, 0.01, glm::vec3(1), glm::vec3(0.1), glm::vec3(1) });
+
 #endif
 	}
 }

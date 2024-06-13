@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Scene.h"
 
 inline glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from)
 {
@@ -13,6 +14,12 @@ inline glm::mat4 aiMatrix4x4ToGlm(const aiMatrix4x4& from)
 
     return to;
 }
+
+struct ShaderTexture {
+    GLuint image;
+    bool useImage;
+    glm::vec4 color;
+};
 
 inline std::string ReadFile(const std::string& path) {
 
@@ -180,6 +187,30 @@ public:
 
     void setTextures(const std::string& name, const GLint* tex, int count) {
         glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, tex);
+    }
+
+    void SetLight(const std::string& name, const SceneLight* light) {
+        glUniform3fv(glGetUniformLocation(ID, (name + ".direction").c_str()), 1, glm::value_ptr(light->direction));
+        glUniform3fv(glGetUniformLocation(ID, (name + ".ambient").c_str()), 1, glm::value_ptr(light->ambient));
+        glUniform3fv(glGetUniformLocation(ID, (name + ".diffuse").c_str()), 1, glm::value_ptr(light->diffuse));
+        glUniform3fv(glGetUniformLocation(ID, (name + ".specular").c_str()), 1, glm::value_ptr(light->specular));
+    }
+
+    void SetLight(const std::string& name, const LightSource* light) {
+        glUniform1f(glGetUniformLocation(ID, (name + ".loaded").c_str()), light->loaded);
+
+
+        glUniform3fv(glGetUniformLocation(ID, (name + ".position").c_str()), 1, glm::value_ptr(light->position));
+
+        glUniform1f(glGetUniformLocation(ID, (name + ".strength").c_str()), light->strength);
+
+        glUniform1f(glGetUniformLocation(ID, (name + ".linear").c_str()), light->linear);
+        glUniform1f(glGetUniformLocation(ID, (name + ".quadratic").c_str()), light->quadratic);
+
+
+        glUniform3fv(glGetUniformLocation(ID, (name + ".ambient").c_str()), 1, glm::value_ptr(light->ambient));
+        glUniform3fv(glGetUniformLocation(ID, (name + ".diffuse").c_str()), 1, glm::value_ptr(light->diffuse));
+        glUniform3fv(glGetUniformLocation(ID, (name + ".specular").c_str()), 1, glm::value_ptr(light->specular));
     }
 
 private:

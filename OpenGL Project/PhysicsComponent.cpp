@@ -51,11 +51,8 @@ void PhysicsComponent::Update(const FrameData& data) {
 		const glm::vec3 ModelCenter = cData->bounds.Center();
 		const glm::vec3 CameraOffset = axis.Front * -10.0f; //50 units away from player.
 
-
 		cam->SetPosition(ModelCenter + CameraOffset);
 		cam->SetOrientation(cData->bounds.GetOrientation());
 	}
 	
-
-
 }

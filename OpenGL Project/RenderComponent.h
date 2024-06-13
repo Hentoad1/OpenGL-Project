@@ -24,4 +24,6 @@ private:
 	//Model Data
 	const ModelBuffers* mData;
 
+	ComponentData* cData;
+
 };
