@@ -67,7 +67,7 @@ void InputComponent::Update(const FrameData& input) {
 
 #ifdef ENGINE_SETTING_DISPLAY_MODEL
 
-		Scene::AddLight(LightSource{ true, cData->camera->GetPosition(), 100.0f, 0, 0.01, glm::vec3(1), glm::vec3(0.1), glm::vec3(1) });
+		Scene::AddLight(glslLightSource{ true, cData->camera->GetPosition(), 100.0f, 0, 0.01, glm::vec3(1), glm::vec3(0.1), glm::vec3(1) });
 
 #endif
 	}

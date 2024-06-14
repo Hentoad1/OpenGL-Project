@@ -189,14 +189,14 @@ public:
         glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, tex);
     }
 
-    void SetLight(const std::string& name, const SceneLight* light) {
+    void SetLight(const std::string& name, const glslSceneLight* light) {
         glUniform3fv(glGetUniformLocation(ID, (name + ".direction").c_str()), 1, glm::value_ptr(light->direction));
         glUniform3fv(glGetUniformLocation(ID, (name + ".ambient").c_str()), 1, glm::value_ptr(light->ambient));
         glUniform3fv(glGetUniformLocation(ID, (name + ".diffuse").c_str()), 1, glm::value_ptr(light->diffuse));
         glUniform3fv(glGetUniformLocation(ID, (name + ".specular").c_str()), 1, glm::value_ptr(light->specular));
     }
 
-    void SetLight(const std::string& name, const LightSource* light) {
+    void SetLight(const std::string& name, const glslLightSource* light) {
         glUniform1f(glGetUniformLocation(ID, (name + ".loaded").c_str()), light->loaded);
 
 

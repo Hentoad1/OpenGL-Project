@@ -14,7 +14,7 @@ void BasicShader::Update() {
 
     SetLight("sceneLight", Scene::GetSceneLight());
 
-    const LightSource* sources = Scene::GetLightSources();
+    const glslLightSource* sources = Scene::GetLightSources();
 
     for (int i = 0; i < NUM_LIGHT_SOURCES; ++i) {
         std::string loc = std::string("LightSources[") + std::to_string(i) + std::string("]");

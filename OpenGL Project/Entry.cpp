@@ -7,8 +7,7 @@
 
 int main() {
 
-	//potentially use material struct instead of parallel arrays or just procrastinate for later.
-	
+	//shaders are about as good as they will get until a full importer is made, just make animations now.
 	//animations
 
 	//create a method in storing image data only once. this can allow for efficient batch rendering
@@ -20,6 +19,8 @@ int main() {
 	using a Shader Storeage Buffer Object (https://www.khronos.org/opengl/wiki/Shader_Storage_Buffer_Object)
 	or a Uniform Buffer Object (https://www.khronos.org/opengl/wiki/Uniform_Buffer_Object)
 
+	//potentially use material struct instead of parallel arrays or just procrastinate for later.
+	//this is harder than i thought u cannot make a struct with sampler2D, probably only use uniform buffer object for lights.
 
 	OpenGL does not copy the data placed into a Shader Storeage Buffer Object, so ideally a system would be in place to reuse textures and materials, using minial memory.
 

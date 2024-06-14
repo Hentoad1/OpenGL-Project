@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-struct SceneLight {
+struct glslSceneLight {
     glm::vec3 direction;
 
     glm::vec3 ambient;
@@ -12,7 +12,7 @@ struct SceneLight {
 
 #define NUM_LIGHT_SOURCES 10
 
-struct LightSource {
+struct glslLightSource {
     bool loaded = false;
 
     glm::vec3 position;
@@ -28,8 +28,8 @@ struct LightSource {
 };
 
 namespace Scene {
-    const SceneLight* GetSceneLight();
-    const LightSource* GetLightSources();
+    const glslSceneLight* GetSceneLight();
+    const glslLightSource* GetLightSources();
 
-    void AddLight(const LightSource&);
+    void AddLight(const glslLightSource&);
 }
