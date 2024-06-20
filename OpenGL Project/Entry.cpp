@@ -85,16 +85,17 @@ int main() {
 		Engine.GetCamera(),
 		z,
 		MESH_COMPONENT_RENDER | 
+		MESH_COMPONENT_ANIMATION |
 		MESH_USECOLLISION | 
 
-		MESH_SHADERTYPE_BASIC 
+		MESH_SHADERTYPE_SKELETAL
 	);
 
 	World::Load(warwick);
 
 	//load player
 
-	ModelBuffers* m = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1) };
+	ModelBuffers* m = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1)};
 
 	Mesh* player = new Mesh(
 		Engine.GetCamera(),

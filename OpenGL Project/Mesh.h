@@ -23,6 +23,8 @@ enum TextureType : uint8_t {
 class Mesh {
 
 public:
+	Mesh(const Mesh& ref);
+
 	Mesh(Camera*, const ModelBuffers*, const ComponentMeta&);
 
 	~Mesh();
@@ -43,6 +45,7 @@ private:
 	RenderComponent* cRender;
 	PhysicsComponent* cPhysics;
 	InputComponent* cInput;
+	AnimationComponent* cAnim;
 
 	//Camera
 	Camera* mCamera;

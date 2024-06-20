@@ -1,6 +1,12 @@
 #include "pch.h"
 #include "Mesh.h"
 
+Mesh::Mesh(const Mesh& ref) : cMeta(0) {
+
+	throw;
+}
+
+
 Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const ComponentMeta& _cMeta) : mCamera(mCam), cMeta(_cMeta) {
 
 	cData = ComponentData{ BoundingBox(mData->min, mData->max), mCamera, glm::vec3(0) };
@@ -9,11 +15,14 @@ Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const ComponentMeta& _cMeta)
 	cData.bounds.BindGL(mCamera);
 #endif
 
-	cRender = cMeta.has(MESH_COMPONENT_RENDER) ? new RenderComponent(&cData , &cMeta, mData) : nullptr;
+	cAnim = cMeta.has(MESH_COMPONENT_ANIMATION) ? new AnimationComponent(mData) : nullptr;
+	cRender = cMeta.has(MESH_COMPONENT_RENDER) ? new RenderComponent(&cData , &cMeta, mData, cAnim) : nullptr;
 	cPhysics = cMeta.has(MESH_COMPONENT_PHYSICS) ? new PhysicsComponent(&cData, &cMeta) : nullptr;
 	cInput = cMeta.has(MESH_COMPONENT_INPUT) ? new InputComponent(&cData, &cMeta) : nullptr;
 
-
+	if (cMeta.has(MESH_COMPONENT_ANIMATION)) {
+		cAnim->SetAnimation((Animation*)mData->animations[0]);
+	}
 
 }
 
@@ -31,6 +40,9 @@ Mesh::~Mesh() {
 		delete cInput;
 	}
 
+	if (cMeta.has(MESH_COMPONENT_ANIMATION)) {
+		delete cAnim;
+	}
 }
 
 BoundingBox& Mesh::GetBoundingBox() {
@@ -47,6 +59,9 @@ void Mesh::Update(const FrameData& fData) {
 		cPhysics->Update(fData);
 	}
 
+	if (cMeta.has(MESH_COMPONENT_ANIMATION)) {
+		cAnim->Update(fData);
+	}
 }
 
 void Mesh::Render() {

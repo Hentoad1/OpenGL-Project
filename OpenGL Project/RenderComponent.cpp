@@ -4,10 +4,17 @@
 
 #include "Shader.h"
 
-RenderComponent::RenderComponent(ComponentData* _cData, const ComponentMeta* cMeta, const ModelBuffers* _mData) : cData(_cData), mData(_mData) {
+RenderComponent::RenderComponent(ComponentData* _cData, const ComponentMeta* cMeta, const ModelBuffers* _mData, const AnimationComponent* anim) : cData(_cData), mData(_mData), animComp(anim) {
+	
+	
 	if (cMeta->has(MESH_SHADERTYPE_BASIC)) {
 		shader = (ShaderProgram*)(new BasicShader(cData->camera, mData->center()));
 	}
+	else if (cMeta->has(MESH_SHADERTYPE_SKELETAL)) {
+		shader = (ShaderProgram*)(new SkeletalShader(cData->camera, mData->center()));
+	}
+
+
 }
 
 RenderComponent::~RenderComponent() {
@@ -18,11 +25,15 @@ void RenderComponent::Render() {
 
 	/* -------------------------------- USE AND UPDATE SHADER -------------------------------- */
 
-	//shader->SetPosition(cData->bounds.Center());
-	
-	shader->SetPosition(glm::mat4(1.0f));
-
 	shader->Use();
+	
+
+	//should check shaderType
+	if (animComp != nullptr) {
+		shader->setMat4s("finalBonesMatrices", MAX_BONES, animComp->GetFinalBoneTransforms().data());
+	}
+
+	shader->SetPosition(glm::mat4(1.0f));
 
 	shader->Update();
 

@@ -2,6 +2,12 @@
 
 #include "pch.h"
 
+
+#define NUM_LIGHT_SOURCES 10
+
+#define MAX_BONE_INFLUENCE 4
+#define MAX_BONES 100
+
 struct glslSceneLight {
     glm::vec3 direction;
 
@@ -9,8 +15,6 @@ struct glslSceneLight {
     glm::vec3 diffuse;
     glm::vec3 specular;
 };
-
-#define NUM_LIGHT_SOURCES 10
 
 struct glslLightSource {
     bool loaded = false;

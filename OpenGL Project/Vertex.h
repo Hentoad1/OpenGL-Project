@@ -2,6 +2,8 @@
 
 #include "pch.h"
 
+#include "Scene.h"
+
 struct Vertex{
 	Vertex(float, float, float, float, float, float, float, float);
 
@@ -36,4 +38,7 @@ struct Vertex{
 	float normal_x;
 	float normal_y;
 	float normal_z;
+
+	int boneIndices[MAX_BONE_INFLUENCE] = { -1, -1, -1, -1 };
+	float boneWeights[MAX_BONE_INFLUENCE] = { 0.0f, 0.0f, 0.0f, 0.0f };
 };

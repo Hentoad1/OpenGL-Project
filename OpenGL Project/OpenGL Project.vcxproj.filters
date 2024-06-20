@@ -79,6 +79,12 @@
     <Filter Include="Source Files\Scene">
       <UniqueIdentifier>{0efe1143-73a9-426e-b5d6-a20673b0bc26}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Shaders\Skeletal">
+      <UniqueIdentifier>{1cf324e6-21db-43c7-bc78-885cf919bacd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\Importer\ModelData\Skeleton">
+      <UniqueIdentifier>{60c4c103-67e0-4bda-a30f-a4c7b0376a14}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -164,6 +170,21 @@
     </ClCompile>
     <ClCompile Include="Scene.cpp">
       <Filter>Source Files\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkeletalShader.cpp">
+      <Filter>Source Files\Shaders\Skeletal</Filter>
+    </ClCompile>
+    <ClCompile Include="Bones.cpp">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Skeleton.cpp">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation.cpp">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Skeleton</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationComponent.cpp">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -263,6 +284,21 @@
     <ClInclude Include="Scene.h">
       <Filter>Source Files\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="SkeletalShader.h">
+      <Filter>Source Files\Shaders\Skeletal</Filter>
+    </ClInclude>
+    <ClInclude Include="Bones.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation.h">
+      <Filter>Source Files\Loading Models\Importer\ModelData\Skeleton</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationComponent.h">
+      <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="CreateHeader.txt" />
@@ -279,6 +315,12 @@
     </None>
     <None Include="DebugShaderV.glsl">
       <Filter>Source Files\Shaders\Debug</Filter>
+    </None>
+    <None Include="SkeletalShaderF.glsl">
+      <Filter>Source Files\Shaders\Skeletal</Filter>
+    </None>
+    <None Include="SkeletalShaderV.glsl">
+      <Filter>Source Files\Shaders\Skeletal</Filter>
     </None>
   </ItemGroup>
 </Project>
