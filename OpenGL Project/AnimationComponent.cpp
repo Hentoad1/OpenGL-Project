@@ -13,6 +13,7 @@ void AnimationComponent::SetAnimation(Animation* anim) {
 
 void AnimationComponent::Update(const FrameData& data) {
 
+    FinalBoneTransforms.fill(glm::mat4(1));
 
     if (currentAnimation != nullptr) {
 
@@ -20,11 +21,15 @@ void AnimationComponent::Update(const FrameData& data) {
 
         CalculateBoneTransform(skeleton->GetRoot(), glm::mat4(1.0f));
 
-        /*std::cout << "---------------------------------" << std::endl;
+        //std::cout << "---------------------------------" << std::endl;
 
         for (int i = 0; i < MAX_BONES; ++i) {
-            std::cout << i << ": " << glm::to_string(FinalBoneTransforms[i]) << std::endl << std::endl;
-        }*/
+            //std::cout << i << ": " << glm::to_string(FinalBoneTransforms[i]) << std::endl << std::endl;
+
+            if (FinalBoneTransforms[i] == glm::mat4(0)) {
+                //std::cout << i << std::endl;
+            }
+        }
     }
 
 }
@@ -35,6 +40,10 @@ void AnimationComponent::CalculateBoneTransform(Bone* bone, const glm::mat4& par
     const glm::mat4& offset = bone->offset;
 
     const glm::mat4 globalTransform = (parentTransform * nodeTransform);
+
+    if (bone->index == 29) {
+        //throw;
+    }
 
     FinalBoneTransforms[bone->index] = globalTransform * offset;
 

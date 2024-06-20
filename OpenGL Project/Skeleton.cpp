@@ -20,7 +20,7 @@ Skeleton::Skeleton(const aiNode* root, const aiMesh* mesh) {
 	for (int i = 0; i < mesh->mNumBones; ++i) {
 		Bone* newBone = new Bone(mesh->mBones[i], i);
 
-		std::cout << mesh->mBones[i]->mName.C_Str() << std::endl;
+		//std::cout << mesh->mBones[i]->mName.C_Str() << std::endl;
 
 		bones.push_back(newBone);
 		boneMap.emplace(std::string(mesh->mBones[i]->mName.C_Str()), newBone);
@@ -55,7 +55,7 @@ Bone* Skeleton::CreateMap(const aiNode* node, const Bone* parent) {
 
 	Bone* bone = GetBone(node->mName);
 
-	std::cout << node->mName.C_Str() << std::endl;
+	//std::cout << node->mName.C_Str() << std::endl;
 
 	if (bone == nullptr) {
 
@@ -81,7 +81,9 @@ Bone* Skeleton::CreateMap(const aiNode* node, const Bone* parent) {
 		else {
 			return nullptr;
 		}
-	}
+
+		throw;
+	} 
 
 	for (int i = 0; i < node->mNumChildren; ++i) {
 		aiNode* child = node->mChildren[i];

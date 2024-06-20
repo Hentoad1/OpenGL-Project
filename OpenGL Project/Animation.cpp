@@ -100,7 +100,8 @@ void Animation::Update(const FrameData& fData) {
 				float scaleFactor = GetScaleFactor(frame.positionFrames[keyframeIndex].time, frame.positionFrames[keyframeIndex + 1].time, duration_played);
 
 
-				glm::vec3 finalPosition = glm::mix(frame.positionFrames[keyframeIndex].position, frame.positionFrames[keyframeIndex + 1].position, scaleFactor);
+				//glm::vec3 finalPosition = glm::mix(frame.positionFrames[keyframeIndex].position, frame.positionFrames[keyframeIndex + 1].position, scaleFactor);
+				glm::vec3 finalPosition = frame.positionFrames[keyframeIndex].position;
 
 				translation = glm::translate(glm::mat4(1.0f), finalPosition);
 			}
@@ -125,7 +126,8 @@ void Animation::Update(const FrameData& fData) {
 			if (keyframeIndex != -1) {
 				float scaleFactor = GetScaleFactor(frame.orientationFrames[keyframeIndex].time, frame.orientationFrames[keyframeIndex + 1].time, duration_played);
 
-				glm::quat finalRotation = glm::mix(frame.orientationFrames[keyframeIndex].orientation, frame.orientationFrames[keyframeIndex + 1].orientation, scaleFactor);
+				//glm::quat finalRotation = glm::mix(frame.orientationFrames[keyframeIndex].orientation, frame.orientationFrames[keyframeIndex + 1].orientation, scaleFactor);
+				glm::quat finalRotation = frame.orientationFrames[keyframeIndex].orientation;
 
 				finalRotation = glm::normalize(finalRotation);
 
@@ -153,7 +155,8 @@ void Animation::Update(const FrameData& fData) {
 				float scaleFactor = GetScaleFactor(frame.scaleFrames[keyframeIndex].time, frame.scaleFrames[keyframeIndex + 1].time, duration_played);
 
 
-				glm::vec3 finalPosition = glm::mix(frame.scaleFrames[keyframeIndex].scale, frame.scaleFrames[keyframeIndex + 1].scale, scaleFactor);
+				//glm::vec3 finalPosition = glm::mix(frame.scaleFrames[keyframeIndex].scale, frame.scaleFrames[keyframeIndex + 1].scale, scaleFactor);
+				glm::vec3 finalPosition = frame.scaleFrames[keyframeIndex].scale;
 
 				scale = glm::translate(glm::mat4(1.0f), finalPosition);
 			}

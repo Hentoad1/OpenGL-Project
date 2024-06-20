@@ -26,15 +26,19 @@ ModelData* CustomImporter::Import(const std::string& path) {
 		//does fix current issue but is good nonetheless
 		aiProcess_GenUVCoords | \
 
-		//max amounts of bones per vertex (defaults to 4)
-		aiProcess_LimitBoneWeights | \
+		//max amounts of bones per vertex (defaults to 4) THIS CAUSED AN ERROR. (node tree missing bone segment and not fusing children)
+		//aiProcess_LimitBoneWeights | \
 
 		//creates bone nodes for proper importing.
 		aiProcess_PopulateArmatureData | \
 
+		//validates that everything is correct
+		//aiProcess_ValidateDataStructure | \
+
+
+
 		//sometimes this fixes something, sometimes it doesn't
 		//aiProcess_FlipUVs | \
-
 
 		//can be useful later for lighting
 		//aiProcess_CalcTangentSpace | \
@@ -170,7 +174,14 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 			for (int i = 0; i < bone->mNumWeights; ++i) {
 				const aiVertexWeight& weight = bone->mWeights[i];
+				
+				if (weight.mWeight == 0) {
+					continue;
+				}
+
 				Vertex& vertex = vertices[weight.mVertexId];
+
+				bool addedWeight = false;
 
 				for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
 					if (vertex.boneIndices[i] == -1) {
@@ -178,11 +189,50 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 						int boneindex = skeleton->GetBone(bone->mName)->index;
 
-						std::cout << boneindex << std::endl;
+						//std::cout << boneindex << std::endl;
 
 						vertex.boneIndices[i] = boneindex;
+
+						addedWeight = true;
+
 						break;
+					}	
+				}
+
+				//remove lowest weight and normalize the rest.
+				if (!addedWeight) {
+					std::cout << "more than 4 bone weights" << std::endl;
+
+					std::cout << "adding weight: " << weight.mWeight << ", index: " << skeleton->GetBone(bone->mName)->index << std::endl;
+
+					float smallestWeight = weight.mWeight;
+					int smallestWeightIndex = -1;
+
+					float totalWeight = smallestWeight;
+
+					for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
+						std::cout << "with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
+						if (vertex.boneWeights[i] < smallestWeight) {
+							smallestWeight = vertex.boneWeights[i];
+							smallestWeightIndex = i;
+						}
+
+						totalWeight += vertex.boneWeights[i];
 					}
+
+					totalWeight -= smallestWeight;
+
+					for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
+						if (smallestWeightIndex == i) {
+							vertex.boneWeights[i] = weight.mWeight;
+							vertex.boneIndices[i] = skeleton->GetBone(bone->mName)->index;
+						}
+
+						vertex.boneWeights[i] /= totalWeight;
+						std::cout << "finished with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
+					}
+
+					//throw;
 				}
 			}
 		}

@@ -27,11 +27,6 @@ uniform mat4 finalBonesMatrices[MAX_BONES];
 
 void main()
 {
-    /*if (boneIndices.x < 1000000000){
-	    fPos = vec3(1000,0,0);
-        return;
-    }*/
-
 	vec4 totalPosition = vec4(0.0f);
 
     for(int i = 0; i < MAX_BONE_INFLUENCE; i++) {
@@ -47,7 +42,7 @@ void main()
 
         vec4 localPosition = finalBonesMatrices[boneIndices[i]] * vec4(vPos,1.0f);
 
-        totalPosition += localPosition * 1;//boneWeights[i];
+        totalPosition += localPosition * boneWeights[i];
 
         //not in use.
         vec3 localNormal = vNormal * mat3(finalBonesMatrices[boneIndices[i]]);
