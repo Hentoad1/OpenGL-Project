@@ -49,14 +49,9 @@ void main()
 
     }
 	
-	//gl_Position = projection * view * model * vec4(vPos, 1.0f);
-	
     gl_Position = projection * view * model * totalPosition;
 
-
-    //TODO: fPos is not the same therefore lighting doesnt work
-	fPos = vec3(model * vec4(vPos, 1.0f));
-
+	fPos = vec3(model * totalPosition);
 	fUV = vUV;
 	fNormal = vNormal;
 }
