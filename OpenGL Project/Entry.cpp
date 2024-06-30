@@ -5,12 +5,24 @@
 
 #include "CustomImporter.h"
 
+#include "MemoryMapper.h"
+
 int main() {
+	
+	/*
+	lots of loose ends here.
+	A shit ton of debug cout calls
+	memory for Texture is being allocated with malloc, and STB_FREE is always called, even if it shouldnt be.
+	*/
+
 
 	//shaders are about as good as they will get until a full importer is made, just make animations now.
 	//animations
+	
 
 	//create a method in storing image data only once. this can allow for efficient batch rendering
+
+	//create an interface of behaviorComponent to provide unique physics for different meshes
 
 	/*
 	RENDERING:
@@ -77,9 +89,15 @@ int main() {
 	//WARWICK
 	//World::Load("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\warwick.glb");
 	
+
+	//import keyframe
+
 	CustomImporter importer = CustomImporter();
 
-	ModelBuffers* z = importer.ImportAndAttach("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\warwick.glb");
+	ModelData* z1 = importer.Import("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\warwick.glb");
+	Buffer z2 = ModelToBuffer(z1);
+	ModelData* copied = BufferToModel(z2);
+	ModelBuffers* z = importer.Attach(copied);
 
 	Mesh* warwick = new Mesh(
 		Engine.GetCamera(),
@@ -93,23 +111,69 @@ int main() {
 
 	World::Load(warwick);
 
+
+
 	//load player
 
-	ModelBuffers* m = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1)};
+	ModelBuffers* m1 = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1)};
 
 	Mesh* player = new Mesh(
 		Engine.GetCamera(),
-		m,
+		m1,
 		MESH_COMPONENT_PHYSICS |
 		MESH_COMPONENT_INPUT |
 
-		MESH_USECOLLISION |
+		//MESH_USECOLLISION |
 		MESH_ATTACHEDCAMERA |
 
 		MESH_SHADERTYPE_BASIC
 	);
-	
+
 	World::Load(player);
+
+
+
+	//wall one
+	
+	/*ModelBuffers* m2 = new ModelBuffers{0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-500, -500, -500), glm::vec3(500, 500, -490)};
+
+	Mesh* wall1 = new Mesh(
+		Engine.GetCamera(),
+		m2,
+		MESH_USECOLLISION |
+
+		MESH_SHADERTYPE_BASIC
+	);
+
+	World::Load(wall1);
+
+	//wall two
+
+	ModelBuffers* m3 = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-500, -500, -490), glm::vec3(-490, 500, 500) };
+
+	Mesh* wall2 = new Mesh(
+		Engine.GetCamera(),
+		m3,
+		MESH_USECOLLISION |
+
+		MESH_SHADERTYPE_BASIC
+	);
+
+	World::Load(wall2);
+
+	//floor
+
+	ModelBuffers* m4 = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-490, -500, -490), glm::vec3(500, -490, 500) };
+
+	Mesh* floor = new Mesh(
+		Engine.GetCamera(),
+		m4,
+		MESH_USECOLLISION |
+
+		MESH_SHADERTYPE_BASIC
+	);
+
+	World::Load(floor);*/
 
 	while (!Engine.ShouldClose())
 	{
@@ -119,7 +183,10 @@ int main() {
 
 	Engine.Terminate();
 
-	delete m;
+	delete m1;
+	//delete m2;
+	//delete m3;
+	//delete m4;
 
 	return 0;
 }

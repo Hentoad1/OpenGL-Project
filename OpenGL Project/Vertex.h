@@ -9,6 +9,8 @@ struct Vertex{
 
 	Vertex(const aiVector3D&, const aiVector3D&, const aiVector3D&);
 
+	Vertex() {}
+
 	~Vertex();
 
 

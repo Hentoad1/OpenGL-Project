@@ -85,6 +85,9 @@
     <Filter Include="Source Files\Loading Models\Importer\ModelData\Skeleton">
       <UniqueIdentifier>{60c4c103-67e0-4bda-a30f-a4c7b0376a14}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Loading Models\Compressor">
+      <UniqueIdentifier>{a60c0012-c2ae-4085-abdd-17e8a56f6236}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -162,7 +165,7 @@
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClCompile>
-    <ClCompile Include="CustomImporter.cpp">
+    <ClCompile Include="Customimporter.cpp">
       <Filter>Source Files\Loading Models\Importer</Filter>
     </ClCompile>
     <ClCompile Include="MaterialBuffer.cpp">
@@ -185,6 +188,12 @@
     </ClCompile>
     <ClCompile Include="AnimationComponent.cpp">
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Export.cpp">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
+    </ClCompile>
+    <ClCompile Include="Import.cpp">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -298,6 +307,12 @@
     </ClInclude>
     <ClInclude Include="AnimationComponent.h">
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryMapper.h">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
+    </ClInclude>
+    <ClInclude Include="Packed_Skeleton.h">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

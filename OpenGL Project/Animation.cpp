@@ -4,6 +4,34 @@
 
 
 KeyFrame::KeyFrame(const KeyFrame& ref) {
+	//throw;
+
+	bone = ref.bone;
+
+
+	numPositionFrames = ref.numPositionFrames;
+	positionFrames = new PositionKeyFrame[numPositionFrames]();
+
+	for (int i = 0; i < numPositionFrames; ++i) {
+		positionFrames[i] = PositionKeyFrame(ref.positionFrames[i]);
+	}
+
+
+	numOrientationFrames = ref.numOrientationFrames;
+	orientationFrames = new OrientationKeyFrame[numOrientationFrames]();
+
+	for (int i = 0; i < numOrientationFrames; ++i) {
+		orientationFrames[i] = OrientationKeyFrame(ref.orientationFrames[i]);
+	}
+
+
+	numScaleFrames = ref.numScaleFrames;
+	scaleFrames = new ScaleKeyFrame[numScaleFrames]();
+
+	for (int i = 0; i < numScaleFrames; ++i) {
+		scaleFrames[i] = ScaleKeyFrame(ref.scaleFrames[i]);
+	}
+
 	throw;
 }
 
@@ -36,7 +64,25 @@ KeyFrame::KeyFrame(const aiNodeAnim* channel, Bone* b) :
 	}
 }
 
-Animation::Animation(const aiAnimation* anim, Skeleton* _skeleton) : skeleton(_skeleton), duration(anim->mDuration) {
+KeyFrame::KeyFrame(
+	Bone* _bone,
+	int _numPositionFrames,
+	PositionKeyFrame* _positionFrames,
+	int _numOrientationFrames,
+	OrientationKeyFrame* _orientationFrames,
+	int _numScaleFrames,
+	ScaleKeyFrame* _scaleFrames
+) : 
+	bone(_bone),
+	numPositionFrames(_numPositionFrames),
+	positionFrames(_positionFrames),
+	numOrientationFrames(_numOrientationFrames),
+	orientationFrames(_orientationFrames),
+	numScaleFrames(_numScaleFrames),
+	scaleFrames(_scaleFrames)
+{};
+
+Animation::Animation(const aiAnimation* anim, Skeleton* _skeleton) : skeleton(_skeleton), duration(anim->mDuration), duration_played(0) {
 	
 	KeyFrames.reserve(anim->mNumChannels);
 
@@ -50,7 +96,16 @@ Animation::Animation(const aiAnimation* anim, Skeleton* _skeleton) : skeleton(_s
 		}
 	}
 
+	
 }
+
+Animation::Animation(double _duration, double _duration_played, int _ticksPerSecond, Skeleton* _skeleton, const std::vector<KeyFrame>& _keyframes) : 
+	duration(_duration),
+	duration_played(_duration_played),
+	ticksPerSecond(_ticksPerSecond),
+	skeleton(_skeleton),
+	KeyFrames(_keyframes)
+{}
 
 static float GetScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime)
 {

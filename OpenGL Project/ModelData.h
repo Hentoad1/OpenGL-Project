@@ -35,10 +35,11 @@ struct ModelData {
 		throw;
 	}
 
-	ModelData(const std::vector<Vertex>& _vertices, const  std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, Skeleton* _skeleton, std::vector<Animation*> _animations, const glm::vec3& _min, const glm::vec3& _max) :
+	ModelData(const std::vector<Vertex>& _vertices, const  std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, const glm::vec3& _min, const glm::vec3& _max) :
 		vertices(_vertices),
 		indices(_indices),
 		mesh_data(_mesh_data),
+		Materials(_Materials),
 		skeleton(_skeleton),
 		animations(_animations),
 		min(_min),

@@ -41,10 +41,6 @@ void AnimationComponent::CalculateBoneTransform(Bone* bone, const glm::mat4& par
 
     const glm::mat4 globalTransform = (parentTransform * nodeTransform);
 
-    if (bone->index == 29) {
-        //throw;
-    }
-
     FinalBoneTransforms[bone->index] = globalTransform * offset;
 
     for (int i = 0; i < bone->children.size(); ++i) {

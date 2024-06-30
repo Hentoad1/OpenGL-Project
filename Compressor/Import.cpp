@@ -1,10 +1,13 @@
+
 #include "pch.h"
 
-#include "CustomImporter.h"
+#include "Definitions.h"
 
-#include "Bones.h"
+#include "Compressor.h"
 
-ModelData* CustomImporter::Import(const std::string& path) {
+
+
+void Compressor::ImportFile(const std::string& path) {
 	/* ------------------------------------ IMPORT SCENE ------------------------------------- */
 
 	Assimp::Importer importer;
@@ -81,8 +84,7 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 	const aiVector3D ZeroVector(0.0f, 0.0f, 0.0f);
 
-
-	std::vector<SubMesh> mesh_data = std::vector<SubMesh>();
+	std::vector<Mesh> mesh_data = std::vector<Mesh>();
 
 	unsigned int BaseVertex = 0;
 	unsigned int BaseIndex = 0;
@@ -131,7 +133,7 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 		const unsigned int mNumIndices = mesh->mNumFaces * 3;
 
-		mesh_data.push_back(SubMesh{ mNumIndices, BaseVertex, BaseIndex, mesh->mMaterialIndex, min, max });
+		mesh_data.push_back(Mesh{ mNumIndices, BaseVertex, BaseIndex, mesh->mMaterialIndex, min, max });
 
 		BaseIndex += mNumIndices;
 		BaseVertex += mesh->mNumVertices;
@@ -153,11 +155,11 @@ ModelData* CustomImporter::Import(const std::string& path) {
 	}
 
 	/* ------------------------------ IMPORT BONES / ANIMATIONS ------------------------------ */
-	
-	
+
+
 	Skeleton* skeleton = new Skeleton(scene->mRootNode, scene->mMeshes[0]);
 
-	std::vector<Animation*> animations;
+	std::vector<Animation> animations;
 
 	for (int i = 0; i < scene->mNumAnimations; ++i) {
 		animations.push_back(new Animation(scene->mAnimations[i], skeleton));
@@ -167,14 +169,14 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 	for (int i = 0; i < scene->mNumMeshes; ++i) {
 		const aiMesh* mesh = scene->mMeshes[i];
-		
+
 		for (int i = 0; i < mesh->mNumBones; ++i) {
 			const aiBone* bone = mesh->mBones[i];
 
 
 			for (int i = 0; i < bone->mNumWeights; ++i) {
 				const aiVertexWeight& weight = bone->mWeights[i];
-				
+
 				if (weight.mWeight == 0) {
 					continue;
 				}
@@ -189,12 +191,14 @@ ModelData* CustomImporter::Import(const std::string& path) {
 
 						int boneindex = skeleton->GetBone(bone->mName)->index;
 
+						//std::cout << boneindex << std::endl;
+
 						vertex.boneIndices[i] = boneindex;
 
 						addedWeight = true;
 
 						break;
-					}	
+					}
 				}
 
 				//remove lowest weight and normalize the rest.
@@ -229,117 +233,36 @@ ModelData* CustomImporter::Import(const std::string& path) {
 						vertex.boneWeights[i] /= totalWeight;
 						std::cout << "finished with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
 					}
-
-					//throw;
 				}
 			}
 		}
 	}
 
+
+
+	/*for (int i = 0; i < vertices.size(); ++i) {
+		std::cout << "-----------------------------" << std::endl;
+		std::cout << vertices[i].boneIndices[0] << std::endl;
+		std::cout << vertices[i].boneWeights[0] << std::endl;
+		std::cout << vertices[i].boneIndices[1] << std::endl;
+		std::cout << vertices[i].boneWeights[1] << std::endl;
+		std::cout << vertices[i].boneIndices[2] << std::endl;
+		std::cout << vertices[i].boneWeights[2] << std::endl;
+		std::cout << vertices[i].boneIndices[3] << std::endl;
+		std::cout << vertices[i].boneWeights[3] << std::endl;
+	}*/
+
 	/* ----------------------------------- IMPORT TEXTURES ----------------------------------- */
 
-	std::vector<Material*> materials;
+	ModelData* CreatedData = new ModelData(vertices, indices, mesh_data, skeleton, animations, min, max);
+
 	for (int i = 0; i < scene->mNumMaterials; i++) {
-		materials.push_back(new Material(scene, i, path));
+		CreatedData->Materials.push_back(new Material(scene, i, path));
 	}
 
-	ModelData* CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, min, max);
-	
+
 	mData.push_back(CreatedData);
 
 
 	return CreatedData;
-}
-
-ModelBuffers* CustomImporter::Attach(ModelData* data) {
-
-	//populate VAO
-
-	GLuint VAO;
-
-	GLuint buf[2];
-
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
-
-	glGenBuffers(2, buf);
-
-	size_t Vertex_Size = sizeof(data->vertices[0]);
-
-	glBindBuffer(GL_ARRAY_BUFFER, buf[0]);
-	glBufferData(GL_ARRAY_BUFFER, Vertex_Size * data->vertices.size(), &data->vertices[0], GL_STATIC_DRAW);
-
-	glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
-	glEnableVertexAttribArray(POSITION_LOCATION);
-
-	glVertexAttribPointer(TEXTURE_LOCATION, 2, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)12);
-	glEnableVertexAttribArray(TEXTURE_LOCATION);
-
-	glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)20);
-	glEnableVertexAttribArray(NORMAL_LOCATION);
-
-	glVertexAttribIPointer(BONE_INDEX_LOCATION, 4, GL_INT, Vertex_Size, (void*)32);
-	glEnableVertexAttribArray(BONE_INDEX_LOCATION);
-
-	glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)48);
-	glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(data->indices[0]) * data->indices.size(), &data->indices[0], GL_STATIC_DRAW);
-
-	glBindVertexArray(0);
-
-	std::vector<MaterialBuffer*> MBO = std::vector<MaterialBuffer*>();
-
-	for (int i = 0; i < data->Materials.size(); ++i) {
-		MaterialBuffer* buf = new MaterialBuffer(data->Materials[i]);
-
-		MBO.push_back(buf);
-	}
-
-	ModelBuffers* CreatedData = new ModelBuffers{ VAO, MBO, data->mesh_data, data->skeleton, data->animations, data->min, data->max };
-
-	mBuffers.push_back(CreatedData);
-	
-	return CreatedData;
-}
-
-ModelBuffers* CustomImporter::ImportAndAttach(const std::string& path) {
-	ModelData* data = Import(path);
-	ModelBuffers* buf = Attach(data);
-
-	Free(data);
-
-	return buf;
-}
-
-
-void CustomImporter::Free(void* ptr) {
-
-	for (int i = 0; i < mData.size(); i++) {
-		if (mData[i] == ptr) {
-			delete mData[i];
-			mData.erase(mData.begin() + i);
-			return;
-		}
-	}
-
-	for (int i = 0; i < mBuffers.size(); i++) {
-		if (mBuffers[i] == ptr) {
-			delete mBuffers[i];
-			mBuffers.erase(mBuffers.begin() + i);
-			return;
-		}
-	}
-
-}
-
-CustomImporter::~CustomImporter() {
-	for (int i = 0; i < mData.size(); ++i) {
-		delete mData[i];
-	}
-
-	for (int i = 0; i < mBuffers.size(); ++i) {
-		delete mBuffers[i];
-	}
 }

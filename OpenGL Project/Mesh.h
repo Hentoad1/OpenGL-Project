@@ -35,11 +35,11 @@ public:
 
 	BoundingBox& GetBoundingBox();
 
+	ComponentMeta cMeta;
 private:
 	
 	//Info shared between components
 	ComponentData cData;
-	ComponentMeta cMeta;
 
 	//Components
 	RenderComponent* cRender;

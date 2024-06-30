@@ -26,7 +26,11 @@ struct KeyFrame {
 
 	~KeyFrame();
 
+	KeyFrame() { }
+
 	KeyFrame(const aiNodeAnim*, Bone*);
+
+	KeyFrame(Bone*, int, PositionKeyFrame*, int, OrientationKeyFrame*, int, ScaleKeyFrame*);
 
 	Bone* bone;
 
@@ -44,20 +48,21 @@ struct KeyFrame {
 class Animation {
 private:
 
+public:
+
 	double duration;
 	double duration_played;
 
 	int ticksPerSecond;
 
-	glm::mat4 globalInverse;
-	
 	Skeleton* skeleton;
 
 	std::vector<KeyFrame> KeyFrames;
 
-public:
+
 
 	Animation(const aiAnimation* anim, Skeleton* skeleton);
+	Animation(double, double, int, Skeleton*, const std::vector<KeyFrame>&);
 
 	void Update(const FrameData&);
 

@@ -6,8 +6,19 @@ Bone::Bone(aiBone* b, int i) : index(i) {
 	name = std::string(b->mName.C_Str());
 	offset = aiMatrix4x4ToGlm(b->mOffsetMatrix);
 	localTransform = glm::mat4(1.0f);
-
 }
+
+Bone::Bone(
+	const glm::mat4& _localTransform,
+	const glm::mat4& _offset,
+	int _index,
+	const std::string& _name
+) :
+	localTransform(_localTransform),
+	offset(_offset),
+	index(_index),
+	name(_name)
+	{ }
 
 Skeleton::~Skeleton() {
 
@@ -28,6 +39,30 @@ Skeleton::Skeleton(const aiNode* root, const aiMesh* mesh) {
 
 	rootBone = CreateMap(root, nullptr);
 
+}
+
+Skeleton::Skeleton(const std::vector<Packed_Bone>& packed) {
+	
+	bones = std::vector<Bone*>(packed.size());
+	
+	for (int i = 0; i < packed.size(); ++i) {
+		const Packed_Bone& p = packed[i];
+		
+
+		bones[i] = new Bone(p.localTransform, p.offset, i, p.name);
+	}
+
+	for (int i = 0; i < packed.size(); ++i) {
+		const Packed_Bone& p = packed[i];
+
+		bones[i]->children.resize(p.childrenIndices.size());
+
+		for (int childIndex = 0; childIndex < p.childrenIndices.size(); ++childIndex) {
+			bones[i]->children[childIndex] = bones[p.childrenIndices[childIndex]];
+		}
+	}
+
+	rootBone = bones[0];
 }
 
 Bone* Skeleton::GetRoot() const {

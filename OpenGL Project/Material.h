@@ -12,13 +12,14 @@ struct Texture {
 
 	Texture(const std::string&);
 	Texture(const aiTexture*);
+	Texture(int, int, int, void*);
 
 	~Texture();
 
-	void* data = nullptr;
 	int width = 0;
 	int height = 0;
 	int bits_per_pixel = -1;
+	void* data = nullptr;
 };
 
 struct Color {
@@ -43,6 +44,8 @@ public:
 	~Material();
 
 	Material(const aiScene*, const int, const std::string&);
+
+	Material(const std::array<Texture*, numTexTypes>&, const std::array<Color, numTexTypes>&);
 
 	const std::array<Texture*, numTexTypes>& GetTextures() const;
 

@@ -61,7 +61,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glm;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glad\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\include;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Linking\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\libjpg\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\stb\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glm;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glad\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\include;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Linking\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\libjpg\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\stb\include;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Compressor</AdditionalIncludeDirectories>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -69,7 +69,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\lib-vc2022;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.22621.0\um\x64;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Linking\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;OpenGL32.Lib;user32.lib;gdi32.lib;shell32.lib;assimp\assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;OpenGL32.Lib;user32.lib;gdi32.lib;shell32.lib;assimp\assimp-vc143-mt.lib;Compressor\Compressor.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -82,7 +82,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
-      <AdditionalIncludeDirectories>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glm;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glad\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\include;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Linking\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\libjpg\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\stb\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glm;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glad\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\include;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Linking\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\libjpg\include;C:\Users\henry\OneDrive\Documents\Programming\Libraries\stb\include;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Compressor</AdditionalIncludeDirectories>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -92,7 +92,7 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>C:\Users\henry\OneDrive\Documents\Programming\Libraries\glfw\lib-vc2022;C:\Program Files %28x86%29\Windows Kits\10\Lib\10.0.22621.0\um\x64;C:\Users\henry\OneDrive\Documents\Programming\Projects\Visual Studio 2022\OpenGL\OpenGL Project\Linking\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glfw3.lib;OpenGL32.Lib;user32.lib;gdi32.lib;shell32.lib;assimp\assimp-vc143-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;OpenGL32.Lib;user32.lib;gdi32.lib;shell32.lib;assimp\assimp-vc143-mt.lib;Compressor\Compressor.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -110,10 +110,11 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="CustomImporter.cpp" />
+    <ClCompile Include="Customimporter.cpp" />
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entry.cpp" />
+    <ClCompile Include="Import.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Material2.cpp">
@@ -122,6 +123,7 @@
     <ClCompile Include="MaterialBuffer.cpp" />
     <ClCompile Include="MaterialMeta3.cpp" />
     <ClCompile Include="MaterialMeta.cpp" />
+    <ClCompile Include="Export.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshMeta.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -169,8 +171,10 @@
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="MaterialBuffer.h" />
+    <ClInclude Include="MemoryMapper.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ModelData.h" />
+    <ClInclude Include="Packed_Skeleton.h" />
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Scene.h" />

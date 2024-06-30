@@ -363,6 +363,11 @@ Material::Material(const aiScene* scene, const int index, const std::string& roo
 	}
 }
 
+Material::Material(const std::array<Texture*, numTexTypes>& tex, const std::array<Color, numTexTypes>& clr) {
+	Textures = tex;
+	Colors = clr;
+}
+
 const std::array<Texture*, numTexTypes>& Material::GetTextures() const {
 	return Textures;
 }
@@ -378,6 +383,7 @@ Material::~Material() {
 }
 
 Texture::~Texture() {
+	throw;
 	std::cout << "deleting with: " << std::endl;
 	std::cout << "data: " << data << std::endl;
 	std::cout << "isnullptr: " << (data == nullptr) << std::endl;
@@ -424,6 +430,13 @@ Texture::Texture(const std::string& path) {
 		std::cout << stbi_failure_reason();
 		throw;
 	}
+}
+
+Texture::Texture(int w, int h, int bpp, void* _data) {
+	width = w;
+	height = h;
+	bits_per_pixel = bpp;
+	data = _data;
 }
 
 Color::Color(const aiColor3D& clr) {
