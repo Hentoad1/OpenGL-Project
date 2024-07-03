@@ -12,8 +12,7 @@
 int main() {
 
 	/*
-	and STB_FREE is called to free texture data.
-	modeldata always has vertex offsets 
+	modeldata always has vertex offsets  ???? the fuck was i saying
 
 	make proper modeldata/modelbuffer deconstructor
 

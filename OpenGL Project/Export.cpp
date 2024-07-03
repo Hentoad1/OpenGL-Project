@@ -299,7 +299,15 @@ Buffer ModelToBuffer(ModelData* m) {
 
 	buf.Append(is_skeletal_buffer, is_skeletal_size);
 
-	buf.Append(m->vertices);
+	if (m->vType == VERTEX_TYPE_SKELETAL) {
+		auto& z = *static_cast<std::vector<sVertex>*>(m->vertices);
+		buf.Append(*static_cast<std::vector<sVertex>*>(m->vertices));
+	}
+	else {
+		auto& z = *static_cast<std::vector<Vertex>*>(m->vertices);
+		buf.Append(*static_cast<std::vector<Vertex>*>(m->vertices));
+	}
+
 
 	buf.Append(m->indices);
 

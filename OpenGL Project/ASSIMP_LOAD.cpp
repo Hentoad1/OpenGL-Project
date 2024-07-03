@@ -71,9 +71,16 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 		throw;
 	}
 
+
+
+
+
+	bool isSkeletal = scene->HasAnimations();
+
 	/* --------------------------------- CREATE BUFFER DATA ---------------------------------- */
 
 	std::vector<Vertex> vertices;
+	std::vector<sVertex> sVertices;
 
 	std::vector<unsigned int> indices;
 
@@ -107,7 +114,12 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 			max.y = std::max(max.y, pos.y);
 			max.z = std::max(max.z, pos.z);
 
-			vertices.emplace_back(pos, tex, normal);
+			if (isSkeletal) {
+				sVertices.emplace_back(pos, tex, normal);
+			} else {
+				vertices.emplace_back(pos, tex, normal);
+			}
+
 		}
 
 		unsigned int maxIndex = 0;
@@ -151,96 +163,96 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 	}
 
 	/* ------------------------------ IMPORT BONES / ANIMATIONS ------------------------------ */
-	
+
 
 	Skeleton* skeleton = nullptr;
-	if (scene->HasAnimations()) { //HasSkeleton seems to generate false negatives so HasAnimations will just be used.
+	if (isSkeletal) { //HasSkeleton seems to generate false negatives so HasAnimations will just be used.
 		skeleton = new Skeleton(scene->mRootNode, scene->mMeshes[0]);
 	}
 	
 	
 	std::vector<Animation*> animations;
 	
-	if (scene->HasAnimations()) {
+	if (isSkeletal) {
 		for (int i = 0; i < scene->mNumAnimations; ++i) {
 			animations.push_back(new Animation(scene->mAnimations[i], skeleton));
 		}
 	}
 	
 
-	//this populates all vertex data
+	//this populates all vertex data with bone offsets
+	if (isSkeletal) {
+		for (int i = 0; i < scene->mNumMeshes; ++i) {
+			const aiMesh* mesh = scene->mMeshes[i];
 
-	for (int i = 0; i < scene->mNumMeshes; ++i) {
-		const aiMesh* mesh = scene->mMeshes[i];
-
-		for (int i = 0; i < mesh->mNumBones; ++i) {
-			const aiBone* bone = mesh->mBones[i];
+			for (int i = 0; i < mesh->mNumBones; ++i) {
+				const aiBone* bone = mesh->mBones[i];
 
 
-			for (int i = 0; i < bone->mNumWeights; ++i) {
-				const aiVertexWeight& weight = bone->mWeights[i];
+				for (int i = 0; i < bone->mNumWeights; ++i) {
+					const aiVertexWeight& weight = bone->mWeights[i];
 
-				if (weight.mWeight == 0) {
-					continue;
-				}
-
-				Vertex& vertex = vertices[weight.mVertexId];
-
-				bool addedWeight = false;
-
-				for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
-					if (vertex.boneIndices[i] == -1) {
-						vertex.boneWeights[i] = weight.mWeight;
-
-						int boneindex = skeleton->GetBone(bone->mName)->index;
-
-						vertex.boneIndices[i] = boneindex;
-
-						addedWeight = true;
-
-						break;
-					}
-				}
-
-				//remove lowest weight and normalize the rest.
-				if (!addedWeight) {
-					std::cout << "more than 4 bone weights" << std::endl;
-
-					std::cout << "adding weight: " << weight.mWeight << ", index: " << skeleton->GetBone(bone->mName)->index << std::endl;
-
-					float smallestWeight = weight.mWeight;
-					int smallestWeightIndex = -1;
-
-					float totalWeight = smallestWeight;
-
-					for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
-						std::cout << "with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
-						if (vertex.boneWeights[i] < smallestWeight) {
-							smallestWeight = vertex.boneWeights[i];
-							smallestWeightIndex = i;
-						}
-
-						totalWeight += vertex.boneWeights[i];
+					if (weight.mWeight == 0) {
+						continue;
 					}
 
-					totalWeight -= smallestWeight;
+					sVertex& vertex = sVertices[weight.mVertexId];
+
+					bool addedWeight = false;
 
 					for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
-						if (smallestWeightIndex == i) {
+						if (vertex.boneIndices[i] == -1) {
 							vertex.boneWeights[i] = weight.mWeight;
-							vertex.boneIndices[i] = skeleton->GetBone(bone->mName)->index;
-						}
 
-						vertex.boneWeights[i] /= totalWeight;
-						std::cout << "finished with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
+							int boneindex = skeleton->GetBone(bone->mName)->index;
+
+							vertex.boneIndices[i] = boneindex;
+
+							addedWeight = true;
+
+							break;
+						}
 					}
 
-					//throw;
+					//remove lowest weight and normalize the rest.
+					if (!addedWeight) {
+						std::cout << "more than 4 bone weights" << std::endl;
+
+						std::cout << "adding weight: " << weight.mWeight << ", index: " << skeleton->GetBone(bone->mName)->index << std::endl;
+
+						float smallestWeight = weight.mWeight;
+						int smallestWeightIndex = -1;
+
+						float totalWeight = smallestWeight;
+
+						for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
+							std::cout << "with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
+							if (vertex.boneWeights[i] < smallestWeight) {
+								smallestWeight = vertex.boneWeights[i];
+								smallestWeightIndex = i;
+							}
+
+							totalWeight += vertex.boneWeights[i];
+						}
+
+						totalWeight -= smallestWeight;
+
+						for (int i = 0; i < MAX_BONE_INFLUENCE; ++i) {
+							if (smallestWeightIndex == i) {
+								vertex.boneWeights[i] = weight.mWeight;
+								vertex.boneIndices[i] = skeleton->GetBone(bone->mName)->index;
+							}
+
+							vertex.boneWeights[i] /= totalWeight;
+							std::cout << "finished with weight: " << vertex.boneWeights[i] << ", index: " << vertex.boneIndices[i] << std::endl;
+						}
+
+						//throw;
+					}
 				}
 			}
 		}
 	}
-
 	/* ----------------------------------- IMPORT TEXTURES ----------------------------------- */
 
 	std::vector<Material*> materials;
@@ -248,7 +260,15 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 		materials.push_back(new Material(scene, i, path));
 	}
 
-	ModelData* CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, min, max);
+
+	ModelData* CreatedData;
+	if (isSkeletal) {
+		CreatedData = new ModelData(sVertices, indices, mesh_data, materials, skeleton, animations, min, max);
+	}
+	else {
+		CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, min, max);
+	}
+	 
 
 	return CreatedData;
 }

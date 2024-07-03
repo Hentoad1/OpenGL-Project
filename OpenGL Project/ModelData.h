@@ -29,14 +29,20 @@ struct SubMesh {
 	glm::vec3 max;
 };
 
+enum VERTEX_TYPE : uint8_t {
+	VERTEX_TYPE_BASIC,
+	VERTEX_TYPE_SKELETAL,
+};
+
 struct ModelData {
 
 	ModelData(ModelData& ref) {
 		throw;
 	}
 
-	ModelData(const std::vector<Vertex>& _vertices, const  std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, const glm::vec3& _min, const glm::vec3& _max) :
-		vertices(_vertices),
+	ModelData(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, const glm::vec3& _min, const glm::vec3& _max) :
+		vType(VERTEX_TYPE_BASIC),
+		vertices(new std::vector<Vertex>(_vertices)),
 		indices(_indices),
 		mesh_data(_mesh_data),
 		Materials(_Materials),
@@ -46,7 +52,41 @@ struct ModelData {
 		max(_max)
 	{}
 
-	std::vector<Vertex> vertices;
+	ModelData(const std::vector<sVertex>&_vertices, const std::vector<unsigned int>&_indices, const std::vector<SubMesh>&_mesh_data, const std::vector<Material*>&_Materials, Skeleton * _skeleton, std::vector<Animation*> _animations, const glm::vec3 & _min, const glm::vec3 & _max) :
+		vType(VERTEX_TYPE_SKELETAL),
+		vertices(new std::vector<sVertex>(_vertices)),
+		indices(_indices),
+		mesh_data(_mesh_data),
+		Materials(_Materials),
+		skeleton(_skeleton),
+		animations(_animations),
+		min(_min),
+		max(_max)
+	{}
+
+	~ModelData(){
+
+		if (vType == VERTEX_TYPE_BASIC) {
+			delete static_cast<std::vector<Vertex>*>(vertices);
+		}
+		else if (vType == VERTEX_TYPE_SKELETAL){
+			delete static_cast<std::vector<sVertex>*>(vertices);
+		}
+
+		for (int i = 0; i < Materials.size(); ++i) {
+			delete Materials[i];
+		}
+
+		delete skeleton;
+
+		for (int i = 0; i < animations.size(); ++i) {
+			delete animations[i];
+		}
+	}
+
+	VERTEX_TYPE vType;
+	void* vertices;
+	
 
 	std::vector<unsigned int> indices;
 
@@ -64,6 +104,12 @@ struct ModelData {
 };
 
 struct ModelBuffers {
+
+	~ModelBuffers() {
+		//write this shit in here
+		
+		throw;
+	}
 
 	//Vertex Array Object
 	GLuint VAO;

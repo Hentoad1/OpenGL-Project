@@ -20,6 +20,9 @@ struct Texture {
 	int height = 0;
 	int bits_per_pixel = -1;
 	void* data = nullptr;
+
+
+	bool useSTBIdel = false;
 };
 
 struct Color {

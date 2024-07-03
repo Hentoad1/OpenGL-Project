@@ -10,7 +10,7 @@ public:
 	Buffer(const std::vector<uint8_t>& _data) : data(_data) {}
 
 	template <typename T>
-	void Append(std::vector<T> vec) {
+	void Append(std::vector<T>& vec) {
 
 		size_t vector_size = vec.size();
 		size_t vector_size_bytes = sizeof(vector_size);

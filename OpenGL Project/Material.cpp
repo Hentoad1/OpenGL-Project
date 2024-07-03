@@ -398,19 +398,18 @@ Material::~Material() {
 }
 
 Texture::~Texture() {
-	throw;
-	std::cout << "deleting with: " << std::endl;
-	std::cout << "data: " << data << std::endl;
-	std::cout << "isnullptr: " << (data == nullptr) << std::endl;
-	std::cout << "w: " << width << std::endl;
-	std::cout << "h: " << height << std::endl;
-	std::cout << "bpp: " << bits_per_pixel << std::endl;
-	stbi_image_free(&data);
+	if (useSTBIdel) {
+		stbi_image_free(&data);
+	}
+	else {
+		delete[] data; 
+	}
+	
 }
 
 //Texture::Texture() : data(nullptr), width(0), height(0), bits_per_pixel(0){}
 
-Texture::Texture(const aiTexture* texture) {
+Texture::Texture(const aiTexture* texture) : useSTBIdel(true){
 
 	//Regular 2D file
 	if (texture->mHeight != 0) {
@@ -434,7 +433,7 @@ Texture::Texture(const aiTexture* texture) {
 	}
 }
 
-Texture::Texture(const std::string& path) {
+Texture::Texture(const std::string& path) : useSTBIdel(true) {
 
 	stbi_set_flip_vertically_on_load(1);
 

@@ -97,28 +97,52 @@ ModelBuffers* AssetManager::Attach(ModelData* md){
 
     glGenBuffers(2, buf);
 
-    size_t Vertex_Size = sizeof(md->vertices[0]);
+    if (md->vType == VERTEX_TYPE_BASIC) {
 
-    glBindBuffer(GL_ARRAY_BUFFER, buf[0]);
-    glBufferData(GL_ARRAY_BUFFER, Vertex_Size * md->vertices.size(), &md->vertices[0], GL_STATIC_DRAW);
+        const std::vector<Vertex>* vertices = static_cast<std::vector<Vertex>*>(md->vertices);
 
-    glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
-    glEnableVertexAttribArray(POSITION_LOCATION);
+        size_t Vertex_Size = sizeof((*vertices)[0]);
 
-    glVertexAttribPointer(TEXTURE_LOCATION, 2, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)12);
-    glEnableVertexAttribArray(TEXTURE_LOCATION);
+        glBindBuffer(GL_ARRAY_BUFFER, buf[0]);
+        glBufferData(GL_ARRAY_BUFFER, Vertex_Size * vertices->size(), &(*vertices)[0], GL_STATIC_DRAW);
 
-    glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)20);
-    glEnableVertexAttribArray(NORMAL_LOCATION);
+        glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
+        glEnableVertexAttribArray(POSITION_LOCATION);
 
-    glVertexAttribIPointer(BONE_INDEX_LOCATION, 4, GL_INT, Vertex_Size, (void*)32);
-    glEnableVertexAttribArray(BONE_INDEX_LOCATION);
+        glVertexAttribPointer(TEXTURE_LOCATION, 2, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)12);
+        glEnableVertexAttribArray(TEXTURE_LOCATION);
 
-    glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)48);
-    glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
+        glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)20);
+        glEnableVertexAttribArray(NORMAL_LOCATION);
+
+    }
+    else if (md->vType == VERTEX_TYPE_SKELETAL) {
+
+        const std::vector<sVertex>* vertices = static_cast<std::vector<sVertex>*>(md->vertices);
+
+        size_t Vertex_Size = sizeof((*vertices)[0]);
+
+        glBindBuffer(GL_ARRAY_BUFFER, buf[0]);
+        glBufferData(GL_ARRAY_BUFFER, Vertex_Size * vertices->size(), &(*vertices)[0], GL_STATIC_DRAW);
+
+        glVertexAttribPointer(POSITION_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
+        glEnableVertexAttribArray(POSITION_LOCATION);
+
+        glVertexAttribPointer(TEXTURE_LOCATION, 2, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)12);
+        glEnableVertexAttribArray(TEXTURE_LOCATION);
+
+        glVertexAttribPointer(NORMAL_LOCATION, 3, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)20);
+        glEnableVertexAttribArray(NORMAL_LOCATION);
+
+        glVertexAttribIPointer(BONE_INDEX_LOCATION, 4, GL_INT, Vertex_Size, (void*)32);
+        glEnableVertexAttribArray(BONE_INDEX_LOCATION);
+
+        glVertexAttribPointer(BONE_WEIGHT_LOCATION, 4, GL_FLOAT, GL_FALSE, Vertex_Size, (void*)48);
+        glEnableVertexAttribArray(BONE_WEIGHT_LOCATION);
+    }
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buf[1]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(md->indices[0]) * md->indices.size(), &md->indices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(md->indices[0])* md->indices.size(), &md->indices[0], GL_STATIC_DRAW);
 
     glBindVertexArray(0);
 

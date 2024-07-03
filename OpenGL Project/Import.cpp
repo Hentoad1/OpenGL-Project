@@ -323,10 +323,17 @@ ModelData* BufferToModel(Buffer& b) {
 	size_t numVertices;
 	Read(&numVertices, sizeof(numVertices));
 
+	std::vector<Vertex> vertices;
+	std::vector<sVertex> sVertices;
 
-
-	std::vector<Vertex> vertices = std::vector<Vertex>(numVertices);
-	Read(&vertices[0], sizeof(vertices[0]) * numVertices);
+	if (is_skeletal) {
+		sVertices.resize(numVertices);
+		Read(&sVertices[0], sizeof(sVertices[0]) * numVertices);
+	}
+	else {
+		vertices.resize(numVertices);
+		Read(&vertices[0], sizeof(vertices[0]) * numVertices);
+	}
 
 
 
@@ -401,5 +408,14 @@ ModelData* BufferToModel(Buffer& b) {
 	Read(&max, sizeof(max));
 
 
-	return new ModelData{ vertices, indices, meshes, materials, skeleton, animations, min, max };
+
+
+
+
+	if (is_skeletal) {
+		return new ModelData{ sVertices, indices, meshes, materials, skeleton, animations, min, max };
+	}
+	else {
+		return new ModelData{ vertices, indices, meshes, materials, skeleton, animations, min, max };
+	}
 }
