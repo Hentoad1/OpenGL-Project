@@ -293,6 +293,12 @@ static void AppendAnimationToBuffer(Buffer& b, Animation* anim) {
 Buffer ModelToBuffer(ModelData* m) {
 	Buffer buf;
 
+	bool is_skeletal = (m->skeleton != nullptr);
+	uint8_t* is_skeletal_buffer = static_cast<uint8_t*>(static_cast<void*>(&is_skeletal));
+	size_t is_skeletal_size = sizeof(is_skeletal);
+
+	buf.Append(is_skeletal_buffer, is_skeletal_size);
+
 	buf.Append(m->vertices);
 
 	buf.Append(m->indices);
@@ -311,21 +317,27 @@ Buffer ModelToBuffer(ModelData* m) {
 		AppendMaterialToBuffer(buf, m->Materials[i]);
 	}
 
-	/* ---------- Skeleton ---------- */
 
-	AppendSkeletonToBuffer(buf, m->skeleton);
+	if (is_skeletal) {
 
-	/* ---------- Animations ---------- */
-	
-	size_t num_animations = m->animations.size();
-	uint8_t* num_animations_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_animations));
-	size_t num_animations_size = sizeof(num_animations);
+		/* ---------- Skeleton ---------- */
+		AppendSkeletonToBuffer(buf, m->skeleton);
 
-	buf.Append(num_animations_buffer, num_animations_size);
+		/* ---------- Animations ---------- */
 
-	for (int i = 0; i < m->animations.size(); ++i) {
-		AppendAnimationToBuffer(buf, m->animations[i]);
+		size_t num_animations = m->animations.size();
+		uint8_t* num_animations_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_animations));
+		size_t num_animations_size = sizeof(num_animations);
+
+		buf.Append(num_animations_buffer, num_animations_size);
+
+		for (int i = 0; i < m->animations.size(); ++i) {
+			AppendAnimationToBuffer(buf, m->animations[i]);
+		}
 	}
+
+
+	
 
 	/* ---------- Min/Max ---------- */
 

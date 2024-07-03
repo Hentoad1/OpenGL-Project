@@ -7,12 +7,23 @@
 
 #include "MemoryMapper.h"
 
+#include "AssetManager.h"
+
 int main() {
-	
+
+	/*
+	and STB_FREE is called to free texture data.
+	modeldata always has vertex offsets 
+
+	make proper modeldata/modelbuffer deconstructor
+
+	bounding box is always a cube
+	cant import meshes
+	*/
+
 	/*
 	lots of loose ends here.
 	A shit ton of debug cout calls
-	memory for Texture is being allocated with malloc, and STB_FREE is always called, even if it shouldnt be.
 	*/
 
 
@@ -92,16 +103,15 @@ int main() {
 
 	//import keyframe
 
-	CustomImporter importer = CustomImporter();
+	BuildModels();
 
-	ModelData* z1 = importer.Import("C:\\Users\\henry\\OneDrive\\Documents\\Programming\\Projects\\Visual Studio 2022\\OpenGL\\OpenGL Project\\OpenGL Project\\Assets\\warwick.glb");
-	Buffer z2 = ModelToBuffer(z1);
-	ModelData* copied = BufferToModel(z2);
-	ModelBuffers* z = importer.Attach(copied);
+	AssetManager a;
+
+	ModelBuffers* ww = a.Attach(a.LoadModel("warwick"));
 
 	Mesh* warwick = new Mesh(
 		Engine.GetCamera(),
-		z,
+		ww,
 		MESH_COMPONENT_RENDER | 
 		MESH_COMPONENT_ANIMATION |
 		MESH_USECOLLISION | 
@@ -111,6 +121,18 @@ int main() {
 
 	World::Load(warwick);
 
+	ModelBuffers* cannon = a.Attach(a.LoadModel("Cannon"));
+
+	Mesh* other = new Mesh(
+		Engine.GetCamera(),
+		cannon,
+		MESH_COMPONENT_RENDER |
+		MESH_USECOLLISION |
+
+		MESH_SHADERTYPE_BASIC
+	);
+
+	World::Load(other);
 
 
 	//load player

@@ -6,6 +6,9 @@
 
 struct Buffer {
 public:
+	Buffer() {}
+	Buffer(const std::vector<uint8_t>& _data) : data(_data) {}
+
 	template <typename T>
 	void Append(std::vector<T> vec) {
 
@@ -40,7 +43,7 @@ public:
 		memcpy(dest, (&data[0] + offset), length);
 	}
 
-	std::vector<uint8_t> GetData() const {
+	const std::vector<uint8_t>& GetData() const {
 		return data;
 	}
 
@@ -50,4 +53,10 @@ private:
 
 Buffer ModelToBuffer(ModelData*);
 
-ModelData* BufferToModel(Buffer);
+ModelData* BufferToModel(Buffer&);
+
+void SourceToBuild(const std::string& read, const std::string& write);
+
+ModelData* LoadBinaryFile(const std::string&);
+
+ModelData* ASSIMP_LOAD(const std::string&);

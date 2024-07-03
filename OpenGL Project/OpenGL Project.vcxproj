@@ -102,6 +102,7 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="AnimationComponent.cpp" />
+    <ClCompile Include="AssetManager.cpp" />
     <ClCompile Include="BasicMesh.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
@@ -110,12 +111,16 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="Customimporter.cpp" />
+    <ClCompile Include="Customimporter.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="DebugShader.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entry.cpp" />
     <ClCompile Include="Import.cpp" />
     <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="ASSIMP_LOAD.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Material2.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -124,12 +129,16 @@
     <ClCompile Include="MaterialMeta3.cpp" />
     <ClCompile Include="MaterialMeta.cpp" />
     <ClCompile Include="Export.cpp" />
+    <ClCompile Include="MemoryMapper.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="MeshMeta.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Orientation.cpp" />
-    <ClCompile Include="Path.cpp" />
+    <ClCompile Include="Path.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="PhysicsComponent.cpp" />
     <ClCompile Include="PhysicsMesh.cpp">
@@ -154,10 +163,14 @@
   <ItemGroup>
     <ClInclude Include="Animation.h" />
     <ClInclude Include="AnimationComponent.h" />
+    <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Bones.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="CustomImporter.h" />
+    <ClInclude Include="CustomImporter.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="BasicMesh.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
@@ -190,7 +203,10 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Orientation.h" />
-    <ClInclude Include="Path.h" />
+    <ClInclude Include="Path.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="pch.h" />
     <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="PhysicsMesh.h">

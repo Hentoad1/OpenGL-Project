@@ -195,6 +195,15 @@
     <ClCompile Include="Import.cpp">
       <Filter>Source Files\Loading Models\Compressor</Filter>
     </ClCompile>
+    <ClCompile Include="AssetManager.cpp">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryMapper.cpp">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
+    </ClCompile>
+    <ClCompile Include="ASSIMP_LOAD.cpp">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -312,6 +321,9 @@
       <Filter>Source Files\Loading Models\Compressor</Filter>
     </ClInclude>
     <ClInclude Include="Packed_Skeleton.h">
+      <Filter>Source Files\Loading Models\Compressor</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetManager.h">
       <Filter>Source Files\Loading Models\Compressor</Filter>
     </ClInclude>
   </ItemGroup>

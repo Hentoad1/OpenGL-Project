@@ -8,6 +8,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
+#define ASSET_RESOURCE_SUBDIR "Resources"
+
 static Color SCENE_AMBIENT_LIGHT = Color(1, 1, 1, 0.125);
 
 static void LogMetaData(const aiMaterial* mat, const aiTextureType type = (aiTextureType)(-1)) {
@@ -301,6 +303,19 @@ static constexpr int aiTexureTypeToIndex(aiTextureType type) {
 	default:
 		return -1;
 	}
+}
+
+
+static std::string CalculatePath(std::string basepath, std::string filepath) {
+
+	std::filesystem::path base = std::filesystem::path(basepath);
+	std::filesystem::path file = std::filesystem::path(filepath);
+
+	base = base.replace_filename("").replace_extension("");
+	base /= std::filesystem::path(ASSET_RESOURCE_SUBDIR);
+	base /= file.filename();
+
+	return base.generic_string();
 }
 
 Material::Material(const aiScene* scene, const int index, const std::string& root) {

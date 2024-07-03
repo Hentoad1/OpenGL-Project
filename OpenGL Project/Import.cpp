@@ -286,7 +286,7 @@ static Animation* BufferToAnimation(const Buffer& b, const std::function<void(vo
 	return anim;
 }
 
-ModelData* BufferToModel(Buffer b) {
+ModelData* BufferToModel(Buffer& b) {
 
 	/*
 	
@@ -314,9 +314,13 @@ ModelData* BufferToModel(Buffer b) {
 	};
 
 
+	bool is_skeletal;
+	Read(&is_skeletal, sizeof(is_skeletal));
+
+
 	//Vertices
 
-	size_t numVertices = 2;
+	size_t numVertices;
 	Read(&numVertices, sizeof(numVertices));
 
 
@@ -357,21 +361,35 @@ ModelData* BufferToModel(Buffer b) {
 
 
 
-	//Skeleton
-
-	Skeleton* skeleton = BufferToSkeleton(b, Read);
 
 
 
-	//Animations
+	Skeleton* skeleton = nullptr;
 
-	size_t numAnimations;
-	Read(&numAnimations, sizeof(numAnimations));
+	std::vector<Animation*> animations;
 
-	std::vector<Animation*> animations = std::vector<Animation*>(numAnimations);
-	for (int i = 0; i < animations.size(); ++i) {
-		animations[i] = BufferToAnimation(b, Read, skeleton);
+	if (is_skeletal) {
+		
+		//Skeleton
+		skeleton = BufferToSkeleton(b, Read);
+
+
+		//Animations
+		size_t numAnimations;
+		Read(&numAnimations, sizeof(numAnimations));
+
+		animations.resize(numAnimations);
+
+		for (int i = 0; i < animations.size(); ++i) {
+			animations[i] = BufferToAnimation(b, Read, skeleton);
+		}
+
 	}
+
+
+
+
+	
 
 
 	//Min/Max
