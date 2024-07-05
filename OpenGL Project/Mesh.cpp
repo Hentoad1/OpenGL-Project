@@ -6,9 +6,9 @@ Mesh::Mesh(const Mesh& ref) : cMeta(0) {
 	throw;
 }
 
-Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const BoundingBox& bounds, const ComponentMeta& _cMeta) : mCamera(mCam), cMeta(_cMeta) {
+Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const ComponentMeta& _cMeta) : mCamera(mCam), cMeta(_cMeta) {
 
-	cData = ComponentData{ bounds, mCamera, glm::vec3(0) };
+	cData = ComponentData{ BoundingBox(mData->sbb), mCamera, glm::vec3(0)};
 
 #ifdef _DEBUG
 	cData.bounds.BindGL(mCamera);
@@ -24,8 +24,6 @@ Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const BoundingBox& bounds, c
 	}
 
 }
-
-Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const ComponentMeta& _cMeta) : Mesh(mCam, mData, BoundingBox(mData->min, mData->max), _cMeta) {}
 
 /*Mesh::Mesh(Camera* mCam, const ModelBuffers* mData, const ComponentMeta& _cMeta) : mCamera(mCam), cMeta(_cMeta) {
 

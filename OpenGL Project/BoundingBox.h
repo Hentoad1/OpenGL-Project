@@ -10,23 +10,36 @@
 #include "Camera.h"
 #endif // _DEBUG
 
+enum BoundingBoxType : uint8_t{
+	BoundingBoxType_AABB,
+	BoundingBoxType_CONVEX_HULL,
+	BoundingBoxType_COMPLEX
+};
+
+struct StaticBoundingBox {
+
+	//vertices remains static, regardless of orientation or position
+	std::vector<glm::vec3> vertices;
+
+	//indices remains static, regardless of orientation or position
+	std::vector<unsigned int> indices;
+
+	//normals remains static, regardless of orientation or position
+	std::vector<glm::vec3> normals;
+
+	//center remains static, regardless of orientation or position
+	glm::vec3 center;
+
+	//The type of algorthim used for generating the bounding box.
+	BoundingBoxType type;
+};
+
 class BoundingBox {
 
 public:
 	BoundingBox() {}
 
-	BoundingBox(
-		const std::vector<glm::vec3>& _vertices,
-		const std::vector<unsigned int>& _indices,
-		const std::vector<glm::vec3>& _normals,
-		const glm::vec3& _position,
-		const Orientation& _orientation,
-		const glm::vec3& _center
-	) : vertices(_vertices), indices(_indices), normals(_normals), position(_position), orientation(_orientation), center(_center) {}
-
-	BoundingBox(glm::vec3 min, glm::vec3 max);
-
-	BoundingBox(const std::vector<glm::vec3>&, const std::vector<unsigned int>&, const std::vector<glm::vec3>&);
+	BoundingBox(const StaticBoundingBox*);
 
 	const glm::vec3& Center() const;
 
@@ -46,8 +59,6 @@ public:
 
 	CollisionInfo CollidesWith(const BoundingBox&, const glm::vec3&);
 
-	bool CollidesWith(const BoundingBox&);
-
 	glm::vec3 ConvertAbsolute(glm::vec3) const;
 
 #ifdef _DEBUG
@@ -57,17 +68,10 @@ public:
 #endif // _DEBUG
 
 private:
-	//vertices remains static, regardless of orientation or position
-	std::vector<glm::vec3> vertices;
 
-	//indices remains static, regardless of orientation or position
-	std::vector<unsigned int> indices;
+	CollisionInfo TestCollision_Complex(const BoundingBox&, const glm::vec3&);
 
-	//normals remains static, regardless of orientation or position
-	std::vector<glm::vec3> normals;
-
-	//center remains static, regardless of orientation or position
-	glm::vec3 center = glm::vec3(0);
+	const StaticBoundingBox* sbb;
 
 	//position is dynamic, changing possbily every frame.
 	glm::vec3 position = glm::vec3(0);
@@ -76,8 +80,6 @@ private:
 	Orientation orientation = glm::vec3(0, 0, -1);
 
 #ifdef _DEBUG
-	unsigned int numIndices;
-
 	ShaderProgram* shader;
 	GLuint VertexBuffer;
 #endif

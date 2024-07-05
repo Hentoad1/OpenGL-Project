@@ -6,6 +6,7 @@
 #include "MaterialBuffer.h"
 #include "Skeleton.h"
 #include "Animation.h"
+#include "BoundingBox.h"
 
 #define POSITION_LOCATION 0
 #define TEXTURE_LOCATION 1
@@ -40,7 +41,7 @@ struct ModelData {
 		throw;
 	}
 
-	ModelData(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, const glm::vec3& _min, const glm::vec3& _max) :
+	ModelData(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, StaticBoundingBox* _sbb, const glm::vec3& _min, const glm::vec3& _max) :
 		vType(VERTEX_TYPE_BASIC),
 		vertices(new std::vector<Vertex>(_vertices)),
 		indices(_indices),
@@ -48,11 +49,12 @@ struct ModelData {
 		Materials(_Materials),
 		skeleton(_skeleton),
 		animations(_animations),
+		sbb(_sbb),
 		min(_min),
 		max(_max)
 	{}
 
-	ModelData(const std::vector<sVertex>&_vertices, const std::vector<unsigned int>&_indices, const std::vector<SubMesh>&_mesh_data, const std::vector<Material*>&_Materials, Skeleton * _skeleton, std::vector<Animation*> _animations, const glm::vec3 & _min, const glm::vec3 & _max) :
+	ModelData(const std::vector<sVertex>&_vertices, const std::vector<unsigned int>&_indices, const std::vector<SubMesh>&_mesh_data, const std::vector<Material*>&_Materials, Skeleton * _skeleton, std::vector<Animation*> _animations, StaticBoundingBox* _sbb, const glm::vec3 & _min, const glm::vec3 & _max) :
 		vType(VERTEX_TYPE_SKELETAL),
 		vertices(new std::vector<sVertex>(_vertices)),
 		indices(_indices),
@@ -60,6 +62,7 @@ struct ModelData {
 		Materials(_Materials),
 		skeleton(_skeleton),
 		animations(_animations),
+		sbb(_sbb),
 		min(_min),
 		max(_max)
 	{}
@@ -77,11 +80,7 @@ struct ModelData {
 			delete Materials[i];
 		}
 
-		delete skeleton;
-
-		for (int i = 0; i < animations.size(); ++i) {
-			delete animations[i];
-		}
+		//skeleton and animations are deleted in the buffers object.
 	}
 
 	VERTEX_TYPE vType;
@@ -96,6 +95,8 @@ struct ModelData {
 
 	Skeleton* skeleton;
 	std::vector<Animation*> animations;
+
+	StaticBoundingBox* sbb;
 
 	glm::vec3 min;
 	glm::vec3 max;
@@ -117,6 +118,10 @@ struct ModelBuffers {
 		for (int i = 0; i < animations.size(); ++i) {
 			delete animations[i];
 		}
+
+		delete sbb;
+
+		delete skeleton;
 	}
 
 	//Vertex Array Object
@@ -129,6 +134,8 @@ struct ModelBuffers {
 
 	Skeleton* skeleton;
 	std::vector<Animation*> animations;
+
+	StaticBoundingBox* sbb;
 
 	glm::vec3 min;
 	glm::vec3 max;

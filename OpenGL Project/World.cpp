@@ -58,19 +58,6 @@ void World::Update(const FrameData& state) {
 	}
 }
 
-bool World::TestCollision(const BoundingBox& other) {
-	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {
-		Mesh* mesh = (*it);
-
-		if ((*it)->GetBoundingBox().CollidesWith(other)) {
-			return true;
-		}
-		
-	}
-
-	return false;
-}
-
 CollisionInfo World::TestCollision(const BoundingBox& other, const glm::vec3& otherVelocity) {
 
 	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {

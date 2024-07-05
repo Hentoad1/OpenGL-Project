@@ -2,6 +2,8 @@
 
 #include "MemoryMapper.h"
 
+#include "BuildBoundingBox.h"
+
 ModelData* ASSIMP_LOAD(const std::string& path) {
 	/* ------------------------------------ IMPORT SCENE ------------------------------------- */
 
@@ -260,13 +262,17 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 		materials.push_back(new Material(scene, i, path));
 	}
 
+	/* -------------------------------- GENERATE BOUNDING BOX -------------------------------- */
+
+	StaticBoundingBox* sbb = BuildAABB(min, max);
+
 
 	ModelData* CreatedData;
 	if (isSkeletal) {
-		CreatedData = new ModelData(sVertices, indices, mesh_data, materials, skeleton, animations, min, max);
+		CreatedData = new ModelData(sVertices, indices, mesh_data, materials, skeleton, animations, sbb, min, max);
 	}
 	else {
-		CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, min, max);
+		CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, sbb, min, max);
 	}
 	 
 

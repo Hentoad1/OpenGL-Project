@@ -13,13 +13,19 @@
 
 #include "BoundingBox.h"
 
+#include "BuildBoundingBox.h"
+
 int main() {
 
 	/*
 	bounding box is always a cube
 	cant import meshes
 
+	combine modeldata and modelbuffers into one "model" struct with two pointers to data and attached
+
 	make it so mesh doesnt construct bounding box to then replace later.
+
+	remove convex hulls lib
 	*/
 
 	/*
@@ -131,14 +137,13 @@ int main() {
 
 	//maybe just make an enum for bounding box type and then have 1 goated constructor for boundingbox that recives all data for all boxes
 
-	BoundingBox bounds = CreateConvexHull(*static_cast<std::vector<Vertex>*>(cannon_raw->vertices));
+	//BoundingBox bounds = CreateConvexHull(*static_cast<std::vector<Vertex>*>(cannon_raw->vertices));
 
 
 
 	Mesh* other = new Mesh(
 		Engine.GetCamera(),
 		cannon,
-		bounds,
 		MESH_COMPONENT_RENDER |
 		MESH_USECOLLISION |
 
@@ -151,7 +156,10 @@ int main() {
 
 	//load player
 
-	ModelBuffers* m1 = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), glm::vec3(-1, -1, -1), glm::vec3(1, 1, 1)};
+	glm::vec3 min = glm::vec3(-1, -1, -1);
+	glm::vec3 max = glm::vec3(1, 1, 1);
+
+	ModelBuffers* m1 = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), BuildAABB(min, max), min, max };
 
 	Mesh* player = new Mesh(
 		Engine.GetCamera(),

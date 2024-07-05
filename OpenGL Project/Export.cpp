@@ -289,6 +289,21 @@ static void AppendAnimationToBuffer(Buffer& b, Animation* anim) {
 	}
 }
 
+static void AppendStaticBoundingBoxToBuffer(Buffer& b, StaticBoundingBox* sbb) {
+	b.Append(sbb->vertices);
+	b.Append(sbb->indices);
+	b.Append(sbb->normals);
+
+	size_t center_size = sizeof(sbb->center);
+	uint8_t* center_buffer = static_cast<uint8_t*>(static_cast<void*>(&sbb->normals));
+	b.Append(center_buffer, center_size);
+
+
+	size_t type_size = sizeof(sbb->type);
+	uint8_t* type_buffer = static_cast<uint8_t*>(static_cast<void*>(&sbb->type));
+	b.Append(type_buffer, type_size);
+
+}
 
 Buffer ModelToBuffer(ModelData* m) {
 	Buffer buf;
@@ -345,7 +360,10 @@ Buffer ModelToBuffer(ModelData* m) {
 	}
 
 
+	/* ---------- BoundingBox ---------- */
 	
+	AppendStaticBoundingBoxToBuffer(buf, m->sbb);
+
 
 	/* ---------- Min/Max ---------- */
 

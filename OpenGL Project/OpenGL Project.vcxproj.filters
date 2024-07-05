@@ -64,12 +64,6 @@
     <Filter Include="Source Files\Mesh &amp; Components\Mesh\Meta">
       <UniqueIdentifier>{d2795968-9c65-4900-9581-78d6cf4b67c3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Mesh &amp; Components\Mesh\BoundingBox">
-      <UniqueIdentifier>{82e49612-7296-461c-aba6-02294c8944e7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Mesh &amp; Components\Mesh\BoundingBox\Orientation">
-      <UniqueIdentifier>{18c29e04-955b-43f6-b7c0-6ffe4d8fcec0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Mesh &amp; Components\Mesh\Old System">
       <UniqueIdentifier>{d155788b-0183-4ecd-9254-54f54828a20d}</UniqueIdentifier>
     </Filter>
@@ -96,6 +90,15 @@
     </Filter>
     <Filter Include="Libraries\quickhull\structs">
       <UniqueIdentifier>{6e613d2c-a423-4442-a0a3-213e3173a41f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{92696913-d40b-41a9-866f-f5da1eee1d16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\BoundingBox">
+      <UniqueIdentifier>{82e49612-7296-461c-aba6-02294c8944e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics\BoundingBox\Orientation">
+      <UniqueIdentifier>{18c29e04-955b-43f6-b7c0-6ffe4d8fcec0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -133,7 +136,7 @@
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
-      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox</Filter>
+      <Filter>Source Files\Physics\BoundingBox</Filter>
     </ClCompile>
     <ClCompile Include="DebugShader.cpp">
       <Filter>Source Files\Shaders\Debug</Filter>
@@ -142,7 +145,7 @@
       <Filter>Source Files\Engine\Camera</Filter>
     </ClCompile>
     <ClCompile Include="Orientation.cpp">
-      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox\Orientation</Filter>
+      <Filter>Source Files\Physics\BoundingBox\Orientation</Filter>
     </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Source Files\Engine</Filter>
@@ -219,6 +222,18 @@
     <ClCompile Include="qhull\QuickHull.cpp">
       <Filter>Libraries\quickhull</Filter>
     </ClCompile>
+    <ClCompile Include="BuildBoundingBox.cpp">
+      <Filter>Source Files\Physics\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision_Complex.cpp">
+      <Filter>Source Files\Physics\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision_complex_old.cpp">
+      <Filter>Source Files\Physics\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision_AABB.cpp">
+      <Filter>Source Files\Physics\BoundingBox</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -258,7 +273,7 @@
       <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
     </ClInclude>
     <ClInclude Include="BoundingBox.h">
-      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox</Filter>
+      <Filter>Source Files\Physics\BoundingBox</Filter>
     </ClInclude>
     <ClInclude Include="DebugShader.h">
       <Filter>Source Files\Shaders\Debug</Filter>
@@ -267,7 +282,7 @@
       <Filter>Source Files\Engine\Camera</Filter>
     </ClInclude>
     <ClInclude Include="Orientation.h">
-      <Filter>Source Files\Mesh &amp; Components\Mesh\BoundingBox\Orientation</Filter>
+      <Filter>Source Files\Physics\BoundingBox\Orientation</Filter>
     </ClInclude>
     <ClInclude Include="EngineInternal.h">
       <Filter>Source Files\Engine</Filter>
@@ -376,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="qhull\Structs\VertexDataSource.hpp">
       <Filter>Libraries\quickhull\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildBoundingBox.h">
+      <Filter>Source Files\Physics\BoundingBox</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
