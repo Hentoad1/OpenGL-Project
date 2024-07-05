@@ -65,5 +65,5 @@ StaticBoundingBox* BuildAABB(const glm::vec3& min, const glm::vec3& max) {
 		});
 	}
 
-	return new StaticBoundingBox{ vertices, indices, normals, center, BoundingBoxType_AABB };
+	return new StaticBoundingBox{ vertices, indices, normals, min, max, center, BoundingBoxType_AABB };
 }

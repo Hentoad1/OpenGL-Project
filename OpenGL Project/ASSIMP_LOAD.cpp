@@ -269,10 +269,10 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 
 	ModelData* CreatedData;
 	if (isSkeletal) {
-		CreatedData = new ModelData(sVertices, indices, mesh_data, materials, skeleton, animations, sbb, min, max);
+		CreatedData = new ModelData(sVertices, indices, mesh_data, materials, skeleton, animations, sbb);
 	}
 	else {
-		CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, sbb, min, max);
+		CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, sbb);
 	}
 	 
 

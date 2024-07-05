@@ -27,6 +27,12 @@ struct StaticBoundingBox {
 	//normals remains static, regardless of orientation or position
 	std::vector<glm::vec3> normals;
 
+	//min remains static, regardless of orientation or position
+	glm::vec3 min;
+
+	//max remains static, regardless of orientation or position
+	glm::vec3 max;
+
 	//center remains static, regardless of orientation or position
 	glm::vec3 center;
 

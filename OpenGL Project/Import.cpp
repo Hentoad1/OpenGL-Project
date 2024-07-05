@@ -416,6 +416,11 @@ ModelData* BufferToModel(Buffer& b) {
 	std::vector<glm::vec3> sbb_normals = std::vector<glm::vec3>(sbb_numNormals);
 	Read(&sbb_normals[0], sizeof(sbb_normals[0]) * sbb_numNormals);
 
+	glm::vec3 min;
+	Read(&min, sizeof(min));
+
+	glm::vec3 max;
+	Read(&max, sizeof(max));
 
 	glm::vec3 center;
 	Read(&center, sizeof(center));
@@ -424,16 +429,7 @@ ModelData* BufferToModel(Buffer& b) {
 	BoundingBoxType type;
 	Read(&type, sizeof(type));
 
-	StaticBoundingBox* sbb = new StaticBoundingBox{ sbb_vertices, sbb_indices, sbb_normals, center, type };
-
-
-	//Min/Max
-
-	glm::vec3 min;
-	Read(&min, sizeof(min));
-
-	glm::vec3 max;
-	Read(&max, sizeof(max));
+	StaticBoundingBox* sbb = new StaticBoundingBox{ sbb_vertices, sbb_indices, sbb_normals, min, max, center, type };
 
 
 
@@ -441,9 +437,9 @@ ModelData* BufferToModel(Buffer& b) {
 
 
 	if (is_skeletal) {
-		return new ModelData{ sVertices, indices, meshes, materials, skeleton, animations, sbb, min, max };
+		return new ModelData{ sVertices, indices, meshes, materials, skeleton, animations, sbb };
 	}
 	else {
-		return new ModelData{ vertices, indices, meshes, materials, skeleton, animations, sbb, min, max };
+		return new ModelData{ vertices, indices, meshes, materials, skeleton, animations, sbb };
 	}
 }

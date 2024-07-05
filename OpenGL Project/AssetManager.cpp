@@ -163,7 +163,7 @@ ModelBuffers* AssetManager::Attach(ModelData* md){
         MBO.push_back(buf);
     }
 
-    ModelBuffers* CreatedData = new ModelBuffers{ VAO, MBO, md->mesh_data, md->skeleton, md->animations, md->sbb, md->min, md->max };
+    ModelBuffers* CreatedData = new ModelBuffers{ VAO, MBO, md->mesh_data, md->skeleton, md->animations, md->sbb };
 
     info->attached = CreatedData;
 

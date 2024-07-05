@@ -294,6 +294,17 @@ static void AppendStaticBoundingBoxToBuffer(Buffer& b, StaticBoundingBox* sbb) {
 	b.Append(sbb->indices);
 	b.Append(sbb->normals);
 
+
+	size_t min_size = sizeof(sbb->min);
+	uint8_t* min_buffer = static_cast<uint8_t*>(static_cast<void*>(&sbb->min));
+	b.Append(min_buffer, min_size);
+
+
+	size_t max_size = sizeof(sbb->max);
+	uint8_t* max_buffer = static_cast<uint8_t*>(static_cast<void*>(&sbb->max));
+	b.Append(max_buffer, max_size);
+
+
 	size_t center_size = sizeof(sbb->center);
 	uint8_t* center_buffer = static_cast<uint8_t*>(static_cast<void*>(&sbb->normals));
 	b.Append(center_buffer, center_size);
@@ -363,19 +374,6 @@ Buffer ModelToBuffer(ModelData* m) {
 	/* ---------- BoundingBox ---------- */
 	
 	AppendStaticBoundingBoxToBuffer(buf, m->sbb);
-
-
-	/* ---------- Min/Max ---------- */
-
-	uint8_t* minpoint_buffer = static_cast<uint8_t*>(static_cast<void*>(&m->min));
-	size_t minpoint_size = sizeof(m->min);
-
-	buf.Append(minpoint_buffer, minpoint_size);
-
-	uint8_t* maxpoint_buffer = static_cast<uint8_t*>(static_cast<void*>(&m->max));
-	size_t maxpoint_size = sizeof(m->max);
-
-	buf.Append(maxpoint_buffer, maxpoint_size);
 	
 	return buf;
 }

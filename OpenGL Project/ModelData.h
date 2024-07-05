@@ -41,7 +41,7 @@ struct ModelData {
 		throw;
 	}
 
-	ModelData(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, StaticBoundingBox* _sbb, const glm::vec3& _min, const glm::vec3& _max) :
+	ModelData(const std::vector<Vertex>& _vertices, const std::vector<unsigned int>& _indices, const std::vector<SubMesh>& _mesh_data, const std::vector<Material*>& _Materials, Skeleton* _skeleton, std::vector<Animation*> _animations, StaticBoundingBox* _sbb) :
 		vType(VERTEX_TYPE_BASIC),
 		vertices(new std::vector<Vertex>(_vertices)),
 		indices(_indices),
@@ -49,12 +49,10 @@ struct ModelData {
 		Materials(_Materials),
 		skeleton(_skeleton),
 		animations(_animations),
-		sbb(_sbb),
-		min(_min),
-		max(_max)
+		sbb(_sbb)
 	{}
 
-	ModelData(const std::vector<sVertex>&_vertices, const std::vector<unsigned int>&_indices, const std::vector<SubMesh>&_mesh_data, const std::vector<Material*>&_Materials, Skeleton * _skeleton, std::vector<Animation*> _animations, StaticBoundingBox* _sbb, const glm::vec3 & _min, const glm::vec3 & _max) :
+	ModelData(const std::vector<sVertex>&_vertices, const std::vector<unsigned int>&_indices, const std::vector<SubMesh>&_mesh_data, const std::vector<Material*>&_Materials, Skeleton * _skeleton, std::vector<Animation*> _animations, StaticBoundingBox* _sbb) :
 		vType(VERTEX_TYPE_SKELETAL),
 		vertices(new std::vector<sVertex>(_vertices)),
 		indices(_indices),
@@ -62,9 +60,7 @@ struct ModelData {
 		Materials(_Materials),
 		skeleton(_skeleton),
 		animations(_animations),
-		sbb(_sbb),
-		min(_min),
-		max(_max)
+		sbb(_sbb)
 	{}
 
 	~ModelData(){
@@ -98,10 +94,7 @@ struct ModelData {
 
 	StaticBoundingBox* sbb;
 
-	glm::vec3 min;
-	glm::vec3 max;
-
-	glm::vec3 center() const { return (min + max) * 0.5f; }
+	glm::vec3 center() const { return sbb->center; }
 };
 
 struct ModelBuffers {

@@ -26,6 +26,8 @@ int main() {
 	make it so mesh doesnt construct bounding box to then replace later.
 
 	remove convex hulls lib
+
+	no fast aabb collision
 	*/
 
 	/*
