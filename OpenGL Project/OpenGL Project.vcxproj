@@ -111,6 +111,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ConvexHull.cpp" />
     <ClCompile Include="Customimporter.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -147,6 +148,10 @@
     <ClCompile Include="CameraMesh.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="qhull\QuickHull.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SkeletalShader.cpp" />
@@ -167,6 +172,8 @@
     <ClInclude Include="Bones.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="ConvexHull.h" />
+    <ClInclude Include="convhull_3d.h" />
     <ClInclude Include="CustomImporter.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -189,6 +196,16 @@
     <ClInclude Include="ModelData.h" />
     <ClInclude Include="Packed_Skeleton.h" />
     <ClInclude Include="PhysicsComponent.h" />
+    <ClInclude Include="qhull\ConvexHull.hpp" />
+    <ClInclude Include="qhull\HalfEdgeMesh.hpp" />
+    <ClInclude Include="qhull\MathUtils.hpp" />
+    <ClInclude Include="qhull\QuickHull.hpp" />
+    <ClInclude Include="qhull\Structs\Mesh.hpp" />
+    <ClInclude Include="qhull\Structs\Plane.hpp" />
+    <ClInclude Include="qhull\Structs\Pool.hpp" />
+    <ClInclude Include="qhull\Structs\Ray.hpp" />
+    <ClInclude Include="qhull\Structs\Vector3.hpp" />
+    <ClInclude Include="qhull\Structs\VertexDataSource.hpp" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SkeletalShader.h" />

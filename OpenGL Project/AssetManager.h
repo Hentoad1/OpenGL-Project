@@ -23,6 +23,8 @@ private:
 public:
 	AssetManager();
 
+	~AssetManager();
+
 	ModelData* LoadModel(const std::string& name);
 
 	ModelBuffers* Attach(ModelData*);

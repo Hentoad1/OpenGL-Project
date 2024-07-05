@@ -25,6 +25,7 @@ class Mesh {
 public:
 	Mesh(const Mesh& ref);
 
+	Mesh(Camera*, const ModelBuffers*, const BoundingBox&, const ComponentMeta&);
 	Mesh(Camera*, const ModelBuffers*, const ComponentMeta&);
 
 	~Mesh();
@@ -34,6 +35,8 @@ public:
 	void Render();
 
 	BoundingBox& GetBoundingBox();
+
+	void SetBoundingBox(const BoundingBox&);
 
 	ComponentMeta cMeta;
 private:

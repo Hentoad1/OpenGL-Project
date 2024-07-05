@@ -181,6 +181,14 @@ static float GetAxisOverlap(const glm::vec3& axis, const BoundingBox& boxA, cons
 	}
 }
 
+
+BoundingBox::BoundingBox(
+	const std::vector<glm::vec3>& _vertices,
+	const std::vector<unsigned int>& _indices,
+	const std::vector<glm::vec3>& _normals) : vertices(_vertices), indices(_indices), normals(_normals) {
+	
+}
+
 //Generates a cube shaped BoundingBox
 BoundingBox::BoundingBox(glm::vec3 min, glm::vec3 max) :
 	center(((max + min) * 0.5f)),
@@ -208,6 +216,8 @@ BoundingBox::BoundingBox(glm::vec3 min, glm::vec3 max) :
 		1, 3, 4, 6
 	};
 
+
+
 	normals = {
 		glm::vec3(0,0,1),
 		glm::vec3(0,0,-1),
@@ -217,6 +227,19 @@ BoundingBox::BoundingBox(glm::vec3 min, glm::vec3 max) :
 		glm::vec3(-1,0,0),
 	};
 
+	/*
+	
+	renderIndices.insert(renderIndices.end(), {
+		indices[i],
+		indices[i + 1],
+		indices[i],
+		indices[i + 2],
+		indices[i + 1],
+		indices[i + 2]
+	});
+
+	*/
+
 	for (int i = 0; i < 6; i++) {
 		int index1 = i * 4;
 		int index2 = index1 + 1;
@@ -224,10 +247,16 @@ BoundingBox::BoundingBox(glm::vec3 min, glm::vec3 max) :
 		int index4 = index1 + 3;
 		
 		indices.insert(indices.end(), {
-			indexes[index1], indexes[index2], indexes[index3],
-			indexes[index1], indexes[index3], indexes[index4]
+			indexes[index1], indexes[index2],
+			indexes[index2], indexes[index3],
+			indexes[index1], indexes[index3],
+
+			indexes[index1], indexes[index3],
+			indexes[index1], indexes[index4],
+			indexes[index3], indexes[index4],
 		});
 	}
+
 
 	position = glm::vec3(0);
 }
@@ -491,21 +520,6 @@ CollisionInfo BoundingBox::CollidesWith(const BoundingBox& boxB, const glm::vec3
 void BoundingBox::BindGL(Camera* bCam){
 	shader = (ShaderProgram*)new DebugShader(bCam, Position());
 
-
-	std::vector<unsigned int> renderIndices;
-
-	for (int i = 0; i < indices.size(); i += 3) {
-
-		renderIndices.insert(renderIndices.end(), {
-			indices[i],
-			indices[i + 1],
-			indices[i],
-			indices[i + 2],
-			indices[i + 1],
-			indices[i + 2]
-		});
-	}
-
 	GLuint mBuffers[2];
 
 	glGenVertexArrays(1, &VertexBuffer);
@@ -520,12 +534,12 @@ void BoundingBox::BindGL(Camera* bCam){
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, Vertex_Size, 0);
 	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(renderIndices[0]) * renderIndices.size(), &renderIndices[0], GL_STATIC_DRAW);
 	
-	numIndices = renderIndices.size();
-
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mBuffers[1]);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &indices[0], GL_STATIC_DRAW);
+	
+	numIndices = indices.size();
+	
 	glBindVertexArray(0);
 }
 

@@ -26,6 +26,8 @@ public:
 
 	BoundingBox(glm::vec3 min, glm::vec3 max);
 
+	BoundingBox(const std::vector<glm::vec3>&, const std::vector<unsigned int>&, const std::vector<glm::vec3>&);
+
 	const glm::vec3& Center() const;
 
 	const glm::vec3& Position() const;
@@ -65,13 +67,13 @@ private:
 	std::vector<glm::vec3> normals;
 
 	//center remains static, regardless of orientation or position
-	glm::vec3 center;
+	glm::vec3 center = glm::vec3(0);
 
 	//position is dynamic, changing possbily every frame.
 	glm::vec3 position = glm::vec3(0);
 
 	//orientation is dynamic, changing possibly every frame.
-	Orientation orientation;
+	Orientation orientation = glm::vec3(0, 0, -1);
 
 #ifdef _DEBUG
 	unsigned int numIndices;

@@ -85,8 +85,17 @@
     <Filter Include="Source Files\Loading Models\Importer\ModelData\Skeleton">
       <UniqueIdentifier>{60c4c103-67e0-4bda-a30f-a4c7b0376a14}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading Models\Compressor">
+    <Filter Include="Source Files\Loading Models\AssetManager">
       <UniqueIdentifier>{a60c0012-c2ae-4085-abdd-17e8a56f6236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loading Models\ConvexHull">
+      <UniqueIdentifier>{afef126f-a7b4-41af-af27-9cf0581bd864}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\quickhull">
+      <UniqueIdentifier>{9aee4609-3505-46d0-a3f9-66f1d2f9e33f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Libraries\quickhull\structs">
+      <UniqueIdentifier>{6e613d2c-a423-4442-a0a3-213e3173a41f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -190,19 +199,25 @@
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClCompile>
     <ClCompile Include="Export.cpp">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClCompile>
     <ClCompile Include="Import.cpp">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClCompile>
     <ClCompile Include="AssetManager.cpp">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClCompile>
     <ClCompile Include="MemoryMapper.cpp">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClCompile>
     <ClCompile Include="ASSIMP_LOAD.cpp">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvexHull.cpp">
+      <Filter>Source Files\Loading Models\ConvexHull</Filter>
+    </ClCompile>
+    <ClCompile Include="qhull\QuickHull.cpp">
+      <Filter>Libraries\quickhull</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -318,13 +333,49 @@
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClInclude>
     <ClInclude Include="MemoryMapper.h">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClInclude>
     <ClInclude Include="Packed_Skeleton.h">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClInclude>
     <ClInclude Include="AssetManager.h">
-      <Filter>Source Files\Loading Models\Compressor</Filter>
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="convhull_3d.h">
+      <Filter>Libraries</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvexHull.h">
+      <Filter>Source Files\Loading Models\ConvexHull</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\HalfEdgeMesh.hpp">
+      <Filter>Libraries\quickhull</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\MathUtils.hpp">
+      <Filter>Libraries\quickhull</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\QuickHull.hpp">
+      <Filter>Libraries\quickhull</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\ConvexHull.hpp">
+      <Filter>Libraries\quickhull</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\Structs\Mesh.hpp">
+      <Filter>Libraries\quickhull\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\Structs\Plane.hpp">
+      <Filter>Libraries\quickhull\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\Structs\Pool.hpp">
+      <Filter>Libraries\quickhull\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\Structs\Ray.hpp">
+      <Filter>Libraries\quickhull\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\Structs\Vector3.hpp">
+      <Filter>Libraries\quickhull\structs</Filter>
+    </ClInclude>
+    <ClInclude Include="qhull\Structs\VertexDataSource.hpp">
+      <Filter>Libraries\quickhull\structs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

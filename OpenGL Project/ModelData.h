@@ -108,7 +108,15 @@ struct ModelBuffers {
 	~ModelBuffers() {
 		//write this shit in here
 		
-		throw;
+		glDeleteVertexArrays(1, &VAO);
+
+		for (int i = 0; i < MBO.size(); ++i) {
+			delete MBO[i];
+		}
+
+		for (int i = 0; i < animations.size(); ++i) {
+			delete animations[i];
+		}
 	}
 
 	//Vertex Array Object

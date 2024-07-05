@@ -4,6 +4,15 @@
 
 #include "MemoryMapper.h"
 
+AssetManager::~AssetManager() {
+    for (auto& [key, value] : models) {
+        if (value.isLoaded) {
+            delete value.model;
+            delete value.attached;
+        }
+    }
+}
+
 static std::vector<std::filesystem::path> GetDirFiles(const std::string& path) {
     std::vector<std::filesystem::path> files;
 
