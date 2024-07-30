@@ -35,7 +35,7 @@ void PhysicsComponent::Update(const FrameData& data) {
 		std::cout << "position" << glm::to_string(cData->bounds.Position()) << std::endl;
 
 
-		cData->velocity = info.collisionVelocity;
+		//cData->velocity = info.collisionVelocity;
 	}
 
 	cData->bounds.MoveAbsolute(cData->velocity);

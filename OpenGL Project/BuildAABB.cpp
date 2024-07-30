@@ -1,12 +1,9 @@
 
 #include "pch.h"
 
-#include "BuildBoundingBox.h"
+#include "BuildAABB.h"
 
 StaticBoundingBox* BuildAABB(const glm::vec3& min, const glm::vec3& max) {
-
-	//const glm::vec3& min = mData->min;
-	//const glm::vec3& max = mData->max;
 
 	glm::vec3 center = (max + min) * 0.5f;
 
@@ -62,7 +59,7 @@ StaticBoundingBox* BuildAABB(const glm::vec3& min, const glm::vec3& max) {
 			face_indices[index1], face_indices[index4],
 			face_indices[index3], face_indices[index4],
 
-		});
+			});
 	}
 
 	return new StaticBoundingBox{ vertices, indices, normals, min, max, center, BoundingBoxType_AABB };

@@ -2,7 +2,7 @@
 
 #include "MemoryMapper.h"
 
-#include "BuildBoundingBox.h"
+#include "BuildAABB.h"
 
 ModelData* ASSIMP_LOAD(const std::string& path) {
 	/* ------------------------------------ IMPORT SCENE ------------------------------------- */

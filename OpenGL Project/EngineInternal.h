@@ -54,9 +54,6 @@ struct CollisionInfo {
 	//The position that the object should be moved to
 	glm::vec3 newPosition;
 
-	//The velocity resulting from the collision.
-	glm::vec3 collisionVelocity;
-
 	//The type of surface hit
 	CollisionType collisionType;
 };

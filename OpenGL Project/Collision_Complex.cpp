@@ -126,8 +126,8 @@ static float GetAxisOverlap(const glm::vec3& axis, const BoundingBox& boxA, cons
 	}
 }
 
-CollisionInfo BoundingBox::TestCollision_Complex(const BoundingBox& boxB, const glm::vec3& velocity) {
-	int numAxisA = sbb->normals.size();
+CollisionInfo BoundingBox::Collision_Complex(const BoundingBox& boxA, const BoundingBox& boxB, const glm::vec3& velocity) {
+	int numAxisA = boxA.sbb->normals.size();
 	int numAxisB = boxB.sbb->normals.size();
 	int numAxisCross = numAxisA * numAxisB;
 	int totalAxis = numAxisA + numAxisB + numAxisCross;
@@ -139,10 +139,10 @@ CollisionInfo BoundingBox::TestCollision_Complex(const BoundingBox& boxB, const 
 	float negativePenetration = 0;
 	float PenetrationResult[2];
 
-	for (int i = 0; i < sbb->normals.size(); ++i) {
-		glm::vec3 axis = glm::normalize(sbb->normals[i]);
+	for (int i = 0; i < boxA.sbb->normals.size(); ++i) {
+		glm::vec3 axis = glm::normalize(boxA.sbb->normals[i]);
 
-		float overlap = GetAxisOverlap(axis, *this, boxB, PenetrationResult);
+		float overlap = GetAxisOverlap(axis, boxA, boxB, PenetrationResult);
 
 		if (overlap == 0) {
 			return CollisionInfo{ false };
@@ -167,7 +167,7 @@ CollisionInfo BoundingBox::TestCollision_Complex(const BoundingBox& boxB, const 
 	for (int i = 0; i < boxB.sbb->normals.size(); ++i) {
 		glm::vec3 axis = glm::normalize(boxB.sbb->normals[i]);
 
-		float overlap = GetAxisOverlap(axis, *this, boxB, PenetrationResult);
+		float overlap = GetAxisOverlap(axis, boxA, boxB, PenetrationResult);
 
 		if (overlap == 0) {
 			return CollisionInfo{ false };
@@ -189,9 +189,9 @@ CollisionInfo BoundingBox::TestCollision_Complex(const BoundingBox& boxB, const 
 		}
 	}
 
-	for (int i = 0; i < sbb->normals.size(); ++i) {
+	for (int i = 0; i < boxA.sbb->normals.size(); ++i) {
 		for (int j = 0; j < boxB.sbb->normals.size(); ++j) {
-			glm::vec3 cross = glm::cross(sbb->normals[i], boxB.sbb->normals[j]);
+			glm::vec3 cross = glm::cross(boxA.sbb->normals[i], boxB.sbb->normals[j]);
 
 			if (cross == glm::vec3(0, 0, 0)) {
 				continue;
@@ -201,7 +201,7 @@ CollisionInfo BoundingBox::TestCollision_Complex(const BoundingBox& boxB, const 
 
 			glm::vec3 axis = glm::normalize(cross);
 
-			float overlap = GetAxisOverlap(axis, *this, boxB, PenetrationResult);
+			float overlap = GetAxisOverlap(axis, boxA, boxB, PenetrationResult);
 
 			if (overlap == 0) {
 				return CollisionInfo{ false };
@@ -284,5 +284,5 @@ CollisionInfo BoundingBox::TestCollision_Complex(const BoundingBox& boxB, const 
 	//testing
 	glm::vec newVelocity = (velocity - 1.0f * glm::dot(axisWithOverlap, velocity) * axisWithOverlap);
 
-	return CollisionInfo{ true, postitionChange, newVelocity };
+	return CollisionInfo{ true, postitionChange };
 }

@@ -1,19 +1,16 @@
 
-#include "pch.h""
+#include "pch.h"
 
 #include "Engine.h"
-
-#include "CustomImporter.h"
 
 #include "MemoryMapper.h"
 
 #include "AssetManager.h"
 
-#include "ConvexHull.h"
-
 #include "BoundingBox.h"
 
-#include "BuildBoundingBox.h"
+#include "BuildAABB.h"
+
 
 int main() {
 
@@ -128,31 +125,7 @@ int main() {
 		MESH_SHADERTYPE_SKELETAL
 	);
 
-	//warwick->SetBoundingBox(BoundingBox());
-
-
 	World::Load(warwick);
-
-	ModelData* cannon_raw = assetManager.LoadModel("Cannon");
-	ModelBuffers* cannon = assetManager.Attach(cannon_raw);
-
-
-	//maybe just make an enum for bounding box type and then have 1 goated constructor for boundingbox that recives all data for all boxes
-
-	//BoundingBox bounds = CreateConvexHull(*static_cast<std::vector<Vertex>*>(cannon_raw->vertices));
-
-
-
-	Mesh* other = new Mesh(
-		Engine.GetCamera(),
-		cannon,
-		MESH_COMPONENT_RENDER |
-		MESH_USECOLLISION |
-
-		MESH_SHADERTYPE_BASIC
-	);
-
-	World::Load(other);
 
 	//warwick->SetBoundingBox(CreateConvexHull());
 

@@ -11,8 +11,14 @@
 #endif // _DEBUG
 
 enum BoundingBoxType : uint8_t{
+	
+	//Axis Aligned Bounding Box
 	BoundingBoxType_AABB,
-	BoundingBoxType_CONVEX_HULL,
+	
+	//Oriented Bounding Box
+	BoundingBoxType_OBB,
+
+	//Complex Bounding Box
 	BoundingBoxType_COMPLEX
 };
 
@@ -75,7 +81,9 @@ public:
 
 private:
 
-	CollisionInfo TestCollision_Complex(const BoundingBox&, const glm::vec3&);
+	static CollisionInfo Collision_AABB_With_AABB(const BoundingBox& AABB1, const BoundingBox& AABB2, const glm::vec3& velocity);
+
+	static CollisionInfo Collision_Complex(const BoundingBox&, const BoundingBox&, const glm::vec3& velocity);
 
 	const StaticBoundingBox* sbb;
 

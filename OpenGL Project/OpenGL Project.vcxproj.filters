@@ -46,12 +46,6 @@
     <Filter Include="Source Files\Loading Models\Importer\ModelData\Material\Meta">
       <UniqueIdentifier>{40995a00-565c-4e1f-ad2f-19923297f9f9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading Models\Importer\ModelData\Path">
-      <UniqueIdentifier>{fe44a07d-3538-47fd-b659-a16e4c648ada}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Loading Models\Importer\ModelData\Texture">
-      <UniqueIdentifier>{57426e12-b18f-41a1-a5e8-7c1406dc5862}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Loading Models\Importer\ModelData\Vertex">
       <UniqueIdentifier>{6db78850-d05a-4f61-b9ee-6da1b541dc2b}</UniqueIdentifier>
     </Filter>
@@ -82,9 +76,6 @@
     <Filter Include="Source Files\Loading Models\AssetManager">
       <UniqueIdentifier>{a60c0012-c2ae-4085-abdd-17e8a56f6236}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Loading Models\ConvexHull">
-      <UniqueIdentifier>{afef126f-a7b4-41af-af27-9cf0581bd864}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Libraries\quickhull">
       <UniqueIdentifier>{9aee4609-3505-46d0-a3f9-66f1d2f9e33f}</UniqueIdentifier>
     </Filter>
@@ -114,14 +105,8 @@
     <ClCompile Include="BasicShader.cpp">
       <Filter>Source Files\Shaders\Basic</Filter>
     </ClCompile>
-    <ClCompile Include="Texture.cpp">
-      <Filter>Source Files\Loading Models\Importer\ModelData\Texture</Filter>
-    </ClCompile>
     <ClCompile Include="Vertex.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Vertex</Filter>
-    </ClCompile>
-    <ClCompile Include="Path.cpp">
-      <Filter>Source Files\Loading Models\Importer\ModelData\Path</Filter>
     </ClCompile>
     <ClCompile Include="MaterialMeta3.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
@@ -131,9 +116,6 @@
     </ClCompile>
     <ClCompile Include="MaterialMeta.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
-    </ClCompile>
-    <ClCompile Include="Material2.cpp">
-      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClCompile>
     <ClCompile Include="BoundingBox.cpp">
       <Filter>Source Files\Physics\BoundingBox</Filter>
@@ -171,14 +153,8 @@
     <ClCompile Include="InputComponent.cpp">
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClCompile>
-    <ClCompile Include="World2.cpp">
-      <Filter>Source Files\Engine</Filter>
-    </ClCompile>
     <ClCompile Include="Material.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
-    </ClCompile>
-    <ClCompile Include="Customimporter.cpp">
-      <Filter>Source Files\Loading Models\Importer</Filter>
     </ClCompile>
     <ClCompile Include="MaterialBuffer.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
@@ -216,14 +192,8 @@
     <ClCompile Include="ASSIMP_LOAD.cpp">
       <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClCompile>
-    <ClCompile Include="ConvexHull.cpp">
-      <Filter>Source Files\Loading Models\ConvexHull</Filter>
-    </ClCompile>
     <ClCompile Include="qhull\QuickHull.cpp">
       <Filter>Libraries\quickhull</Filter>
-    </ClCompile>
-    <ClCompile Include="BuildBoundingBox.cpp">
-      <Filter>Source Files\Physics\BoundingBox</Filter>
     </ClCompile>
     <ClCompile Include="Collision_Complex.cpp">
       <Filter>Source Files\Physics\BoundingBox</Filter>
@@ -233,6 +203,9 @@
     </ClCompile>
     <ClCompile Include="Collision_AABB.cpp">
       <Filter>Source Files\Physics\BoundingBox</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildAABB.cpp">
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -251,17 +224,8 @@
     <ClInclude Include="Engine.h">
       <Filter>Source Files\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Texture.h">
-      <Filter>Source Files\Loading Models\Importer\ModelData\Texture</Filter>
-    </ClInclude>
     <ClInclude Include="Vertex.h">
       <Filter>Source Files\Loading Models\Importer\ModelData\Vertex</Filter>
-    </ClInclude>
-    <ClInclude Include="Path.h">
-      <Filter>Source Files\Loading Models\Importer\ModelData\Path</Filter>
-    </ClInclude>
-    <ClInclude Include="Material2.h">
-      <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClInclude>
     <ClInclude Include="MaterialMeta3.h">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material\Meta</Filter>
@@ -311,17 +275,11 @@
     <ClInclude Include="InputComponent.h">
       <Filter>Source Files\Mesh &amp; Components\Mesh\Components</Filter>
     </ClInclude>
-    <ClInclude Include="World2.h">
-      <Filter>Source Files\Engine</Filter>
-    </ClInclude>
     <ClInclude Include="Material.h">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
     </ClInclude>
     <ClInclude Include="ModelData.h">
       <Filter>Source Files\Loading Models\Importer\ModelData</Filter>
-    </ClInclude>
-    <ClInclude Include="CustomImporter.h">
-      <Filter>Source Files\Loading Models\Importer</Filter>
     </ClInclude>
     <ClInclude Include="MaterialBuffer.h">
       <Filter>Source Files\Loading Models\Importer\ModelData\Material</Filter>
@@ -350,17 +308,11 @@
     <ClInclude Include="MemoryMapper.h">
       <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClInclude>
-    <ClInclude Include="Packed_Skeleton.h">
-      <Filter>Source Files\Loading Models\AssetManager</Filter>
-    </ClInclude>
     <ClInclude Include="AssetManager.h">
       <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClInclude>
     <ClInclude Include="convhull_3d.h">
       <Filter>Libraries</Filter>
-    </ClInclude>
-    <ClInclude Include="ConvexHull.h">
-      <Filter>Source Files\Loading Models\ConvexHull</Filter>
     </ClInclude>
     <ClInclude Include="qhull\HalfEdgeMesh.hpp">
       <Filter>Libraries\quickhull</Filter>
@@ -392,8 +344,11 @@
     <ClInclude Include="qhull\Structs\VertexDataSource.hpp">
       <Filter>Libraries\quickhull\structs</Filter>
     </ClInclude>
-    <ClInclude Include="BuildBoundingBox.h">
-      <Filter>Source Files\Physics\BoundingBox</Filter>
+    <ClInclude Include="BuildAABB.h">
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Packed_Skeleton.h">
+      <Filter>Source Files\Loading Models\AssetManager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
