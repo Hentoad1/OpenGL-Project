@@ -15,8 +15,7 @@
 int main() {
 
 	/*
-	bounding box is always a cube
-	cant import meshes
+	cant import meshes ???? tf this mean
 
 	combine modeldata and modelbuffers into one "model" struct with two pointers to data and attached
 
@@ -24,18 +23,15 @@ int main() {
 
 	remove convex hulls lib
 
-	no fast aabb collision
+	aabb vs aabb collision should be written, aabb vs triangle collision uses SAT
+
+	add Terrain class that auto generates random terrain.
 	*/
 
 	/*
 	lots of loose ends here.
 	A shit ton of debug cout calls
 	*/
-
-
-	//shaders are about as good as they will get until a full importer is made, just make animations now.
-	//animations
-	
 
 	//create a method in storing image data only once. this can allow for efficient batch rendering
 
