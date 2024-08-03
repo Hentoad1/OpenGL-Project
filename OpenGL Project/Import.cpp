@@ -1,10 +1,13 @@
 #include "pch.h"
 
-#include "MemoryMapper.h"
+//#include "MemoryMapper.h"
 
 #include "Packed_Skeleton.h"
 
-static Texture* BufferToTexture(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+#include "Basic_Model.h"
+#include "Skeletal_Model.h"
+
+static Texture* BufferToTexture(const std::function<void(void*, size_t)>& Read) {
 
 	/*
 	
@@ -32,7 +35,7 @@ static Texture* BufferToTexture(const Buffer& b, const std::function<void(void*,
 	return new Texture(width, height, bits_per_pixel, data);
 }
 
-static Material* BufferToMaterial(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+static Material* BufferToMaterial(const std::function<void(void*, size_t)>& Read) {
 
 	/*
 	std::array<Texture*, numTexTypes> Textures;
@@ -47,7 +50,7 @@ static Material* BufferToMaterial(const Buffer& b, const std::function<void(void
 		Read(&texExists, sizeof(texExists));
 
 		if (texExists) {
-			Textures[i] = BufferToTexture(b, Read);
+			Textures[i] = BufferToTexture(Read);
 		}
 		else {
 			Textures[i] = nullptr;
@@ -62,7 +65,7 @@ static Material* BufferToMaterial(const Buffer& b, const std::function<void(void
 	return new Material(Textures, Colors);
 }
 
-static std::string BufferToString(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+static std::string BufferToString(const std::function<void(void*, size_t)>& Read) {
 
 	
 	
@@ -93,7 +96,7 @@ static std::string BufferToString(const Buffer& b, const std::function<void(void
 
 }
 
-static Skeleton* BufferToSkeleton(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+static Skeleton* BufferToSkeleton(const std::function<void(void*, size_t)>& Read) {
 
 	size_t numBones;
 	Read(&numBones, sizeof(numBones));
@@ -105,7 +108,7 @@ static Skeleton* BufferToSkeleton(const Buffer& b, const std::function<void(void
 
 		Read(&bones[i].offset, sizeof(bones[i].offset));
 
-		bones[i].name = BufferToString(b, Read);
+		bones[i].name = BufferToString(Read);
 
 		size_t numChildren;
 		Read(&numChildren, sizeof(numChildren));
@@ -120,7 +123,7 @@ static Skeleton* BufferToSkeleton(const Buffer& b, const std::function<void(void
 
 }
 
-static PositionKeyFrame BufferToPositionKeyFrame(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+static PositionKeyFrame BufferToPositionKeyFrame(const std::function<void(void*, size_t)>& Read) {
 	/*
 	
 	glm::vec3 position;
@@ -139,7 +142,7 @@ static PositionKeyFrame BufferToPositionKeyFrame(const Buffer& b, const std::fun
 	return PositionKeyFrame{ position, time };
 }
 
-static OrientationKeyFrame BufferToOrientationKeyFrame(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+static OrientationKeyFrame BufferToOrientationKeyFrame(const std::function<void(void*, size_t)>& Read) {
 	/*
 
 	glm::quat orientation;
@@ -158,7 +161,7 @@ static OrientationKeyFrame BufferToOrientationKeyFrame(const Buffer& b, const st
 	return OrientationKeyFrame{ orientation, time };
 }
 
-static ScaleKeyFrame BufferToScaleKeyFrame(const Buffer& b, const std::function<void(void*, size_t)>& Read) {
+static ScaleKeyFrame BufferToScaleKeyFrame(const std::function<void(void*, size_t)>& Read) {
 	/*
 
 	glm::vec3 scale;
@@ -177,7 +180,7 @@ static ScaleKeyFrame BufferToScaleKeyFrame(const Buffer& b, const std::function<
 	return ScaleKeyFrame{ scale, time };
 }
 
-inline static void BufferToKeyFrame(const Buffer& b, const std::function<void(void*, size_t)>& Read, Skeleton* skeleton, std::vector<KeyFrame>& vector) {
+inline static void BufferToKeyFrame(const std::function<void(void*, size_t)>& Read, Skeleton* skeleton, std::vector<KeyFrame>& vector) {
 	/*
 	
 	Bone* bone;
@@ -204,7 +207,7 @@ inline static void BufferToKeyFrame(const Buffer& b, const std::function<void(vo
 	PositionKeyFrame* positionFrames = new PositionKeyFrame[numPositionFrames]();
 
 	for (int i = 0; i < numPositionFrames; ++i) {
-		positionFrames[i] = BufferToPositionKeyFrame(b, Read);
+		positionFrames[i] = BufferToPositionKeyFrame(Read);
 	}
 
 
@@ -215,7 +218,7 @@ inline static void BufferToKeyFrame(const Buffer& b, const std::function<void(vo
 	OrientationKeyFrame* orientationFrames = new OrientationKeyFrame[numOrientationFrames]();
 
 	for (int i = 0; i < numOrientationFrames; ++i) {
-		orientationFrames[i] = BufferToOrientationKeyFrame(b, Read);
+		orientationFrames[i] = BufferToOrientationKeyFrame(Read);
 	}
 
 
@@ -226,7 +229,7 @@ inline static void BufferToKeyFrame(const Buffer& b, const std::function<void(vo
 	ScaleKeyFrame* scaleFrames = new ScaleKeyFrame[numScaleFrames]();
 
 	for (int i = 0; i < numScaleFrames; ++i) {
-		scaleFrames[i] = BufferToScaleKeyFrame(b, Read);
+		scaleFrames[i] = BufferToScaleKeyFrame(Read);
 	}
 
 	vector.emplace_back(skeleton->GetBones()[boneIndex], numPositionFrames, positionFrames, numOrientationFrames, orientationFrames, numScaleFrames, scaleFrames);
@@ -234,7 +237,7 @@ inline static void BufferToKeyFrame(const Buffer& b, const std::function<void(vo
 	//return KeyFrame{ skeleton->GetBones()[boneIndex], numPositionFrames, positionFrames, numOrientationFrames, orientationFrames, numScaleFrames, scaleFrames };
 }
 
-static Animation* BufferToAnimation(const Buffer& b, const std::function<void(void*, size_t)>& Read, Skeleton* skeleton) {
+static Animation* BufferToAnimation(const std::function<void(void*, size_t)>& Read, Skeleton* skeleton) {
 
 	/*
 	
@@ -280,119 +283,13 @@ static Animation* BufferToAnimation(const Buffer& b, const std::function<void(vo
 
 	anim->KeyFrames.reserve(numKeyFrames);
 	for (int i = 0; i < numKeyFrames; ++i) {
-		BufferToKeyFrame(b, Read, skeleton, anim->KeyFrames);
+		BufferToKeyFrame(Read, skeleton, anim->KeyFrames);
 	}
 
 	return anim;
 }
 
-ModelData* BufferToModel(Buffer& b) {
-
-	/*
-	
-	std::vector<Vertex> vertices;
-
-	std::vector<unsigned int> indices;
-
-	std::vector<SubMesh> mesh_data;
-
-	std::vector<Material*> Materials;
-
-	Skeleton* skeleton;
-	std::vector<Animation*> animations;
-
-	glm::vec3 min;
-	glm::vec3 max;
-
-	*/
-
-	int offset = 0;
-
-	auto Read = [&](void* ptr, size_t num) -> void {
-		b.Read(ptr, num, offset);
-		offset += num;
-	};
-
-
-	bool is_skeletal;
-	Read(&is_skeletal, sizeof(is_skeletal));
-
-
-	//Vertices
-
-	size_t numVertices;
-	Read(&numVertices, sizeof(numVertices));
-
-	std::vector<Vertex> vertices;
-	std::vector<sVertex> sVertices;
-
-	if (is_skeletal) {
-		sVertices.resize(numVertices);
-		Read(&sVertices[0], sizeof(sVertices[0]) * numVertices);
-	}
-	else {
-		vertices.resize(numVertices);
-		Read(&vertices[0], sizeof(vertices[0]) * numVertices);
-	}
-
-
-
-	//Indices
-
-	size_t numIndices;
-	Read(&numIndices, sizeof(numIndices));
-
-	std::vector<unsigned int> indices = std::vector<unsigned int>(numIndices);
-	Read(&indices[0], sizeof(indices[0]) * numIndices);
-
-
-
-	//mesh_data
-
-	size_t numMeshes;
-	Read(&numMeshes, sizeof(numMeshes));
-
-	std::vector<SubMesh> meshes = std::vector<SubMesh>(numMeshes);
-	Read(&meshes[0], sizeof(meshes[0]) * numMeshes);
-
-
-	//Material
-
-	size_t numMaterials;
-	Read(&numMaterials, sizeof(numMaterials));
-
-	std::vector<Material*> materials = std::vector<Material*>(numMaterials);
-	for (int i = 0; i < numMaterials; ++i) {
-		materials[i] = BufferToMaterial(b, Read);
-	}
-
-
-
-
-
-
-	Skeleton* skeleton = nullptr;
-
-	std::vector<Animation*> animations;
-
-	if (is_skeletal) {
-		
-		//Skeleton
-		skeleton = BufferToSkeleton(b, Read);
-
-
-		//Animations
-		size_t numAnimations;
-		Read(&numAnimations, sizeof(numAnimations));
-
-		animations.resize(numAnimations);
-
-		for (int i = 0; i < animations.size(); ++i) {
-			animations[i] = BufferToAnimation(b, Read, skeleton);
-		}
-
-	}
-
+static StaticBoundingBox* BufferToSBB(const std::function<void(void*, size_t)>& Read) {
 
 	//StaticBoundingBox
 
@@ -431,15 +328,139 @@ ModelData* BufferToModel(Buffer& b) {
 
 	StaticBoundingBox* sbb = new StaticBoundingBox{ sbb_vertices, sbb_indices, sbb_normals, min, max, center, type };
 
+	return sbb;
+}
+
+Model* Model::ImportModel(Buffer& b) {
+
+	int offset = 0;
+
+	auto Read = [&](void* ptr, size_t num) -> void {
+		b.Read(ptr, num, offset);
+		offset += num;
+	};
+
+
+	Model_Type model_type;
+	Read(&model_type, sizeof(model_type));
+
+
+	if (model_type == Model_Type_Basic) {
+
+		/*  ----------BASIC MODEL-----------  */
+
+		size_t numVertices;
+		Read(&numVertices, sizeof(numVertices));
+
+		std::vector<Vertex> vertices;
+
+		vertices.resize(numVertices);
+		Read(&vertices[0], sizeof(vertices[0]) * numVertices);
+
+
+		size_t numIndices;
+		Read(&numIndices, sizeof(numIndices));
+
+		std::vector<unsigned int> indices = std::vector<unsigned int>(numIndices);
+		Read(&indices[0], sizeof(indices[0]) * numIndices);
 
 
 
+		//mesh_data
+
+		size_t numMeshes;
+		Read(&numMeshes, sizeof(numMeshes));
+
+		std::vector<SubMesh> meshes = std::vector<SubMesh>(numMeshes);
+		Read(&meshes[0], sizeof(meshes[0]) * numMeshes);
 
 
-	if (is_skeletal) {
-		return new ModelData{ sVertices, indices, meshes, materials, skeleton, animations, sbb };
+		//Material
+
+		size_t numMaterials;
+		Read(&numMaterials, sizeof(numMaterials));
+
+		std::vector<Material*> materials = std::vector<Material*>(numMaterials);
+		for (int i = 0; i < numMaterials; ++i) {
+			materials[i] = BufferToMaterial(Read);
+		}
+
+		StaticBoundingBox* sbb = BufferToSBB(Read);
+
+		return (Model*)new Basic_Model{ vertices, indices, meshes, materials, sbb };
+
+
+	}
+	else if (model_type == Model_Type_Skeletal) {
+
+		/*  ----------SKELETAL MODEL-----------  */
+
+		size_t numVertices;
+		Read(&numVertices, sizeof(numVertices));
+
+		std::vector<sVertex> vertices;
+
+		vertices.resize(numVertices);
+		Read(&vertices[0], sizeof(vertices[0]) * numVertices);
+
+
+
+		//indices
+
+		size_t numIndices;
+		Read(&numIndices, sizeof(numIndices));
+
+		std::vector<unsigned int> indices = std::vector<unsigned int>(numIndices);
+		Read(&indices[0], sizeof(indices[0]) * numIndices);
+
+
+
+		//mesh_data
+
+		size_t numMeshes;
+		Read(&numMeshes, sizeof(numMeshes));
+
+		std::vector<SubMesh> meshes = std::vector<SubMesh>(numMeshes);
+		Read(&meshes[0], sizeof(meshes[0]) * numMeshes);
+
+
+
+		//Material
+
+		size_t numMaterials;
+		Read(&numMaterials, sizeof(numMaterials));
+
+		std::vector<Material*> materials = std::vector<Material*>(numMaterials);
+		for (int i = 0; i < numMaterials; ++i) {
+			materials[i] = BufferToMaterial(Read);
+		}
+
+
+		//Skeletal
+
+		Skeleton* skeleton = BufferToSkeleton(Read);
+
+
+
+		//Animations
+
+		std::vector<Animation*> animations;
+
+		size_t numAnimations;
+		Read(&numAnimations, sizeof(numAnimations));
+
+		animations.resize(numAnimations);
+
+		for (int i = 0; i < animations.size(); ++i) {
+			animations[i] = BufferToAnimation(Read, skeleton);
+		}
+
+		StaticBoundingBox* sbb = BufferToSBB(Read);
+
+		return (Model*)new Skeletal_Model{ vertices, indices, meshes, materials, skeleton, animations, sbb };
+
 	}
 	else {
-		return new ModelData{ vertices, indices, meshes, materials, skeleton, animations, sbb };
+		throw;
 	}
 }

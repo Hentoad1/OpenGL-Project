@@ -1,10 +1,11 @@
 #include "pch.h"
 
-#include "MemoryMapper.h"
-
 #include "BuildAABB.h"
 
-ModelData* ASSIMP_LOAD(const std::string& path) {
+#include "Basic_Model.h"
+#include "Skeletal_Model.h"
+
+Model* Model::ImportModel(const std::string& path) {
 	/* ------------------------------------ IMPORT SCENE ------------------------------------- */
 
 	Assimp::Importer importer;
@@ -118,7 +119,8 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 
 			if (isSkeletal) {
 				sVertices.emplace_back(pos, tex, normal);
-			} else {
+			}
+			else {
 				vertices.emplace_back(pos, tex, normal);
 			}
 
@@ -171,16 +173,16 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 	if (isSkeletal) { //HasSkeleton seems to generate false negatives so HasAnimations will just be used.
 		skeleton = new Skeleton(scene->mRootNode, scene->mMeshes[0]);
 	}
-	
-	
+
+
 	std::vector<Animation*> animations;
-	
+
 	if (isSkeletal) {
 		for (int i = 0; i < scene->mNumAnimations; ++i) {
 			animations.push_back(new Animation(scene->mAnimations[i], skeleton));
 		}
 	}
-	
+
 
 	//this populates all vertex data with bone offsets
 	if (isSkeletal) {
@@ -266,15 +268,15 @@ ModelData* ASSIMP_LOAD(const std::string& path) {
 
 	StaticBoundingBox* sbb = BuildAABB(min, max);
 
-
-	ModelData* CreatedData;
+	Model* CreatedData;
 	if (isSkeletal) {
-		CreatedData = new ModelData(sVertices, indices, mesh_data, materials, skeleton, animations, sbb);
+		CreatedData = (Model*)new Skeletal_Model(sVertices, indices, mesh_data, materials, skeleton, animations, sbb);
 	}
 	else {
-		CreatedData = new ModelData(vertices, indices, mesh_data, materials, skeleton, animations, sbb);
+		CreatedData = (Model*)new Basic_Model(vertices, indices, mesh_data, materials, sbb);
 	}
-	 
+
+
 
 	return CreatedData;
 }

@@ -11,17 +11,17 @@
 
 #include "BuildAABB.h"
 
+#include "Basic_Model.h"
 
 int main() {
 
 	/*
-	cant import meshes ???? tf this mean
 
-	combine modeldata and modelbuffers into one "model" struct with two pointers to data and attached
+	cant import meshes ???? tf this mean
 
 	make it so mesh doesnt construct bounding box to then replace later.
 
-	remove convex hulls lib
+	every rendercomponent has its own shader, should only be one shader pointer for everything.
 
 	aabb vs aabb collision should be written, aabb vs triangle collision uses SAT
 
@@ -109,7 +109,7 @@ int main() {
 
 	AssetManager assetManager;
 
-	ModelBuffers* ww = assetManager.Attach(assetManager.LoadModel("warwick"));
+	Model* ww = assetManager.LoadModel("warwick");
 
 	Mesh* warwick = new Mesh(
 		Engine.GetCamera(),
@@ -130,7 +130,10 @@ int main() {
 	glm::vec3 min = glm::vec3(-1, -1, -1);
 	glm::vec3 max = glm::vec3(1, 1, 1);
 
-	ModelBuffers* m1 = new ModelBuffers{ 0, std::vector<MaterialBuffer*>(), std::vector<SubMesh>(), nullptr, std::vector<Animation*>(), BuildAABB(min, max), min, max };
+
+	//Model* m1 = (Model*)(new Basic_Model(std::vector<Vertex>(), std::vector<unsigned int>(), std::vector<SubMesh>(), std::vector<Material*>(), ));
+
+	Model* m1 = Model::CreateEmptyModel(BuildAABB(min, max));
 
 	Mesh* player = new Mesh(
 		Engine.GetCamera(),
@@ -145,6 +148,7 @@ int main() {
 	);
 
 	World::Load(player);
+	
 
 
 
@@ -198,7 +202,7 @@ int main() {
 
 	Engine.Terminate();
 
-	delete m1;
+	//delete m1;
 	//delete m2;
 	//delete m3;
 	//delete m4;

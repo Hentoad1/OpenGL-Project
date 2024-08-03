@@ -9,12 +9,12 @@
 
 #include "Shader.h"
 
-#include "ModelData.h"
+#include "Model.h"
 
 
 class AnimationComponent {
 public:
-	AnimationComponent(const ModelBuffers*);
+	AnimationComponent(const Model*);
 
 	void Update(const FrameData&);
 
@@ -29,5 +29,6 @@ private:
 	std::array<glm::mat4, MAX_BONES> FinalBoneTransforms;
 
 	Animation* currentAnimation;
-	Skeleton* skeleton;
+
+	const Skeleton* skeleton;
 };

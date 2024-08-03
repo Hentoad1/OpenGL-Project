@@ -2,14 +2,18 @@
 
 #include "MemoryMapper.h"
 
+#include "Model.h"
+
 void SourceToBuild(const std::string& read, const std::string& write) {
 
 	std::cout << "readLoc: " << read << std::endl;
 	std::cout << "writeLoc: " << write << std::endl;
 
-	ModelData* model = ASSIMP_LOAD(read);
+	Model* model = Model::ImportModel(read);
 
-	const Buffer& buf = ModelToBuffer(model);
+	Buffer buf;
+
+	model->AddToBuffer(buf);
 
 	FILE* out;
 	fopen_s(&out, write.c_str(), "wb");
@@ -18,7 +22,7 @@ void SourceToBuild(const std::string& read, const std::string& write) {
 	fclose(out);
 }
 
-ModelData* LoadBinaryFile(const std::string& path) {
+Model* LoadBinaryFile(const std::string& path) {
 
 	std::vector<uint8_t> data;
 
@@ -38,7 +42,7 @@ ModelData* LoadBinaryFile(const std::string& path) {
 
 	Buffer buf = Buffer(data);
 
-	ModelData* d = BufferToModel(buf);
+	Model* d = Model::ImportModel(buf);
 
 	return d;
 }

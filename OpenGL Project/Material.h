@@ -2,7 +2,7 @@
 
 #include "pch.h"
 
-static constexpr unsigned int numTexTypes = 3;
+#define numTexTypes 3
 
 struct Texture {
 

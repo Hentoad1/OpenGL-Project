@@ -3,8 +3,8 @@
 
 #include "AnimationComponent.h"
 
-AnimationComponent::AnimationComponent(const ModelBuffers* m) : skeleton(){
-    skeleton = m->skeleton;
+AnimationComponent::AnimationComponent(const Model* m) : skeleton(){
+    skeleton = m->GetSkeleton();
 }
 
 void AnimationComponent::SetAnimation(Animation* anim) {

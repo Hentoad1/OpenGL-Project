@@ -1,7 +1,9 @@
 #include "pch.h"
 
-#include "MemoryMapper.h"
+//#include "MemoryMapper.h"
 
+#include "Basic_Model.h"
+#include "Skeletal_Model.h"
 
 //#include "ModelData.h"
 
@@ -316,7 +318,80 @@ static void AppendStaticBoundingBoxToBuffer(Buffer& b, StaticBoundingBox* sbb) {
 
 }
 
-Buffer ModelToBuffer(ModelData* m) {
+void Basic_Model::AddToBuffer(Buffer& b) const {
+
+	Model_Type model_type = this->GetModelType();
+	uint8_t* model_type_buffer = static_cast<uint8_t*>(static_cast<void*>(&model_type));
+	size_t model_type_size = sizeof(model_type);
+
+	b.Append(model_type_buffer, model_type_size);
+
+	b.Append(vertices);
+
+	b.Append(indices);
+
+	b.Append(mesh_data);
+
+	size_t num_materials = Materials.size();
+	uint8_t* num_materials_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_materials));
+	size_t num_material_size = sizeof(num_materials);
+
+	b.Append(num_materials_buffer, num_material_size);
+
+	for (int i = 0; i < Materials.size(); ++i) {
+		AppendMaterialToBuffer(b, Materials[i]);
+	}
+
+	AppendStaticBoundingBoxToBuffer(b, sbb);
+
+}
+
+void Skeletal_Model::AddToBuffer(Buffer& b) const {
+
+	Model_Type model_type = GetModelType();
+	uint8_t* model_type_buffer = static_cast<uint8_t*>(static_cast<void*>(&model_type));
+	size_t model_type_size = sizeof(model_type);
+
+	b.Append(model_type_buffer, model_type_size);
+
+	b.Append(vertices);
+
+	b.Append(indices);
+
+	b.Append(mesh_data);
+
+	size_t num_materials = Materials.size();
+	uint8_t* num_materials_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_materials));
+	size_t num_material_size = sizeof(num_materials);
+
+	b.Append(num_materials_buffer, num_material_size);
+
+	for (int i = 0; i < Materials.size(); ++i) {
+		AppendMaterialToBuffer(b, Materials[i]);
+	}
+
+	// ---------- Skeleton ----------
+	AppendSkeletonToBuffer(b, skeleton);
+
+	// ---------- Animations ---------- 
+
+	size_t num_animations = animations.size();
+	uint8_t* num_animations_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_animations));
+	size_t num_animations_size = sizeof(num_animations);
+
+	b.Append(num_animations_buffer, num_animations_size);
+
+	for (int i = 0; i < animations.size(); ++i) {
+		AppendAnimationToBuffer(b, animations[i]);
+	}
+
+	AppendStaticBoundingBoxToBuffer(b, sbb);
+
+}
+
+
+
+/*Buffer ModelToBuffer(ModelData* m) {
 	Buffer buf;
 
 	bool is_skeletal = (m->skeleton != nullptr);
@@ -339,7 +414,7 @@ Buffer ModelToBuffer(ModelData* m) {
 
 	buf.Append(m->mesh_data);
 
-	/* ---------- Materials ---------- */
+	// ---------- Materials ----------
 
 	size_t num_materials = m->Materials.size();
 	uint8_t* num_materials_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_materials));
@@ -354,10 +429,10 @@ Buffer ModelToBuffer(ModelData* m) {
 
 	if (is_skeletal) {
 
-		/* ---------- Skeleton ---------- */
+		// ---------- Skeleton ----------
 		AppendSkeletonToBuffer(buf, m->skeleton);
 
-		/* ---------- Animations ---------- */
+		// ---------- Animations ---------- 
 
 		size_t num_animations = m->animations.size();
 		uint8_t* num_animations_buffer = static_cast<uint8_t*>(static_cast<void*>(&num_animations));
@@ -371,9 +446,9 @@ Buffer ModelToBuffer(ModelData* m) {
 	}
 
 
-	/* ---------- BoundingBox ---------- */
+	// ---------- BoundingBox ---------- 
 	
 	AppendStaticBoundingBoxToBuffer(buf, m->sbb);
 	
 	return buf;
-}
+}*/

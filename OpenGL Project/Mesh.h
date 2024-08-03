@@ -4,7 +4,7 @@
 
 #include "BasicShader.h"
 
-#include "ModelData.h"
+#include "Model.h"
 
 #include "InputComponent.h"
 #include "RenderComponent.h"
@@ -25,8 +25,7 @@ class Mesh {
 public:
 	Mesh(const Mesh& ref);
 
-	Mesh(Camera*, const ModelBuffers*, const BoundingBox&, const ComponentMeta&);
-	Mesh(Camera*, const ModelBuffers*, const ComponentMeta&);
+	Mesh(Camera*, Model*, const ComponentMeta&);
 
 	~Mesh();
 

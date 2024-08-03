@@ -1,7 +1,7 @@
 #pragma once
 
 #include "pch.h"
-#include "ModelData.h"
+#include "Model.h"
 
 #include "BasicShader.h"
 #include "SkeletalShader.h"
@@ -13,7 +13,7 @@
 class RenderComponent {
 	
 public:
-	RenderComponent(ComponentData*, const ComponentMeta*, const ModelBuffers*, const AnimationComponent* = nullptr);
+	RenderComponent(ComponentData*, const ComponentMeta*, Model*, const AnimationComponent* = nullptr);
 	
 	~RenderComponent();
 
@@ -26,11 +26,7 @@ private:
 	ShaderProgram* shader;
 
 	//Model Data
-	const ModelBuffers* mData;
-
-	ComponentData* cData;
+	Model* model;
 
 	const AnimationComponent* animComp;
-
-
 };

@@ -117,51 +117,51 @@ public:
 
     virtual void SetPosition(glm::mat4) = 0;
 
-    void setBool(const std::string& name, bool value) {
+    void setBool(const std::string& name, bool value) const {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), (int)value);
     }
 
-    void setBools(const std::string& name, int* value, int count) {
+    void setBools(const std::string& name, int* value, int count) const {
         glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, &value[0]);
     }
 
-    void setInt(const std::string& name, int value) {
+    void setInt(const std::string& name, int value) const {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
     }
 
-    void setFloat(const std::string& name, float value) {
+    void setFloat(const std::string& name, float value) const {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
 
-    void setVec2(const std::string& name, const glm::vec2& value) {
+    void setVec2(const std::string& name, const glm::vec2& value) const {
         glUniform2fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
     }
 
-    void setVec3(const std::string& name, const glm::vec3& value) {
+    void setVec3(const std::string& name, const glm::vec3& value) const {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
     }
 
-    void setVec3s(const std::string& name, const GLfloat* value, int count) {
+    void setVec3s(const std::string& name, const GLfloat* value, int count) const {
         glUniform3fv(glGetUniformLocation(ID, name.c_str()), count * 3, value);
     }
 
-    void setVec4(const std::string& name, const glm::vec4& value) {
+    void setVec4(const std::string& name, const glm::vec4& value) const {
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), 1, glm::value_ptr(value));
     }
 
-    void setVec4s(const std::string& name, const GLfloat* value, int count) {
+    void setVec4s(const std::string& name, const GLfloat* value, int count) const {
         glUniform4fv(glGetUniformLocation(ID, name.c_str()), count * 4, value);
     }
 
-    void setMat2(const std::string& name, const glm::mat2& mat) {
+    void setMat2(const std::string& name, const glm::mat2& mat) const {
         glUniformMatrix2fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
     }
 
-    void setMat3(const std::string& name, const glm::mat3& mat) {
+    void setMat3(const std::string& name, const glm::mat3& mat) const {
         glUniformMatrix3fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
     }
 
-    void setMat4(const std::string& name, const glm::mat4& mat) {
+    void setMat4(const std::string& name, const glm::mat4& mat) const {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
     }
     void setMat4s(const std::string& name, int count, const glm::mat4* mat) {
@@ -169,28 +169,28 @@ public:
     }
 
 
-    void setMat4(const std::string& name, const aiMatrix4x4& mat) {
+    void setMat4(const std::string& name, const aiMatrix4x4& mat) const {
         throw;
         //might have wrong column row order for aiMatrix
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, &mat[0][0]);
     }
 
-    void setTexture(const std::string& name, const GLint tex) {
+    void setTexture(const std::string& name, const GLint tex) const {
         glUniform1i(glGetUniformLocation(ID, name.c_str()), tex);
     }
 
-    void setTextures(const std::string& name, const GLint* tex, int count) {
+    void setTextures(const std::string& name, const GLint* tex, int count) const {
         glUniform1iv(glGetUniformLocation(ID, name.c_str()), count, tex);
     }
 
-    void SetLight(const std::string& name, const glslSceneLight* light) {
+    void SetLight(const std::string& name, const glslSceneLight* light) const {
         glUniform3fv(glGetUniformLocation(ID, (name + ".direction").c_str()), 1, glm::value_ptr(light->direction));
         glUniform3fv(glGetUniformLocation(ID, (name + ".ambient").c_str()), 1, glm::value_ptr(light->ambient));
         glUniform3fv(glGetUniformLocation(ID, (name + ".diffuse").c_str()), 1, glm::value_ptr(light->diffuse));
         glUniform3fv(glGetUniformLocation(ID, (name + ".specular").c_str()), 1, glm::value_ptr(light->specular));
     }
 
-    void SetLight(const std::string& name, const glslLightSource* light) {
+    void SetLight(const std::string& name, const glslLightSource* light) const {
         glUniform1f(glGetUniformLocation(ID, (name + ".loaded").c_str()), light->loaded);
 
 
