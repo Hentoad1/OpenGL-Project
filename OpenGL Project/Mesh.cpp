@@ -8,10 +8,10 @@ Mesh::Mesh(const Mesh& ref) : cMeta(ref.cMeta) {
 
 Mesh::Mesh(Camera* mCam, Model* model, const ComponentMeta& _cMeta, ShaderProgram* shader) : mCamera(mCam), cMeta(_cMeta) {
 
-	cData = ComponentData{ BoundingBox(model->GetSBB()), mCamera, glm::vec3(0)};
+	cData = ComponentData{ new BoundingBox(model->GetSBB()), mCamera, glm::vec3(0)};
 
 #ifdef _DEBUG
-	cData.bounds.BindGL(mCamera);
+	cData.bounds->BindGL(mCamera);
 #endif
 
 	cAnim = cMeta.has(MESH_COMPONENT_ANIMATION) ? new AnimationComponent(model) : nullptr;
@@ -44,11 +44,7 @@ Mesh::~Mesh() {
 	}
 }
 
-void Mesh::SetBoundingBox(const BoundingBox& b) {
-	cData.bounds = b;
-}
-
-BoundingBox& Mesh::GetBoundingBox() {
+BoundingBox* Mesh::GetBoundingBox() {
 	return cData.bounds;
 }
 
@@ -74,7 +70,7 @@ void Mesh::Render() {
 	}
 
 #ifdef _DEBUG
-	cData.bounds.Render();
+	cData.bounds->Render();
 #endif
 
 }

@@ -15,17 +15,13 @@ int main() {
 
 	/*
 
-	cant import meshes ???? tf this mean
-
-	make it so mesh doesnt construct bounding box to then replace later.
-
-	every rendercomponent has its own shader, should only be one shader pointer for everything.
-
 	coillision works with itself, need to exclude own mesh from tests.
 
 	aabb vs aabb collision should be written, aabb vs triangle collision uses SAT
 
 	add Terrain class that auto generates random terrain.
+
+	batch rendering
 	*/
 
 	/*
@@ -34,8 +30,6 @@ int main() {
 	*/
 
 	//create a method in storing image data only once. this can allow for efficient batch rendering
-
-	//create an interface of behaviorComponent to provide unique physics for different meshes
 
 	/*
 	RENDERING:
@@ -156,7 +150,7 @@ int main() {
 
 			MESH_COMPONENT_PHYSICS | MESH_COMPONENT_INPUT,
 
-			//MESH_OPTION_USECOLLISION |
+			MESH_OPTION_USECOLLISION |
 			MESH_OPTION_ATTACHEDCAMERA
 		)
 	);

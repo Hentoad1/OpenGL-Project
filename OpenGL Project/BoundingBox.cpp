@@ -60,8 +60,8 @@ glm::vec3 BoundingBox::ConvertAbsolute(glm::vec3 value) const {
 }
 
 
-CollisionInfo BoundingBox::CollidesWith(const BoundingBox& boxB, const glm::vec3& velocity) {
-	return Collision_Complex(*this, boxB, velocity);
+CollisionInfo BoundingBox::CollidesWith(const BoundingBox* boxB, const glm::vec3& velocity) {
+	return Collision_Complex(*this, *boxB, velocity);
 }
 
 

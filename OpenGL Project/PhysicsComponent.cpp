@@ -26,19 +26,19 @@ void PhysicsComponent::Update(const FrameData& data) {
 
 	if (info.collided) {
 		std::cout << "-----------------------------------------------------" << std::endl;
-		std::cout << "Position: " << glm::to_string(cData->bounds.Position()) << std::endl;
+		std::cout << "Position: " << glm::to_string(cData->bounds->Position()) << std::endl;
 		std::cout << "Velocity: " << glm::to_string(cData->velocity) << std::endl;
 		std::cout << "CollisionVelocity: " << glm::to_string(info.newPosition) << std::endl;
 
-		cData->bounds.SetPosition(cData->bounds.Position() - (info.newPosition));
+		//cData->bounds.SetPosition(cData->bounds.Position() - (info.newPosition));
+		cData->bounds->MoveAbsolute(-info.newPosition);
 
-		std::cout << "position" << glm::to_string(cData->bounds.Position()) << std::endl;
+		std::cout << "position" << glm::to_string(cData->bounds->Position()) << std::endl;
 
+		cData->velocity = info.newVelocity;
+;	}
 
-		//cData->velocity = info.collisionVelocity;
-	}
-
-	cData->bounds.MoveAbsolute(cData->velocity);
+	cData->bounds->MoveAbsolute(cData->velocity);
 
 
 
@@ -46,13 +46,13 @@ void PhysicsComponent::Update(const FrameData& data) {
 
 	if (cMeta->has(MESH_OPTION_ATTACHEDCAMERA)) {
 		Camera* cam = cData->camera;
-		const AxisVectors& axis = cData->bounds.GetOrientation().GetAxis();
+		const AxisVectors& axis = cData->bounds->GetOrientation().GetAxis();
 
-		const glm::vec3 ModelCenter = cData->bounds.Center();
+		const glm::vec3 ModelCenter = cData->bounds->Center();
 		const glm::vec3 CameraOffset = axis.Front * -10.0f; //50 units away from player.
 
 		cam->SetPosition(ModelCenter + CameraOffset);
-		cam->SetOrientation(cData->bounds.GetOrientation());
+		cam->SetOrientation(cData->bounds->GetOrientation());
 	}
 	
 }

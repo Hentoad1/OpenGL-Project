@@ -107,7 +107,7 @@ private:
 
 struct ComponentData {
 
-	BoundingBox bounds;
+	BoundingBox* bounds;
 
 	Camera* camera;
 

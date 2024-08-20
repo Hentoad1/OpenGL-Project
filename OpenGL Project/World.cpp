@@ -58,10 +58,17 @@ void World::Update(const FrameData& state) {
 	}
 }
 
-CollisionInfo World::TestCollision(const BoundingBox& other, const glm::vec3& otherVelocity) {
+CollisionInfo World::TestCollision(const BoundingBox* other, const glm::vec3& otherVelocity) {
 
 	for (auto it = physicsObjects.begin(); it != physicsObjects.end(); ++it) {
-		CollisionInfo info = (*it)->GetBoundingBox().CollidesWith(other, otherVelocity);
+
+		BoundingBox* against = (*it)->GetBoundingBox();
+
+		if (other == against) {
+			continue;
+		}
+
+		CollisionInfo info = against->CollidesWith(other, otherVelocity);
 
 		if (info.collided) {
 			return info;

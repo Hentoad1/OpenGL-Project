@@ -33,9 +33,7 @@ public:
 
 	void Render();
 
-	BoundingBox& GetBoundingBox();
-
-	void SetBoundingBox(const BoundingBox&);
+	BoundingBox* GetBoundingBox();
 
 	ComponentMeta cMeta;
 private:

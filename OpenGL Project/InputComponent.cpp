@@ -7,7 +7,7 @@ InputComponent::InputComponent(ComponentData* _cData, const ComponentMeta* _cMet
 void InputComponent::Update(const FrameData& input) {
 	/* --------------------------------- PROCESS MOUSE INPUT --------------------------------- */
 
-	const Orientation& InitialOrientation = cData->bounds.GetOrientation();
+	const Orientation& InitialOrientation = cData->bounds->GetOrientation();
 
 	float yaw = InitialOrientation.GetYaw();
 	float pitch = InitialOrientation.GetPitch();
@@ -23,7 +23,7 @@ void InputComponent::Update(const FrameData& input) {
 		pitch = -89.0f;
 	}
 
-	cData->bounds.SetOrientation(Orientation(yaw, pitch, roll));
+	cData->bounds->SetOrientation(Orientation(yaw, pitch, roll));
 
 	/* --------------------------------- PROCESS USER INPUT ---------------------------------- */
 
@@ -38,26 +38,26 @@ void InputComponent::Update(const FrameData& input) {
 	}
 
 	if (input.WALK_FORWARD == GLFW_PRESS || input.WALK_FORWARD == GLFW_REPEAT) {
-		glm::vec3 abs = cData->bounds.ConvertAbsolute(glm::vec3(1, 0, 0));
+		glm::vec3 abs = cData->bounds->ConvertAbsolute(glm::vec3(1, 0, 0));
 		abs.y = 0;
 
 		cData->velocity += glm::normalize(abs);
 	}
 	else if (input.WALK_BACKWARD == GLFW_PRESS || input.WALK_BACKWARD == GLFW_REPEAT) {
-		glm::vec3 abs = cData->bounds.ConvertAbsolute(glm::vec3(-1, 0, 0));
+		glm::vec3 abs = cData->bounds->ConvertAbsolute(glm::vec3(-1, 0, 0));
 		abs.y = 0;
 
 		cData->velocity += glm::normalize(abs);
 	}
 
 	if (input.WALK_LEFT == GLFW_PRESS || input.WALK_LEFT == GLFW_REPEAT) {
-		glm::vec3 abs = cData->bounds.ConvertAbsolute(glm::vec3(0, 0, -1));
+		glm::vec3 abs = cData->bounds->ConvertAbsolute(glm::vec3(0, 0, -1));
 		abs.y = 0;
 
 		cData->velocity += glm::normalize(abs);
 	}
 	else if (input.WALK_RIGHT == GLFW_PRESS || input.WALK_RIGHT == GLFW_REPEAT) {
-		glm::vec3 abs = cData->bounds.ConvertAbsolute(glm::vec3(0, 0, 1));
+		glm::vec3 abs = cData->bounds->ConvertAbsolute(glm::vec3(0, 0, 1));
 		abs.y = 0;
 
 		cData->velocity += glm::normalize(abs);

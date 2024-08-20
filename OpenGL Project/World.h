@@ -28,6 +28,6 @@ namespace World{
 
 	void Update(const FrameData&);
 
-	CollisionInfo TestCollision(const BoundingBox&, const glm::vec3&);
+	CollisionInfo TestCollision(const BoundingBox*, const glm::vec3&);
 
 }

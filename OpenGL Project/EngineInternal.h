@@ -56,4 +56,7 @@ struct CollisionInfo {
 
 	//The type of surface hit
 	CollisionType collisionType;
+
+
+	glm::vec3 newVelocity;
 };

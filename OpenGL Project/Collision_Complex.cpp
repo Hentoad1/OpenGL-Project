@@ -255,13 +255,13 @@ CollisionInfo BoundingBox::Collision_Complex(const BoundingBox& boxA, const Boun
 	std::cout << "velocity unit: " << velocityUnit << std::endl;
 
 	glm::vec3 postitionChange;
-	if (positivePenetration < negativePenetration) {
+	/*if (positivePenetration < negativePenetration) {
 		//postitionChange = axisWithOverlap * positivePenetration;
 	}
 	else {
 		//postitionChange = axisWithOverlap * negativePenetration;
 		postitionChange = axisWithOverlap * std::min(positivePenetration, negativePenetration);
-	}
+	}*/
 
 	if (velocityUnit > 0) {
 		postitionChange = axisWithOverlap * std::min(positivePenetration, negativePenetration) * velocityUnit * 10.0f;
@@ -282,7 +282,7 @@ CollisionInfo BoundingBox::Collision_Complex(const BoundingBox& boxA, const Boun
 	//glm::vec newVelocity = glm::reflect(velocity, axisWithOverlap);
 
 	//testing
-	glm::vec newVelocity = (velocity - 1.0f * glm::dot(axisWithOverlap, velocity) * axisWithOverlap);
+	glm::vec3 newVelocity = (velocity - 1.0f * glm::dot(axisWithOverlap, velocity) * axisWithOverlap);
 
-	return CollisionInfo{ true, postitionChange };
+	return CollisionInfo{ true, postitionChange, COLLISIONTYPE_FLOOR, newVelocity };
 }

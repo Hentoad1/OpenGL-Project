@@ -49,8 +49,6 @@ struct StaticBoundingBox {
 class BoundingBox {
 
 public:
-	BoundingBox() {}
-
 	BoundingBox(const StaticBoundingBox*);
 
 	const glm::vec3& Center() const;
@@ -69,7 +67,7 @@ public:
 
 	void SetOrientation(const Orientation&);
 
-	CollisionInfo CollidesWith(const BoundingBox&, const glm::vec3&);
+	CollisionInfo CollidesWith(const BoundingBox*, const glm::vec3&);
 
 	glm::vec3 ConvertAbsolute(glm::vec3) const;
 
