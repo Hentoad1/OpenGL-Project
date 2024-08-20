@@ -8,7 +8,7 @@
 
 class SkeletalShader : ShaderProgram {
 public:
-    SkeletalShader(Camera* mCam, glm::vec3 center);
+    SkeletalShader(Camera* mCam);
 
     void SetPosition(glm::vec3) override;
 

@@ -13,7 +13,7 @@
 class RenderComponent {
 	
 public:
-	RenderComponent(ComponentData*, const ComponentMeta*, Model*, const AnimationComponent* = nullptr);
+	RenderComponent(ComponentData*, const ComponentMeta*, Model*, ShaderProgram* shader, const AnimationComponent* = nullptr);
 	
 	~RenderComponent();
 

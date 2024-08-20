@@ -5,9 +5,7 @@
 
 #include "EngineInternal.h"
 
-SkeletalShader::SkeletalShader(Camera* mCam, glm::vec3 pos) : ShaderProgram("./SkeletalShaderV.glsl", "./SkeletalShaderF.glsl"), sCamera(mCam) {
-    SetPosition(pos);
-}
+SkeletalShader::SkeletalShader(Camera* mCam) : ShaderProgram("./SkeletalShaderV.glsl", "./SkeletalShaderF.glsl"), sCamera(mCam) { }
 
 //Update assumes the shader is in use.
 void SkeletalShader::Update() {

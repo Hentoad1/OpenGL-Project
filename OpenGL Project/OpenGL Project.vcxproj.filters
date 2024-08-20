@@ -88,6 +88,9 @@
     <Filter Include="Source Files\Loading Models\Importer\ModelData\Model">
       <UniqueIdentifier>{146dfce7-9d21-4c2c-a1a8-1a489682ec8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Loading Models\Shader Manager">
+      <UniqueIdentifier>{2815bf56-7d8c-4cf6-933b-f5f049bd7264}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Entry.cpp">
@@ -210,6 +213,9 @@
     <ClCompile Include="Model.cpp">
       <Filter>Source Files\Loading Models\Importer\ModelData\Model</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>Source Files\Loading Models\Shader Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">
@@ -331,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="Buffer.h">
       <Filter>Source Files\Loading Models\AssetManager</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>Source Files\Loading Models\Shader Manager</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

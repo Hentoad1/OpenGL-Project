@@ -4,20 +4,8 @@
 
 #include "Shader.h"
 
-RenderComponent::RenderComponent(ComponentData* cData, const ComponentMeta* cMeta, Model* _model, const AnimationComponent* anim) : model(_model), animComp(anim) {
-
+RenderComponent::RenderComponent(ComponentData* cData, const ComponentMeta* cMeta, Model* _model, ShaderProgram* _shader, const AnimationComponent* anim) : model(_model), animComp(anim), shader(_shader) {
 	model->Attach();
-
-	auto z = model->GetSBB();
-
-	if (cMeta->has(MESH_SHADERTYPE_BASIC)) {
-		shader = (ShaderProgram*)(new BasicShader(cData->camera, model->GetSBB()->center));
-	}
-	else if (cMeta->has(MESH_SHADERTYPE_SKELETAL)) {
-		shader = (ShaderProgram*)(new SkeletalShader(cData->camera, model->GetSBB()->center));
-	}
-
-
 }
 
 RenderComponent::~RenderComponent() {

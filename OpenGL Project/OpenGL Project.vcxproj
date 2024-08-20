@@ -147,6 +147,7 @@
     </ClCompile>
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SkeletalShader.cpp" />
     <ClCompile Include="Skeletal_Model.cpp" />
     <ClCompile Include="Skeleton.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="PhysicsComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SkeletalShader.h" />
     <ClInclude Include="Skeletal_Model.h" />
     <ClInclude Include="Skeleton.h" />

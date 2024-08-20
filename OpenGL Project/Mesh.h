@@ -25,7 +25,7 @@ class Mesh {
 public:
 	Mesh(const Mesh& ref);
 
-	Mesh(Camera*, Model*, const ComponentMeta&);
+	Mesh(Camera*, Model*, const ComponentMeta&, ShaderProgram* shader);
 
 	~Mesh();
 

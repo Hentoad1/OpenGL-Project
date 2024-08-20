@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "Mesh.h"
 
-Mesh::Mesh(const Mesh& ref) : cMeta(0) {
+Mesh::Mesh(const Mesh& ref) : cMeta(ref.cMeta) {
 
 	throw;
 }
 
-Mesh::Mesh(Camera* mCam, Model* model, const ComponentMeta& _cMeta) : mCamera(mCam), cMeta(_cMeta) {
+Mesh::Mesh(Camera* mCam, Model* model, const ComponentMeta& _cMeta, ShaderProgram* shader) : mCamera(mCam), cMeta(_cMeta) {
 
 	cData = ComponentData{ BoundingBox(model->GetSBB()), mCamera, glm::vec3(0)};
 
@@ -15,7 +15,7 @@ Mesh::Mesh(Camera* mCam, Model* model, const ComponentMeta& _cMeta) : mCamera(mC
 #endif
 
 	cAnim = cMeta.has(MESH_COMPONENT_ANIMATION) ? new AnimationComponent(model) : nullptr;
-	cRender = cMeta.has(MESH_COMPONENT_RENDER) ? new RenderComponent(&cData, &cMeta, model, cAnim) : nullptr;
+	cRender = cMeta.has(MESH_COMPONENT_RENDER) ? new RenderComponent(&cData, &cMeta, model, shader, cAnim) : nullptr;
 	cPhysics = cMeta.has(MESH_COMPONENT_PHYSICS) ? new PhysicsComponent(&cData, &cMeta) : nullptr;
 	cInput = cMeta.has(MESH_COMPONENT_INPUT) ? new InputComponent(&cData, &cMeta) : nullptr;
 

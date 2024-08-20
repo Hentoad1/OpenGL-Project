@@ -41,7 +41,7 @@ void World::Load(Mesh* mesh, bool physics) {
 void World::Load(Mesh* m) {
 	content.push_back(m);
 
-	if (m->cMeta.has(MESH_USECOLLISION)) {
+	if (m->cMeta.has(MESH_OPTION_USECOLLISION)) {
 		physicsObjects.push_back(m);
 	}
 }

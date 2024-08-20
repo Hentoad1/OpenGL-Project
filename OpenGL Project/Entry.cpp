@@ -5,8 +5,6 @@
 
 #include "MemoryMapper.h"
 
-#include "AssetManager.h"
-
 #include "BoundingBox.h"
 
 #include "BuildAABB.h"
@@ -22,6 +20,8 @@ int main() {
 	make it so mesh doesnt construct bounding box to then replace later.
 
 	every rendercomponent has its own shader, should only be one shader pointer for everything.
+
+	coillision works with itself, need to exclude own mesh from tests.
 
 	aabb vs aabb collision should be written, aabb vs triangle collision uses SAT
 
@@ -107,9 +107,21 @@ int main() {
 
 	BuildModels();
 
-	AssetManager assetManager;
 
-	Model* ww = assetManager.LoadModel("warwick");
+	Mesh* warwick = Engine.LoadMesh(
+		Engine.GetCamera(),
+		"warwick",
+		ComponentMeta(
+			MESH_SHADERTYPE_SKELETAL,
+			MESH_COMPONENT_RENDER | MESH_COMPONENT_ANIMATION,
+			MESH_OPTION_USECOLLISION
+		)
+
+		
+	);
+
+	/*
+	Model* ww = Engine.LoadModel("warwick");
 
 	Mesh* warwick = new Mesh(
 		Engine.GetCamera(),
@@ -122,6 +134,7 @@ int main() {
 	);
 
 	World::Load(warwick);
+	*/
 
 	//warwick->SetBoundingBox(CreateConvexHull());
 
@@ -135,19 +148,18 @@ int main() {
 
 	Model* m1 = Model::CreateEmptyModel(BuildAABB(min, max));
 
-	Mesh* player = new Mesh(
+	Mesh* player = Engine.LoadMesh(
 		Engine.GetCamera(),
 		m1,
-		MESH_COMPONENT_PHYSICS |
-		MESH_COMPONENT_INPUT |
+		ComponentMeta(
+			MESH_SHADERTYPE_BASIC,
 
-		//MESH_USECOLLISION |
-		MESH_ATTACHEDCAMERA |
+			MESH_COMPONENT_PHYSICS | MESH_COMPONENT_INPUT,
 
-		MESH_SHADERTYPE_BASIC
+			//MESH_OPTION_USECOLLISION |
+			MESH_OPTION_ATTACHEDCAMERA
+		)
 	);
-
-	World::Load(player);
 	
 
 

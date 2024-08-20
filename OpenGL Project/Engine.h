@@ -8,6 +8,9 @@
 
 #include "EngineInternal.h"
 
+#include "AssetManager.h"
+#include "ShaderManager.h"
+
 class Engine {
 
 public:
@@ -29,7 +32,16 @@ public:
 
 	int8_t GetKeyState(int);
 
+	Model* LoadModel(const std::string& name);
+
+	Mesh* LoadMesh(Camera*, Model*, const ComponentMeta&);
+
+	Mesh* LoadMesh(Camera*, const std::string& name, const ComponentMeta&);
+
 private:
+
+	AssetManager assetManager;
+	ShaderManager shaderManager;
 
 	FrameData currentActionState;
 	bool seenMouseMovement;

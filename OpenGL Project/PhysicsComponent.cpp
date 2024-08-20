@@ -44,7 +44,7 @@ void PhysicsComponent::Update(const FrameData& data) {
 
 	/* ------------------------------- UPDATE ATTACHED CAMERA -------------------------------- */
 
-	if (cMeta->has(MESH_ATTACHEDCAMERA)) {
+	if (cMeta->has(MESH_OPTION_ATTACHEDCAMERA)) {
 		Camera* cam = cData->camera;
 		const AxisVectors& axis = cData->bounds.GetOrientation().GetAxis();
 

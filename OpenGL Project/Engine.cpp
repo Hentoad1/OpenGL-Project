@@ -111,6 +111,31 @@ void Engine::Draw() {
 	glfwPollEvents();
 }
 
+Model* Engine::LoadModel(const std::string& name) {
+	return assetManager.LoadModel(name);
+}
+
+
+Mesh* Engine::LoadMesh(Camera* cam, Model* model, const ComponentMeta& cMeta) {
+	
+	ShaderProgram* shader = shaderManager.Load(cMeta.GetShader(), GetCamera());
+	
+	Mesh* m = new Mesh(cam, model, cMeta, shader);
+	
+	World::Load(m);
+	return m;
+}
+
+Mesh* Engine::LoadMesh(Camera* cam, const std::string& name, const ComponentMeta& cMeta) {
+
+	ShaderProgram* shader = shaderManager.Load(cMeta.GetShader(), GetCamera());
+
+	Mesh* m = new Mesh(cam, assetManager.LoadModel(name), cMeta, shader);
+
+	World::Load(m);
+	return m;
+}
+
 void Engine::Update() {
 
 	
